@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '24.0.0 rc3'
+
+    defaultConfig {
+        applicationId "com.community.yuequ"
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs{
+        release{
+            storeFile file('zhoulin.jks')
+            storePassword '123456'
+            keyAlias 'zhoulin'
+            keyPassword '123456'
+
+        }
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    productFlavors {
+        "10001" {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [YUEQU_CHANNEL_VALUE: name]
+        }
+
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile project(':convenientbanner')
+    compile project(':vitamio')
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.zhy:okhttputils:2.6.2'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+}

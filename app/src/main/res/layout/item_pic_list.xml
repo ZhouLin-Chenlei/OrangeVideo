@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="@color/grey300"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_second_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_list_margin_left"
+            android:layout_marginRight="@dimen/base_list_margin_left"
+            android:drawableLeft="@mipmap/ic_sub"
+            android:drawablePadding="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="如果你是一头猪"
+            android:textColor="@color/grey900"
+            android:textSize="17sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_dsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_list_margin_left"
+        android:layout_marginLeft="@dimen/base_list_margin_left"
+        android:layout_marginRight="@dimen/base_list_margin_left"
+        android:layout_marginTop="@dimen/base_list_margin_left"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="这是一个关于笨蛋的故事吗？有一天我走在回家的路上唱着妈妈教给我的歌"
+        android:textColor="@color/grey900"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_list_margin_left"
+        android:layout_marginLeft="@dimen/base_list_margin_left"
+        android:layout_marginRight="@dimen/base_list_margin_left"
+        android:orientation="vertical">
+
+        <com.community.yuequ.view.GroupImageView
+            android:id="@+id/giv_image_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"/>
+
+        </com.community.yuequ.view.GroupImageView>
+    </LinearLayout>
+
+</LinearLayout>

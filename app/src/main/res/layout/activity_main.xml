@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/main_title"/>
+
+    <LinearLayout android:orientation="horizontal" android:id="@+id/rll_main_top" android:background="@color/white" android:layout_width="match_parent" android:layout_height="@dimen/toolbarSize">
+        <RelativeLayout android:id="@+id/rl_recommend" android:layout_width="0.0dip" android:layout_height="match_parent" android:layout_weight="1.0">
+            <RelativeLayout android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_centerInParent="true">
+                <TextView android:textSize="@dimen/maintab_textsize" android:textStyle="bold" android:textColor="@color/main_tab_text_selector" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/main_tab_recommend" android:drawableTop="@drawable/tab_tuijian" android:drawablePadding="0.5dip" android:layout_centerInParent="true" />
+                <TextView android:textSize="11.0sp" android:textColor="@color/white" android:gravity="center" android:id="@+id/tvw_find_tip_num" android:background="@null" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="20.0dip" android:layout_marginTop="3.0dip" android:text="8" android:singleLine="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/rl_video" android:layout_width="0.0dip" android:layout_height="match_parent" android:layout_marginLeft="4.0dip" android:layout_weight="1.0">
+            <RelativeLayout android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_centerInParent="true">
+                <TextView android:textSize="@dimen/maintab_textsize" android:textStyle="bold" android:textColor="@color/main_tab_text_selector" android:gravity="center" android:id="@+id/tv_friends" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/main_tab_video" android:drawableTop="@drawable/tab_shipin" android:drawablePadding="0.5dip" android:layout_centerInParent="true" />
+                <ImageView android:id="@+id/tvw_video_tip" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="30.0dip" android:layout_marginTop="3.0dip" android:src="@mipmap/ic_tab_tip" android:layout_alignLeft="@id/tv_friends" android:layout_alignTop="@id/tv_friends" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/rl_channel" android:layout_width="0.0dip" android:layout_height="match_parent" android:layout_weight="1.0">
+            <RelativeLayout android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_centerInParent="true">
+                <TextView android:textSize="@dimen/maintab_textsize" android:textStyle="bold" android:textColor="@color/main_tab_text_selector" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/main_tab_channel" android:drawableTop="@drawable/tab_zhuanti" android:drawablePadding="0.5dip" android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/rl_tuwen" android:layout_width="0.0dip" android:layout_height="match_parent" android:layout_weight="1.0">
+            <RelativeLayout android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_centerInParent="true">
+                <TextView android:textSize="@dimen/maintab_textsize" android:textStyle="bold" android:textColor="@color/main_tab_text_selector" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/main_tab_tuwen" android:drawableTop="@drawable/tab_tuwen" android:drawablePadding="0.5dip" android:layout_centerInParent="true" />
+                <ImageView android:id="@+id/imgv_tip" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="20.0dip" android:layout_marginTop="3.0dip" android:src="@mipmap/ic_tab_tip" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewpager">
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

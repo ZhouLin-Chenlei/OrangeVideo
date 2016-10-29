@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <RelativeLayout
+        android:id="@+id/mediacontroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0.0dip"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:id="@+id/info_panel"
+            style="@style/InfoPanel_Container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_default_height"
+            android:gravity="center_horizontal|center"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/video_back"
+                android:background="@null"
+                android:layout_width="@dimen/action_bar_default_height"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/player_exit" />
+
+            <TextView
+                android:id="@+id/mediacontroller_file_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="8dip"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/download_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="3.0dp"
+                android:paddingRight="12dp"
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
+
+            <!--
+            <TextView
+                android:id="@+id/date_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="12dp"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/battery_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="12dp"
+                android:textColor="@android:color/white" />
+            -->
+
+            <ImageButton
+                android:id="@+id/video_menu"
+                android:background="@null"
+                android:layout_width="@dimen/action_bar_default_height"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/selectorparent" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/mediacontroller_controls"
+            style="@style/MediaController_Container"
+            android:layout_width="match_parent"
+            android:layout_height="34dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/mediacontroller_buttons_bottom_margin"
+            android:layout_marginTop="@dimen/mediacontroller_buttons_top_margin"
+            android:visibility="visible" >
+
+            <ImageButton
+                android:id="@+id/mediacontroller_play_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/player_pause" />
+
+            <TextView
+                android:id="@+id/live_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="直播中..."
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/mediacontroller_time_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+				<TextView
+                    android:id="@+id/mediacontroller_time_current"
+                    style="@style/MediaController_Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="00:00" />
+                <TextView
+                    android:id="@+id/mediacontroller_time_total"
+                    style="@style/MediaController_Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dip"
+                    android:singleLine="true"
+                    android:text="/00:00" />
+
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dip"
+                    android:layout_marginTop="8dip"
+                    android:background="@android:color/white"
+                    android:contentDescription="@null" />
+
+                <ImageButton
+                    android:id="@+id/mediacontroller_screen_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/button_full_screen_selector" />
+                
+                <!-- <ImageButton
+                    android:id="@+id/mediacontroller_full_screen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:src="@drawable/button_full_screen_selector" 
+                    android:visibility="gone"/> -->
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/mediacontroller_seekbar"
+                style="@style/MediaController_SeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/mediacontroller_time_layout"
+                android:layout_toRightOf="@+id/mediacontroller_play_pause"
+                android:focusable="true"
+                android:max="1000" />
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/mediacontroller_lock"
+            style="@style/MediaController_Button"
+            android:layout_width="@dimen/action_bar_default_height"
+            android:layout_height="@dimen/action_bar_default_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/content_desc_lock"
+            android:src="@drawable/mediacontroller_unlock" />
+        
+        
+        <ListView 
+		    android:id="@+id/programlist"
+		    android:cacheColorHint="#00000000"
+		    android:layout_width="120dip"
+		    android:layout_height="match_parent"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@id/info_panel"
+		    android:dividerHeight="0dip"
+		    android:layout_above="@id/mediacontroller_controls"
+		    android:background="@color/mediacontroller_bg"
+		    android:focusable="true"
+	    	android:focusableInTouchMode="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/probar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            style="@android:style/Widget.ProgressBar.Small"/>
+        <TextView
+            android:id="@+id/load_rate"
+            style="@style/MediaController_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/operation_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/mediacontroller_bg"
+        android:paddingBottom="0dip"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
+        android:paddingTop="0dip"
+        android:textColor="@android:color/white"
+        android:textSize="46sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/operation_volume_brightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        layout="@layout/brightness_volumn"
+        android:visibility="gone" />
+    
+   
+    <!-- </RelativeLayout> -->
+
+</RelativeLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_pic">
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:id="@+id/iv_cover"
+            />
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:id="@+id/iv_play"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/guide_play_b"/>
+        
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/tv_name"
+        android:maxLines="3"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/rl_pic"
+        android:layout_toLeftOf="@+id/iv_arrow"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_arrow"
+        android:id="@+id/iv_arrow"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+</RelativeLayout>

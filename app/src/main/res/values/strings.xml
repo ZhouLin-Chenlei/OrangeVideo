@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">悦趣</string>
+    <string name="main_tab_recommend">推荐</string>
+    <string name="main_tab_video">视频</string>
+    <string name="main_tab_channel">专题</string>
+    <string name="main_tab_tuwen">图文</string>
+
+
+    <string name="no_data">没有数据</string>
+    <string name="load_data_fail">加载失败</string>
+    <string name="load_data_adequate">没有更多啦</string>
+    <string name="loading_data">加载中...</string>
+
+
+    <string name="unknow_erro">未知错误</string>
+
+    <string name="more">更多</string>
+    <string name="movie">影视</string>
+    <string name="funny">搞笑</string>
+    <string name="passage">段子</string>
+    <string name="original">原创</string>
+    <string name="recreation">娱乐</string>
+    <string name="play">播放</string>
+    <string name="intro">简介</string>
+    <string name="unknow">未知</string>
+    <string name="cmcc">中国移动</string>
+    <string name="unicom">中国联通</string>
+    <string name="telecom">中国电信</string>
+    <string name="detail">详情</string>
+
+    <string name="content_desc_lock">锁定</string>
+    <string name="VideoView_ar_aspect_fit_parent">自适应</string>
+    <string name="VideoView_ar_aspect_fill_parent">裁剪</string>
+    <string name="VideoView_ar_aspect_wrap_content">100%</string>
+    <string name="VideoView_ar_match_parent">Free / Fill parent</string>
+    <string name="VideoView_ar_16_9_fit_parent">16:9</string>
+    <string name="VideoView_ar_4_3_fit_parent">4:3</string>
+    <string name="N_A">N/A</string>
+    <string name="video_screen_locked">屏幕已锁定</string>
+    <string name="video_screen_unlocked">屏幕锁定已解除</string>
+    <string name="video_layout_buffering_progress">缓冲: %.2f%%</string>
+    <string name="video_cannot_play">对不起,这个视频不能播放。</string>
+    <string name="file_explorer_sdcard_not_available">SD卡无法读取</string>
+    <string name="video_screenshot_save_in">截图存放在 %s.</string>
+    <string name="video_screenshot_failed">截图失败</string>
+    <string name="video_layout_loading">正在缓冲&#8230;</string>
+    <string name="closing_file">正在退出&#8230;</string>
+    <string name="alert_dialog_ok">确定</string>
+    <string name="alert_dialog_cancel">取消</string>
+    <string name="alert_dialog_text_phonenumber">请输入手机号</string>
+    <string name="alert_dialog_upgrade">升级</string>
+    <string name="alert_dialog_upgradetip">升级提示</string>
+    <string name="alert_dialog_jump">跳过</string>
+
+    <string name="tips">提示</string>
+    <string name="toast_exit_tip">再按一次退出</string>
+    <string name="pay">购买</string>
+
+</resources>

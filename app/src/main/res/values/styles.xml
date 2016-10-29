@@ -1,0 +1,59 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:listDivider">@drawable/list_divider</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="Theme.Fullscreen" parent="Theme.Fullscreen.7"/>
+    <style name="Theme.Fullscreen.7" parent="AppTheme.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="MediaController_SeekBar">
+        <item name="android:minHeight">4dip</item>
+        <item name="android:maxHeight">4dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+        <item name="android:progressDrawable">@drawable/play_seekbar_color_bg</item>
+        <item name="android:thumb">@drawable/play_ctrl_sound_ball</item>
+
+    </style>
+    <style name="MediaController_Text">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="InfoPanel_Container">
+        <item name="android:background">@color/mediacontroller_bg</item>
+    </style>
+
+    <style name="MediaController_Container">
+        <item name="android:background">@color/mediacontroller_bg</item>
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:paddingRight">8dip</item>
+        <item name="android:paddingTop">4dip</item>
+        <item name="android:paddingBottom">4dip</item>
+    </style>
+
+    <style name="MediaController_Button">
+        <item name="android:background">@drawable/mediacontroller_btn_bg</item>
+    </style>
+
+</resources>
