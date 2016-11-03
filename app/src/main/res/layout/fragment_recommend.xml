@@ -13,8 +13,8 @@
             android:id="@id/android:list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbarStyle="outsideOverlay"
-            android:fadingEdgeLength="0dp"/>
+            android:fadingEdgeLength="0dp"
+            android:scrollbarStyle="outsideOverlay"/>
 
     </com.community.yuequ.view.SwipeRefreshLayout>
 
@@ -32,11 +32,10 @@
             android:visibility="invisible"/>
 
         <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
             android:layout_gravity="center"/>
     </FrameLayout>
 
-    <include layout="@layout/shadow_top"/>
 </FrameLayout>

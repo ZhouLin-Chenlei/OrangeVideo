@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_home"
+        icon="@mipmap/tab_home"
+        title="首页" />
+    <tab
+        id="@+id/tab_online"
+        icon="@mipmap/tab_online"
+        title="直播" />
+    <tab
+        id="@+id/tab_videos"
+        icon="@mipmap/tab_videos"
+        title="点播" />
+    <tab
+        id="@+id/tab_myprofile"
+        icon="@mipmap/tab_myprofile"
+        title="我的" />
+</tabs>

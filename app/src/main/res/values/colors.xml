@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#ff7f38</color>
 
-    <color name="pink900">#E02167</color>
-    <color name="pink950">#CB0D2F</color>
-
+    <color name="orange500">#ff8800</color>
+    <color name="orange600">#ff7d00</color>
+    <color name="orange700">#ff7f38</color>
+    <color name="orange800">#ff610a</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -35,4 +34,9 @@
 
     <color name="selectplay_selected">#AD0015</color>
     <color name="info_panel_bg">#000000</color>
+
+    <color name="bb_inActiveBottomBarItemColor">#747474</color>
+    <color name="bb_darkBackgroundColor">#212121</color>
+    <color name="bb_tabletRightBorderDark">#505050</color>
+
 </resources>

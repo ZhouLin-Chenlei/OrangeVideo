@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <com.community.yuequ.widget.FourThreeImageView
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:background="@color/grey400"
+        android:id="@+id/iv_img"
+        android:scaleType="centerCrop"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="@color/grey900"
+        android:textSize="17sp"
+        android:id="@+id/tv_title"
+        android:layout_toRightOf="@id/iv_img"
+        android:layout_marginLeft="10dp"
+        android:text="xcfdfff"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:textColor="@color/grey700"
+        android:textSize="13sp"
+        android:id="@+id/tv_desc"
+        android:layout_toRightOf="@id/iv_img"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="12dp"
+        android:text="xcfdfff"/>
+</RelativeLayout>

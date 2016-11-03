@@ -23,6 +23,7 @@ public abstract class BaseFragment extends Fragment {
     protected View convertView;
     private SparseArray<View> mViews;
     protected  LayoutInflater mLayoutInflater;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayoutInflater = inflater;
@@ -129,5 +130,6 @@ public abstract class BaseFragment extends Fragment {
         isLoading = false;
         super.onDestroyView();
     }
+
 }
 

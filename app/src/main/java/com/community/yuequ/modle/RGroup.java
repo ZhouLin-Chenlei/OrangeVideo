@@ -8,8 +8,7 @@ import java.util.List;
 public class RGroup {
     public int column_id;
     public String column_name;
-    public String type;
+    public String type;// 1：视频
     public List<RProgram> plist;
 
-    public boolean tworow = false;
 }

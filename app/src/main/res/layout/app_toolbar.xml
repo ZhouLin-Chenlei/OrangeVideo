@@ -4,8 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="?android:actionBarSize"
     android:layout_gravity="top"
-    android:background="@color/pink900"
+    android:background="@color/colorPrimary"
     app:layout_scrollFlags="scroll|enterAlways"
+    app:theme="@style/AppTheme.AppBarOverlay"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>

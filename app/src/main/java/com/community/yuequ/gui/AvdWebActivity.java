@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -16,10 +18,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.community.yuequ.R;
-import com.community.yuequ.view.TitleBarLayout;
 
-public class AvdWebActivity extends AppCompatActivity implements View.OnClickListener{
-    private TitleBarLayout mTitleBarLayout;
+public class AvdWebActivity extends AppCompatActivity{
+    private Toolbar mToolbar;
+    private TextView mTitleView;
+
     WebView mWebView;
     TextView tvErrorMsg;
     ProgressBar progressBar;
@@ -30,9 +33,11 @@ public class AvdWebActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avd_web);
-        mTitleBarLayout = new TitleBarLayout(this)
-                .setLeftButtonVisibility(true)
-                .setLeftButtonClickListener(this);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
 
         mWebView = (WebView) findViewById(R.id.webView);
         tvErrorMsg = (TextView) findViewById(R.id.tv_error_msg);
@@ -41,7 +46,7 @@ public class AvdWebActivity extends AppCompatActivity implements View.OnClickLis
         title =  intent.getStringExtra("title");
         link_url =  intent.getStringExtra("link_url");
 
-        mTitleBarLayout.setText(title);
+        mTitleView.setText(title);
         initView();
 
     }
@@ -145,16 +150,12 @@ public class AvdWebActivity extends AppCompatActivity implements View.OnClickLis
         return super.onKeyDown(keyCode, event);
     }
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_back:
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (!getSupportFragmentManager().popBackStackImmediate())
                 finish();
-                break;
-            case R.id.btn_play:
-
-                break;
-            default:
-                break;
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

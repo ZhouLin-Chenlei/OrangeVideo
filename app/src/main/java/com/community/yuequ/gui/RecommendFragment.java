@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
@@ -29,7 +32,7 @@ import okhttp3.Request;
 /**
  * 推荐页
  */
-public class RecommendFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
+public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
     public static final String TAG = RecommendFragment.class.getSimpleName();
     protected PageStatuLayout mStatuLayout;
     private RecommendAdapter mRecommendAdapter;
@@ -53,18 +56,22 @@ public class RecommendFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_recommend;
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initData();
     }
 
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View convertView = inflater.inflate(R.layout.fragment_recommend, container, false);
+
         mStatuLayout = new PageStatuLayout(convertView);
-        mRecyclerView = findView(android.R.id.list);
-        mSwipeRefreshLayout = findView(R.id.swipeLayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.pink900);
+        mRecyclerView = (RecyclerView) convertView.findViewById(android.R.id.list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        headView = mLayoutInflater.inflate(R.layout.recommed_banner_layout, null);
+        headView = inflater.inflate(R.layout.recommed_banner_layout, null);
         mConvenientBanner = (ConvenientBanner) headView.findViewById(R.id.convenientBanner);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -74,7 +81,9 @@ public class RecommendFragment extends BaseFragment implements SwipeRefreshLayou
         mRecyclerView.setAdapter(mRecommendAdapter);
         mRecyclerView.setHasFixedSize(true);
 
+        return convertView;
     }
+
 
 
     private void display() {

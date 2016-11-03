@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:top="-2dp">
+            <!--边框里面背景颜色 白色-->
+           
+        <shape>
+            <solid android:color="#00000000"/>
+            <!-- 圆角 -->  
+                
+            <corners
+                android:bottomLeftRadius="3dp"
+                android:bottomRightRadius="3dp"/>
+            <stroke
+                android:width="1px"
+                android:color="@color/bb_darkBackgroundColor"/>
+        </shape>
+    </item>
+</layer-list>

@@ -17,11 +17,11 @@
 package com.community.yuequ.player;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import com.community.yuequ.R;
 import com.community.yuequ.modle.RProgramDetail;
-import com.community.yuequ.view.TitleBarLayout;
 
 import java.util.ArrayList;
 
@@ -44,8 +43,9 @@ import io.vov.vitamio.Vitamio;
  */
 
 @SuppressLint("HandlerLeak")
-public class VideoViewActivity extends AppCompatActivity implements View.OnClickListener{
-	private TitleBarLayout mTitleBarLayout;
+public class VideoViewActivity extends AppCompatActivity{
+	private Toolbar mToolbar;
+	private TextView mTitleView;
 	private WhtVideoView whtVideoView;
 	private boolean mCreated = false;
 
@@ -66,7 +66,7 @@ public class VideoViewActivity extends AppCompatActivity implements View.OnClick
 			programDetails.add(programDetail);
 			whtVideoView.open(this, false, programDetails);
 			whtVideoView.play(0);
-			mTitleBarLayout.setText(programDetail.name);
+			mTitleView.setText(programDetail.name);
 
 		}
 
@@ -131,9 +131,11 @@ public class VideoViewActivity extends AppCompatActivity implements View.OnClick
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		mTitleBarLayout = new TitleBarLayout(this)
-				.setLeftButtonVisibility(true)
-				.setLeftButtonClickListener(this);
+		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		mToolbar.setTitle("");
+		setSupportActionBar(mToolbar);
+		mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+
 	}
 
 	@Override
@@ -148,13 +150,12 @@ public class VideoViewActivity extends AppCompatActivity implements View.OnClick
 	}
 
 	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.btn_back:
-				finish();
-				break;
-			default:
-				break;
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+
+			finish();
+			return true;
 		}
+		return super.onOptionsItemSelected(item);
 	}
 }

@@ -1,5 +1,7 @@
 package com.community.yuequ.modle;
 
+import com.community.yuequ.imple.HomeData;
+
 import java.io.Serializable;
 import java.util.List;
 

@@ -1,13 +1,15 @@
 package com.community.yuequ.gui;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.community.yuequ.Contants;
@@ -20,7 +22,6 @@ import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerItemDecoration;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
-import com.community.yuequ.view.TitleBarLayout;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -29,9 +30,10 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class PicListActivity extends AppCompatActivity implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class PicListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     public static final String TAG = PicListActivity.class.getSimpleName();
-    private TitleBarLayout mTitleBarLayout;
+    private Toolbar mToolbar;
+    private TextView mTitleView;
     private PageStatuLayout mStatuLayout;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -63,15 +65,15 @@ public class PicListActivity extends AppCompatActivity implements View.OnClickLi
         mStatuLayout = new PageStatuLayout(this)
                 .hide();
 
-        mTitleBarLayout = new TitleBarLayout(this)
-                .setText(column_name)
-                .setLeftButtonVisibility(true)
-                .setLeftButtonClickListener(this);
-
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        mTitleView.setText(column_name);
         mRecyclerView = (RecyclerView) findViewById(android.R.id.list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
 
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.pink900);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mLayoutManager = new LinearLayoutManager(this);
@@ -230,14 +232,12 @@ public class PicListActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_back:
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
                 finish();
-                break;
-            default:
-                break;
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

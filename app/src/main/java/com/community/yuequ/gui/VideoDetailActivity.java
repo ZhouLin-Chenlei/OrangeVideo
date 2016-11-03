@@ -3,7 +3,9 @@ package com.community.yuequ.gui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,7 +28,6 @@ import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.player.VideoViewActivity;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.PageStatuLayout;
-import com.community.yuequ.view.TitleBarLayout;
 import com.community.yuequ.widget.GoChargDialog;
 import com.community.yuequ.widget.InputPhoneNumberDialog;
 import com.google.gson.Gson;
@@ -42,7 +43,8 @@ import okhttp3.Request;
 public class VideoDetailActivity extends AppCompatActivity implements View.OnClickListener,InputPhoneNumberDialog.PhoneNumberCallBack,DialogConfListener {
     public static final String TAG = VideoDetailActivity.class.getSimpleName();
 
-    private TitleBarLayout mTitleBarLayout;
+    private Toolbar mToolbar;
+    private TextView mTitleView;
     private PageStatuLayout mStatuLayout;
     private ImageView iv_img;
     private TextView tv_dec;
@@ -60,9 +62,11 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
         mSession = Session.get(this);
         Intent intent = getIntent();
         mRProgram = (RProgram) intent.getSerializableExtra("program");
-        mTitleBarLayout = new TitleBarLayout(this)
-                .setLeftButtonVisibility(true)
-                .setLeftButtonClickListener(this);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+
         mStatuLayout = new PageStatuLayout(this)
                 .setReloadListener(this)
                 .hide();
@@ -74,7 +78,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
         btn_play.setOnClickListener(this);
 
         if (mRProgram != null) {
-            mTitleBarLayout.setText(mRProgram.name);
+            mTitleView.setText(mRProgram.name);
             tv_dec.setText(mRProgram.name);
             tv_detail.setText(mRProgram.remark);
             ImageManager.getInstance().loadUrlImage(this, mRProgram.img_path, iv_img);
@@ -85,7 +89,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
 
     private void display() {
         if (programDetail != null) {
-            mTitleBarLayout.setText(programDetail.name);
+            mTitleView.setText(programDetail.name);
             tv_dec.setText(programDetail.name);
             tv_detail.setText(programDetail.remark);
             ImageManager.getInstance().loadUrlImage(this, programDetail.img_path, iv_img);
@@ -164,13 +168,19 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
 
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_back:
-                finish();
-                break;
+
             case R.id.btn_play:
                 if(programDetail==null){
                     Toast.makeText(VideoDetailActivity.this, "获取视频信息失败！", Toast.LENGTH_SHORT).show();

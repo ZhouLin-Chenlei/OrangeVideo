@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -29,7 +31,6 @@ import com.community.yuequ.modle.RProgramDetailDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.util.HtmlUtil;
-import com.community.yuequ.view.TitleBarLayout;
 import com.community.yuequ.widget.GoChargDialog;
 import com.community.yuequ.widget.InputPhoneNumberDialog;
 import com.google.gson.Gson;
@@ -42,10 +43,11 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class PicDetailActivity extends AppCompatActivity implements View.OnClickListener, InputPhoneNumberDialog.PhoneNumberCallBack, DialogConfListener {
+public class PicDetailActivity extends AppCompatActivity implements InputPhoneNumberDialog.PhoneNumberCallBack, DialogConfListener {
     public static final String TAG = VideoDetailActivity.class.getSimpleName();
 
-    private TitleBarLayout mTitleBarLayout;
+    private Toolbar mToolbar;
+    private TextView mTitleView;
 
     private RProgram mRProgram;
     private Session mSession;
@@ -66,16 +68,18 @@ public class PicDetailActivity extends AppCompatActivity implements View.OnClick
         mSession = Session.get(this);
         Intent intent = getIntent();
         mRProgram = (RProgram) intent.getSerializableExtra("program");
-        mTitleBarLayout = new TitleBarLayout(this)
-                .setLeftButtonVisibility(true)
-                .setLeftButtonClickListener(this);
+
         mWebView = (WebView) findViewById(R.id.detail_web_view);
 //        tv_content = (TextView) findViewById(R.id.tv_content);
         tvErrorMsg = (TextView) findViewById(R.id.tv_error_msg);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         tv_second_title = (TextView) findViewById(R.id.tv_second_title);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
 
-        mTitleBarLayout.setText(getString(R.string.detail));
+        mTitleView.setText(getString(R.string.detail));
         tv_second_title.setText(mRProgram.name);
 //        initView();
         getData();
@@ -417,20 +421,6 @@ public class PicDetailActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_back:
-                finish();
-                break;
-            case R.id.btn_play:
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void phoneNumber(String phoneNumber) {
         setphoneNumber(phoneNumber);
     }
@@ -439,5 +429,15 @@ public class PicDetailActivity extends AppCompatActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (!getSupportFragmentManager().popBackStackImmediate())
+                finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

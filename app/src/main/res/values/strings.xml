@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">悦趣</string>
-    <string name="main_tab_recommend">推荐</string>
-    <string name="main_tab_video">视频</string>
-    <string name="main_tab_channel">专题</string>
-    <string name="main_tab_tuwen">图文</string>
+    <string name="app_name">橙子视频</string>
+    <string name="main_tab_home">主页</string>
+    <string name="main_tab_online">直播</string>
+    <string name="main_tab_videos">点播</string>
+    <string name="main_tab_myprofile">我的</string>
 
 
     <string name="no_data">没有数据</string>
@@ -55,5 +55,28 @@
     <string name="tips">提示</string>
     <string name="toast_exit_tip">再按一次退出</string>
     <string name="pay">购买</string>
+
+    <string name="test">这是一段很长很长的文字，用于测试文字很长布局显示的情况。有时候实际使用场景Toolbar高度满足不了需求（比如平板），需要对Toolbar高度增加。这是一段很长很长的文字，用于测试文字很长布局显示的情况。有时候实际使用场景Toolbar高度满足不了需求（比如平板），需要对Toolbar高度增加.</string>
+    <string name="history">播放记录</string>
+    <string name="collect">我的收藏</string>
+    <string name="feedback">帮助反馈</string>
+    <string name="about">关于</string>
+    <string name="login_or_register">点击登录/注册</string>
+    <string name="title_activity_login">登录</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">手机号 / 邮箱</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="register_account">注册账户</string>
+    <string name="forget_password">忘记密码</string>
 
 </resources>

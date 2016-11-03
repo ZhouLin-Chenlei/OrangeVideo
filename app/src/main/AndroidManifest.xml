@@ -14,11 +14,16 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
     <!-- <uses-permission android:name="android.permission.BROADCAST_SMS"/> -->
     <application
         android:name=".YQApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -30,12 +35,13 @@
             android:value="GlideModule"/>
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-            android:value="GlideModule" />
+            android:value="GlideModule"/>
+
         <activity
             android:name=".gui.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Fullscreen">
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -104,8 +110,17 @@
             android:enabled="true">
         </service>
 
-        <activity android:name=".gui.GuideActivity"
-                  android:theme="@style/Theme.Fullscreen">
+        <activity
+            android:name=".gui.GuideActivity"
+            android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+            android:name=".gui.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".gui.OnLineListActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

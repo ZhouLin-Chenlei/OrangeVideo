@@ -1,27 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="left"
+    android:orientation="vertical"
+    android:paddingEnd="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingTop="5dp">
 
     <ImageView
         android:id="@+id/iv_grouppic"
         android:layout_width="match_parent"
         android:layout_height="187dp"
-        android:scaleType="centerCrop"
+        android:scaleType="centerCrop"/>
 
-      />
-    <!-- app:rrHeight="562"
-           app:rrWidth="537"-->
     <TextView
         android:id="@+id/tv_group_name"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
         android:gravity="center"
-        android:lines="1"
+        android:maxLines="1"
         android:textColor="@color/black"
-        android:textSize="18sp"/>
+        android:textSize="17sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@mipmap/bg_audience_textview"
+        android:gravity="center"
+        android:maxLines="1"
+        android:layout_marginTop="3dp"
+        android:textSize="12.5sp"
+        android:text="279人观看"
+        android:textColor="@color/orange700"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawableRight="@mipmap/icon_gray_arrow"
+            android:gravity="center"
+            android:text="@string/more"
+            android:textSize="12.5sp"
+            android:textColor="@color/grey700"/>
+    </RelativeLayout>
 </LinearLayout>

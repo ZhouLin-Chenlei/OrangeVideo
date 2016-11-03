@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/title_bar"/>
+    <include layout="@layout/toolbar"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,7 +27,8 @@
                 android:fastScrollEnabled="true"
                 android:fadingEdge="none"
                 android:stretchMode="columnWidth"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:padding="5dp"/>
 
         </com.community.yuequ.view.SwipeRefreshLayout>
 
@@ -51,7 +52,6 @@
                 android:layout_gravity="center"/>
         </FrameLayout>
 
-        <include layout="@layout/shadow_top"/>
     </FrameLayout>
 
 </LinearLayout>

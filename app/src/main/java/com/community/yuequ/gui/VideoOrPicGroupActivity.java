@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.community.yuequ.Contants;
@@ -19,7 +22,6 @@ import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerGridItemDecoration;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
-import com.community.yuequ.view.TitleBarLayout;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -28,9 +30,10 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class VideoOrPicGroupActivity extends AppCompatActivity implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class VideoOrPicGroupActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     public static final String TAG = VideoOrPicGroupActivity.class.getSimpleName();
-    private TitleBarLayout mTitleBarLayout;
+    private Toolbar mToolbar;
+    private TextView mTitleView;
     private  PageStatuLayout mStatuLayout;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -57,19 +60,17 @@ public class VideoOrPicGroupActivity extends AppCompatActivity implements View.O
         mStatuLayout = new PageStatuLayout(this)
                 .hide();
 
-        mTitleBarLayout = new TitleBarLayout(this)
-                .setLeftButtonVisibility(true)
-                .setLeftButtonClickListener(this);
-
-
-
-        mTitleBarLayout .setText(column_name);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        mTitleView .setText(column_name);
 
 
         mRecyclerView = (RecyclerView) findViewById(android.R.id.list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
 
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.pink900);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mLayoutManager = new GridLayoutManager(this,2);
@@ -182,16 +183,6 @@ public class VideoOrPicGroupActivity extends AppCompatActivity implements View.O
         }
     };
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_back:
-                finish();
-                break;
-            default:
-                break;
-        }
-    }
 
     @Override
     public void onRefresh() {
@@ -202,5 +193,13 @@ public class VideoOrPicGroupActivity extends AppCompatActivity implements View.O
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+                finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

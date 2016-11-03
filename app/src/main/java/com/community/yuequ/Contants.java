@@ -1,7 +1,7 @@
 package com.community.yuequ;
 
 /**
- * Created by Administrator on 2016/5/5.
+ * 常量
  */
 public class Contants {
 
@@ -21,8 +21,9 @@ public class Contants {
 
     protected static final String PROTOCOL_HTTP = "http://";
     protected static String PROTOCOL = PROTOCOL_HTTP;
-    public static String DOMAIN = "182.92.192.208:8088/yqi";
-//    public static String DOMAIN = "171.8.238.171:8086/yqi";
+//    public static String DOMAIN = "182.92.192.208:8088/yqi";
+
+    public static String DOMAIN = "182.92.192.208:8088/oli";
     public static String PICDOMAIN = "http://182.92.192.208:8088/yqfile";
 
     public static final String PRODUCTNAME = "yuequ";
