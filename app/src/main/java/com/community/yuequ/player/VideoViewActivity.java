@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.community.yuequ.R;
+import com.community.yuequ.imple.PlayData;
 import com.community.yuequ.modle.RProgramDetail;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class VideoViewActivity extends AppCompatActivity{
 		RProgramDetail programDetail = (RProgramDetail) getIntent().getSerializableExtra("programDetail");
 		if(programDetail!=null){
 
-			ArrayList<RProgramDetail> programDetails = new ArrayList<>();
+			ArrayList<PlayData> programDetails = new ArrayList<>();
 			programDetails.add(programDetail);
 			whtVideoView.open(this, false, programDetails);
 			whtVideoView.play(0);

@@ -13,7 +13,7 @@ public class RProgram implements Serializable{
     public String name;
     public String img_path;
 
-    @SerializedName(value="remark", alternate={"desc_content"})
+//    @SerializedName(value="remark", alternate={"desc_content"})
     public String remark;
 
     /**1：上传，2：外链地址，3：手工填写视频URL*/

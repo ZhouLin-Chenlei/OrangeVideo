@@ -16,28 +16,31 @@
             android:id="@+id/info_panel"
             style="@style/InfoPanel_Container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/action_bar_default_height"
+            android:layout_height="?android:actionBarSize"
             android:gravity="center_horizontal|center"
             android:orientation="horizontal" >
 
             <ImageButton
                 android:id="@+id/video_back"
-                android:background="@null"
-                android:layout_width="@dimen/action_bar_default_height"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:src="@drawable/player_exit" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:src="@mipmap/video_back_img" />
 
             <TextView
                 android:id="@+id/mediacontroller_file_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:layout_weight="1"
                 android:paddingLeft="8dip"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:maxLines="1"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:ellipsize="marquee"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/download_rate"
@@ -66,10 +69,10 @@
 
             <ImageButton
                 android:id="@+id/video_menu"
-                android:background="@null"
-                android:layout_width="@dimen/action_bar_default_height"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:visibility="gone"
                 android:src="@drawable/selectorparent" />
         </LinearLayout>
 
@@ -184,6 +187,7 @@
 		    android:layout_alignParentRight="true"
 		    android:layout_below="@id/info_panel"
 		    android:dividerHeight="0dip"
+            android:visibility="gone"
 		    android:layout_above="@id/mediacontroller_controls"
 		    android:background="@color/mediacontroller_bg"
 		    android:focusable="true"
@@ -199,7 +203,8 @@
         <ProgressBar
             android:id="@+id/probar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
+            android:visibility="gone"
             style="@android:style/Widget.ProgressBar.Small"/>
         <TextView
             android:id="@+id/load_rate"

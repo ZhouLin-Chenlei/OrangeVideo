@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -29,15 +28,6 @@ import java.util.List;
 
 
 /**
- * 《https://github.com/qstumn/VerticalTabLayout》
- *
- app:indicator_color     setIndicatorColor     指示器颜色
- app:indicator_width     setIndicatorWidth     指示器宽度
- app:indicator_gravity   setIndicatorGravity   指示器位置
- app:indicator_corners   setIndicatorCorners   指示器圆角
- app:tab_mode            setTabMode            Tab高度模式
- app:tab_height          setTabHeight          Tab高度
- app:tab_margin          setTabMargin          Tab间距
  */
 public class VerticalTabLayout extends ScrollView {
     private Context mContext;
@@ -77,7 +67,8 @@ public class VerticalTabLayout extends ScrollView {
         setFillViewport(true);
         mTabSelectedListeners = new ArrayList<>();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.VerticalTabLayout);
-        mColorIndicator = typedArray.getColor(R.styleable.VerticalTabLayout_indicator_color, ContextCompat.getColor(context,R.color.colorPrimary));
+        mColorIndicator = typedArray.getColor(R.styleable.VerticalTabLayout_indicator_color,
+                context.getResources().getColor(R.color.colorPrimary));
         mIndicatorWidth = (int) typedArray.getDimension(R.styleable.VerticalTabLayout_indicator_width, dp2px(3));
         mIndicatorCorners = typedArray.getDimension(R.styleable.VerticalTabLayout_indicator_corners, 0);
         mIndicatorGravity = typedArray.getInteger(R.styleable.VerticalTabLayout_indicator_gravity, Gravity.LEFT);

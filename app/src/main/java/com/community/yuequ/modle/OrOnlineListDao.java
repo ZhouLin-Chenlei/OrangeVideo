@@ -13,7 +13,7 @@ public class OrOnlineListDao {
 
     public static class OrOnlineListBean{
         public int total_cnt;//总页数
-//        public int total_page;//总页数
+        public int total_page;//总页数
         public List<RProgram> list;
 
     }

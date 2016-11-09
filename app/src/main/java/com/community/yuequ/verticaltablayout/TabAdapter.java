@@ -4,8 +4,6 @@ package com.community.yuequ.verticaltablayout;
 import com.community.yuequ.verticaltablayout.widget.QTabView;
 
 /**
- * @author chqiu
- *         Email:qstumn@163.com
  */
 public interface TabAdapter {
     int getCount();

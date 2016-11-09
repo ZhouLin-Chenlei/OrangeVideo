@@ -8,16 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.community.yuequ.R;
+import com.community.yuequ.imple.PlayData;
 import com.community.yuequ.modle.RProgramDetail;
 
 import java.util.List;
 
 public class ProgramAdapter extends BaseAdapter {
-	private List<RProgramDetail> items;
+	private List<PlayData> items;
 	private int selsect = 0;
 	private LayoutInflater mInflater;
 	private Context context;
-	public ProgramAdapter(Context context,List<RProgramDetail> items) {
+	public ProgramAdapter(Context context,List<PlayData> items) {
 		this.mInflater = LayoutInflater.from(context);
 		this.items = items;
 		this.context = context;
@@ -58,8 +59,8 @@ public class ProgramAdapter extends BaseAdapter {
 
 			holder = (ViewHolder) convertView.getTag();
 		}
-		RProgramDetail newItem = items.get(position);
-		holder.title.setText(newItem.name);
+		PlayData newItem = items.get(position);
+		holder.title.setText(newItem.getTitle());
 		if (selsect == position) {
 			holder.title.setBackgroundResource(R.color.selectplay_selected);
 			

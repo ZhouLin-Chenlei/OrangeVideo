@@ -75,7 +75,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_live_pro"
-            android:text="cctv1"
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="22sp"
@@ -130,27 +129,29 @@
             android:layout_marginLeft="15dp"/>
 
     </RelativeLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey200"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.community.yuequ.verticaltablayout.VerticalTabLayout
             android:id="@+id/tablayout"
-            android:layout_width="80dp"
+            android:layout_width="112dp"
             android:layout_height="match_parent"
             android:visibility="visible"
             app:indicator_color="@color/colorPrimary"
             app:indicator_gravity="fill"
-            app:tab_height="50dp"
-            app:tab_mode="scrollable"
-            app:tab_margin="1dp"/>
+            app:tab_height="48dp"
+            app:tab_mode="scrollable"/>
         <com.community.yuequ.view.ViewPagerFixed
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/view_pager"
             android:layout_toRightOf="@id/tablayout"
             android:layout_toEndOf="@id/tablayout"
-            >
+            android:background="@color/white">
 
         </com.community.yuequ.view.ViewPagerFixed>
 

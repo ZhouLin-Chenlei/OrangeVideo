@@ -148,7 +148,7 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
                             }else{
                                 mGroupAdapter.addData(mOnlineListBean.list);
                             }
-                            if(mPage >= mOnlineListBean.total_cnt){
+                            if(mPage >= mOnlineListBean.total_page){
                                 mGroupAdapter.setLoadMoreViewVisibility(View.VISIBLE);
                                 mGroupAdapter.setLoadMoreViewText(getString(R.string.load_data_adequate));
                             }else{

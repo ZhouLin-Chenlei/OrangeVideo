@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,9 @@ import com.community.yuequ.R;
 import com.community.yuequ.Session;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.contorl.ImageManager;
+import com.community.yuequ.imple.ActionBarShowHideListener;
 import com.community.yuequ.imple.DialogConfListener;
+import com.community.yuequ.imple.PlayData;
 import com.community.yuequ.modle.MessageBean;
 import com.community.yuequ.modle.OrderTip;
 import com.community.yuequ.modle.OrderTipsDao;
@@ -47,7 +50,7 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class VideoDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class VideoDetailActivity extends AppCompatActivity implements View.OnClickListener,ActionBarShowHideListener {
     public static final String TAG = VideoDetailActivity.class.getSimpleName();
 
     private ActionBar mActionBar;
@@ -56,7 +59,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
 
     private WhtVideoView mVideoView;
     private ImageView iv_video_cover;
-    private ImageView iv_play_cc;
+    private ImageButton iv_play_cc;
     private TextView tv_detail;
 
 
@@ -92,7 +95,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 .hide();
         mVideoView = (WhtVideoView) findViewById(R.id.whtvideoview);
         iv_video_cover = (ImageView) findViewById(R.id.iv_video_cover);
-        iv_play_cc = (ImageView) findViewById(R.id.iv_play_cc);
+        iv_play_cc = (ImageButton) findViewById(R.id.iv_play_cc);
         tv_detail = (TextView) findViewById(R.id.tv_detail);
 
         iv_play_cc.setOnClickListener(this);
@@ -103,7 +106,9 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
 
         if (mRProgram != null) {
             mTitleView.setText(mRProgram.name);
+
             tv_detail.setText(mRProgram.remark);
+
 //            ImageManager.getInstance().loadUrlImage(this, mRProgram.img_path, iv_video_cover);
 
             Glide
@@ -121,6 +126,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
     private void display() {
         if (programDetail != null) {
             mTitleView.setText(programDetail.name);
+
             tv_detail.setText(programDetail.remark);
 //            ImageManager.getInstance().loadUrlImage(this, programDetail.img_path, iv_video_cover);
 
@@ -235,7 +241,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                     }
                     iv_video_cover.setVisibility(View.GONE);
                     iv_play_cc.setVisibility(View.GONE);
-                    ArrayList<RProgramDetail> programDetails = new ArrayList<>();
+                    ArrayList<PlayData> programDetails = new ArrayList<>();
                     programDetails.add(programDetail);
                     mVideoView.open(this, false, programDetails);
                     mVideoView.play(0);
@@ -316,5 +322,19 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
 
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void showActionBar() {
+        if(mActionBar!=null && !mActionBar.isShowing()){
+            mActionBar.show();
+        }
+    }
+
+    @Override
+    public void hideActionBar() {
+        if(mActionBar!=null && mActionBar.isShowing()){
+            mActionBar.hide();
+        }
     }
 }

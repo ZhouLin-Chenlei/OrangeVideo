@@ -2,11 +2,9 @@ package com.community.yuequ.verticaltablayout.widget;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,7 +67,7 @@ public class QTabView extends TabView {
 
     private void initBadge() {
         mBadge = new TextView(mContext);
-        FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        LayoutParams params2 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params2.gravity = Gravity.RIGHT | Gravity.TOP;
         params2.setMargins(0, dp2px(5), dp2px(5), 0);
         mBadge.setLayoutParams(params2);
@@ -82,7 +80,7 @@ public class QTabView extends TabView {
     private void initTitleView() {
         if (mTitle != null) mContainer.removeView(mTitle);
         mTitle = new TextView(mContext);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         mTitle.setLayoutParams(params);
         mTitle.setTextColor(mTabTitle.mColorNormal);
         mTitle.setTextSize(mTabTitle.mTitleTextSize);
@@ -97,7 +95,7 @@ public class QTabView extends TabView {
     private void initIconView() {
         if (mIcon != null) mContainer.removeView(mIcon);
         mIcon = new ImageView(mContext);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(mTabIcon.mIconWidth, mTabIcon.mIconHeight);
+        LayoutParams params = new LayoutParams(mTabIcon.mIconWidth, mTabIcon.mIconHeight);
         mIcon.setLayoutParams(params);
         if (mTabIcon.mNormalIcon != 0) {
             mIcon.setImageResource(mTabIcon.mNormalIcon);
@@ -108,15 +106,15 @@ public class QTabView extends TabView {
     }
 
     private void setBadgeImp(int num) {
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mBadge.getLayoutParams();
+        LayoutParams lp = (LayoutParams) mBadge.getLayoutParams();
         if (num <= 9) {
             lp.width = dp2px(12);
             lp.height = dp2px(12);
             gd.setShape(GradientDrawable.OVAL);
             mBadge.setPadding(0, 0, 0, 0);
         } else {
-            lp.width = FrameLayout.LayoutParams.WRAP_CONTENT;
-            lp.height = FrameLayout.LayoutParams.WRAP_CONTENT;
+            lp.width = LayoutParams.WRAP_CONTENT;
+            lp.height = LayoutParams.WRAP_CONTENT;
             mBadge.setPadding(dp2px(3), 0, dp2px(3), 0);
             gd.setShape(GradientDrawable.RECTANGLE);
             gd.setCornerRadius(dp2px(6));
@@ -276,8 +274,8 @@ public class QTabView extends TabView {
             public Builder() {
                 mSelectedIcon = 0;
                 mNormalIcon = 0;
-                mIconWidth = FrameLayout.LayoutParams.WRAP_CONTENT;
-                mIconHeight = FrameLayout.LayoutParams.WRAP_CONTENT;
+                mIconWidth = LayoutParams.WRAP_CONTENT;
+                mIconHeight = LayoutParams.WRAP_CONTENT;
                 mIconGravity = Gravity.LEFT;
                 mMargin = 0;
             }
@@ -335,7 +333,7 @@ public class QTabView extends TabView {
             private String mContent;
 
             public Builder(Context context) {
-                this.mColorSelected = ContextCompat.getColor(context, R.color.colorPrimary);
+                this.mColorSelected = context.getResources().getColor(R.color.colorPrimary);
                 this.mColorNormal = 0xFF757575;
                 this.mTitleTextSize = 16;
                 this.mContent = "title";

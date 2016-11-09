@@ -61,6 +61,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.community.yuequ.R;
+import com.community.yuequ.imple.ActionBarShowHideListener;
+import com.community.yuequ.imple.PlayData;
 import com.community.yuequ.modle.RProgramDetail;
 
 import java.lang.ref.WeakReference;
@@ -165,7 +167,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	private ScreenReceiver mScreenReceiver;
 	private boolean mReceiverRegistered = false;
 
-	private final ArrayList<RProgramDetail> videoBeans = new ArrayList<RProgramDetail>();
+	private final ArrayList<PlayData> videoBeans = new ArrayList<>();
 	private Uri mUri = null;
 
 	private int mIndex = 0;
@@ -903,6 +905,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	// mBatteryLevel.setText(level);
 	// }
 
+
 	public void show() {
 		show(DEFAULT_TIME_OUT);
 	}
@@ -912,12 +915,17 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	}
 
 	public void show(int timeout) {
-
-		if (!mShowing) {
+		if(mContext instanceof ActionBarShowHideListener){
+			((ActionBarShowHideListener)mContext).showActionBar();
+		}
+		if (!mShowing && !videoBeans.isEmpty()) {
 			if (mPauseButton != null)
 				mPauseButton.requestFocus();
 
 			mMediaController.setVisibility(View.VISIBLE);
+			if (!mControlsLayout.isShown()) {
+				mControlsLayout.setVisibility(View.VISIBLE);
+			}
 			mControlsLayout.startAnimation(mAnimSlideInTop);
 
 			if (mSystemInfoLayout.isShown()) {
@@ -940,7 +948,9 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	}
 
 	public void hide() {
-
+		if(mContext instanceof ActionBarShowHideListener){
+			((ActionBarShowHideListener)mContext).hideActionBar();
+		}
 		if (mShowing) {
 			try {
 //				if (isPermission) {
@@ -959,6 +969,8 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 			// if (mHiddenListener != null)
 			// mHiddenListener.onHidden();
 		}
+
+
 	}
 
 	// public void setOnShownListener(OnShownListener l) {
@@ -1686,7 +1698,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	};
 
 	public void open(Context context, boolean live,
-			ArrayList<RProgramDetail> list) {
+			ArrayList<PlayData> list) {
 		if (mVideoView == null) {
 			mVideoView = new VideoView(context);
 			mVideoView.setOnCompletionListener(this);
@@ -1714,10 +1726,15 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	}
 
 	private void setProgramList() {
-		adapter = new ProgramAdapter(mContext, videoBeans);
-		mProgramlist.setAdapter(adapter);
-		adapter.setSelection(mIndex);
-		mProgramlist.setOnItemClickListener(onItemClickListener);
+		if(videoBeans.size()>1){
+			mProgramlist.setVisibility(View.VISIBLE);
+			adapter = new ProgramAdapter(mContext, videoBeans);
+			mProgramlist.setAdapter(adapter);
+			adapter.setSelection(mIndex);
+			mProgramlist.setOnItemClickListener(onItemClickListener);
+		}else{
+			mProgramlist.setVisibility(View.GONE);
+		}
 
 	}
 	/**
@@ -1747,7 +1764,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 		if (index < 0)
 			index = 0;
 		this.mIndex = index;
-		url = videoBeans.get(index).video_path;
+		url = videoBeans.get(index).getVideoUrl();
 		if (adapter != null) {
 			adapter.setSelection(index);
 		}
@@ -1763,7 +1780,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 
 		}
 		mSeekTo = getStartPosition();
-		String title = videoBeans.get(index).name;
+		String title = videoBeans.get(index).getTitle();
 		title = (title == null) ? "" : title;
 		setFileName(title);
 		mVideoView.setVideoURI(mUri);
