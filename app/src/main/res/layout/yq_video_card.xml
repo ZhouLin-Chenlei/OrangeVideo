@@ -111,10 +111,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:drawableLeft="@mipmap/icon_tv"
-            android:drawablePadding="4dp"
-            android:text="影视"
             />
+        <!--android:drawableLeft="@mipmap/icon_tv"
+            android:drawablePadding="4dp"-->
     </FrameLayout>
 
 

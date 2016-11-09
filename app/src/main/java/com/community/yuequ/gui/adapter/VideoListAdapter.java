@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
+import com.community.yuequ.gui.LiveVideoActivity;
 import com.community.yuequ.gui.VideoDetailActivity;
 import com.community.yuequ.modle.RProgram;
 

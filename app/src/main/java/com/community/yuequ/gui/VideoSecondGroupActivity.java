@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -16,13 +15,11 @@ import android.widget.Toast;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.YQApplication;
-import com.community.yuequ.gui.adapter.OnLineListAdapter;
 import com.community.yuequ.gui.adapter.VideoOrPicGroupAdapter;
-import com.community.yuequ.modle.YQVideoOrPicGroupDao;
+import com.community.yuequ.modle.OrVideoGroupDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerGridItemDecoration;
-import com.community.yuequ.view.DividerItemDecoration;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
 import com.google.gson.Gson;
@@ -33,23 +30,23 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class OnLineListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-    public static final String TAG = OnLineListActivity.class.getSimpleName();
+public class VideoSecondGroupActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener {
+    public static final String TAG = VideoSecondGroupActivity.class.getSimpleName();
     private Toolbar mToolbar;
     private TextView mTitleView;
     private  PageStatuLayout mStatuLayout;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
-    private OnLineListAdapter mGroupAdapter;
+    private GridLayoutManager mLayoutManager;
+    private VideoOrPicGroupAdapter mGroupAdapter;
 
-    private YQVideoOrPicGroupDao mYQVideoDao;
+    private OrVideoGroupDao mYQVideoDao;
 
     private String type = "1";
     private int column_id;
     private String column_name;
-
+    protected volatile boolean isLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +58,7 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
         column_name = intent.getStringExtra("column_name");
 
         mStatuLayout = new PageStatuLayout(this)
+                .setReloadListener(this)
                 .hide();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -76,13 +74,13 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerGridItemDecoration(this));
 
         mRecyclerView.addOnScrollListener(mScrollListener);
-        mGroupAdapter = new OnLineListAdapter(this);
+        mGroupAdapter = new VideoOrPicGroupAdapter(this);
         mRecyclerView.setAdapter(mGroupAdapter);
         mGroupAdapter.setType(type);
         getdata();
@@ -112,7 +110,7 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
                 .url(url)
                 .tag(TAG)
                 .build()
-                .execute(new JsonCallBack<YQVideoOrPicGroupDao>() {
+                .execute(new JsonCallBack<OrVideoGroupDao>() {
                     @Override
                     public void onError(Call call, Exception e,int id) {
                         if (mSwipeRefreshLayout != null) {
@@ -132,7 +130,7 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
                     }
 
                     @Override
-                    public void onResponse(YQVideoOrPicGroupDao response,int id) {
+                    public void onResponse(OrVideoGroupDao response, int id) {
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
@@ -157,6 +155,7 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
 
                     @Override
                     public void onBefore(Request request,int id) {
+                        isLoading = true;
                         if(mGroupAdapter.getItemCount()==0){
                             mStatuLayout.show()
                                     .setProgressBarVisibility(true)
@@ -168,6 +167,10 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
                         }
                     }
 
+                    @Override
+                    public void onAfter(int id) {
+                        isLoading = false;
+                    }
                 });
     }
 
@@ -189,9 +192,20 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
 
     @Override
     public void onRefresh() {
-        getdata();
+       getdata();
     }
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ll_status:
+                if(!isLoading){
+                    getdata();
+                }
+                break;
+            default:
+                break;
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -200,7 +214,7 @@ public class OnLineListActivity extends AppCompatActivity implements SwipeRefres
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+                finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

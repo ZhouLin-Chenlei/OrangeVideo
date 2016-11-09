@@ -1,21 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/orange700</item>
+        <item name="colorPrimaryDark">@color/orange800</item>
         <item name="colorAccent">@color/orange500</item>
-        <!-- Customize your theme here. -->
-        <item name="android:windowNoTitle">true</item>
+
         <item name="android:listDivider">@drawable/list_gray50_5dp_divider</item>
-        <item name="android:windowBackground">@color/grey50</item>
+        <item name="android:windowBackground">@color/grey200</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/grey50</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -25,12 +23,10 @@
 
     <style name="FullscreenTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@null</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
     </style>
-
-
-
 
 
     <style name="MediaController_SeekBar">
@@ -42,11 +38,13 @@
         <item name="android:thumb">@drawable/play_ctrl_sound_ball</item>
 
     </style>
+
     <style name="MediaController_Text">
         <item name="android:textColor">#ffffffff</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="InfoPanel_Container">
         <item name="android:background">@color/mediacontroller_bg</item>
     </style>
@@ -68,10 +66,14 @@
         <item name="android:layout_height">60dp</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/bg_myprofile_group_sel</item>
-        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">
+            @dimen/activity_horizontal_margin
+        </item>
         <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">
+            @dimen/activity_horizontal_margin
+        </item>
     </style>
 
 </resources>

@@ -30,7 +30,7 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class VideoListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class VideoListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
     public static final String TAG = VideoListActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
@@ -61,6 +61,7 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
         type = intent.getStringExtra("type");
         column_name = intent.getStringExtra("column_name");
         mStatuLayout = new PageStatuLayout(this)
+                .setReloadListener(this)
                 .hide();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -243,7 +244,18 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
         super.onDestroy();
     }
 
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ll_status:
+                if(!isLoading){
+                    getdata(1);
+                }
+                break;
+            default:
+                break;
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

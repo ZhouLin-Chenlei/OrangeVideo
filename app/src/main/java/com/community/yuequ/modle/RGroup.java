@@ -8,7 +8,7 @@ import java.util.List;
 public class RGroup {
     public int column_id;
     public String column_name;
-    public String type;// 1：视频
+    public String type;// 1：视频，2：图文，3：直播
     public List<RProgram> plist;
 
 }

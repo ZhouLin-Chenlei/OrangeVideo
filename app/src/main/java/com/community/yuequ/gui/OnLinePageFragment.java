@@ -14,14 +14,11 @@ import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.gui.adapter.OnLinePageAdapter;
-import com.community.yuequ.modle.RTextImage;
-import com.community.yuequ.modle.VideoOrPicGroup;
-import com.community.yuequ.modle.YQImageDao;
-import com.community.yuequ.modle.YQVideoOrPicGroupDao;
+import com.community.yuequ.modle.OrOnlineGroup;
+import com.community.yuequ.modle.OrOnlineDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.util.Log;
-import com.community.yuequ.view.DividerItemDecoration;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
 import com.google.gson.Gson;
@@ -37,15 +34,15 @@ import okhttp3.Request;
 /**
  * 直播一级界面
  */
-public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
     public static final String TAG = OnLinePageFragment.class.getSimpleName();
     protected RecyclerView mRecyclerView;
     protected PageStatuLayout mStatuLayout;
     private OnLinePageAdapter mVideoAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayoutManager mLayoutManager;
-    private YQImageDao mVideoPrograma;
-    private final List<RTextImage> mProgramas = new ArrayList<>();
+    private OrOnlineDao mVideoPrograma;
+    private final List<OrOnlineGroup> mProgramas = new ArrayList<>();
 
     public OnLinePageFragment() {
     }
@@ -73,7 +70,8 @@ public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshL
 
         View convertView = inflater.inflate(R.layout.fragment_video, container, false);
 
-        mStatuLayout = new PageStatuLayout(convertView);
+        mStatuLayout = new PageStatuLayout(convertView)
+                .setReloadListener(this);
         mRecyclerView = (RecyclerView) convertView.findViewById(android.R.id.list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -87,13 +85,12 @@ public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshL
     return convertView;
     }
 
-//    String testUrl = "http://image.baidu.com/channel/listjson?fr=channel&tag1=美女&tag2=泳装&sorttype=0&pn=1&rn=100&ie=utf8&oe=utf-8&8339397110145592";
     @Override
     protected void initData() {
         HashMap<String,Integer> hashMap  =new HashMap<>();
 
         hashMap.put("level",1);//默认一级栏目，值=1；二级栏目，值=2
-        hashMap.put("col_id",4);//默认为视频ID，值=4
+        hashMap.put("col_id",3);//默认为直播ID，值=3
         String content = "";
         try {
             content = AESUtil.encode(new Gson().toJson(hashMap));
@@ -107,10 +104,10 @@ public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshL
         OkHttpUtils
                 .postString()
                 .content(content)
-                .url(Contants.URL_PICTURELIST)
+                .url(Contants.URL_LIVELIST)
                 .tag(TAG)
                 .build()
-                .execute(new JsonCallBack<YQImageDao>() {
+                .execute(new JsonCallBack<OrOnlineDao>() {
                     @Override
                     public void onError(Call call, Exception e,int id) {
                         if(isAdded()){
@@ -119,7 +116,7 @@ public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshL
                     }
 
                     @Override
-                    public void onResponse(YQImageDao response, int id) {
+                    public void onResponse(OrOnlineDao response, int id) {
                         mVideoPrograma = response;
                         if(isAdded()){
                             if(mVideoPrograma.result==null||mVideoPrograma.result.isEmpty()){
@@ -241,7 +238,18 @@ public class OnLinePageFragment extends BaseTabFragment implements SwipeRefreshL
     public void onRefresh() {
         initData();
     }
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ll_status:
+                if(!isLoading){
+                    initData();
+                }
+                break;
+            default:
+                break;
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

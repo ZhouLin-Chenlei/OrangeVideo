@@ -3,12 +3,14 @@ package com.community.yuequ.modle;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/5/6.
+ * Created by Administrator on 2016/5/11.
  */
-public class YQVideoOrPicGroupDao {
+public class OrOnlineDao {
 
     public int errorCode;
     public String errorMessage;
-    public List<VideoOrPicGroup> result;
+    public List<OrOnlineGroup> result;
+
+
 
 }

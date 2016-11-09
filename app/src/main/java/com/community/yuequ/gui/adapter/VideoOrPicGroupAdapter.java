@@ -14,7 +14,7 @@ import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.gui.PicListActivity;
 import com.community.yuequ.gui.VideoListActivity;
-import com.community.yuequ.modle.VideoOrPicGroup;
+import com.community.yuequ.modle.OrVideoGroup;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 public class VideoOrPicGroupAdapter extends RecyclerView.Adapter<VideoOrPicGroupAdapter.ViewHolder>{
     private Activity mContext;
     private String type = "1";
-    private List<VideoOrPicGroup> mList;
+    private List<OrVideoGroup> mList;
     public VideoOrPicGroupAdapter(Activity activity){
         this.mContext = activity;
     }
@@ -41,7 +41,7 @@ public class VideoOrPicGroupAdapter extends RecyclerView.Adapter<VideoOrPicGroup
 
     @Override
     public void onBindViewHolder(VideoOrPicGroupAdapter.ViewHolder holder, int position) {
-        final VideoOrPicGroup programa = mList.get(position);
+        final OrVideoGroup programa = mList.get(position);
         holder.tv_group_name.setText(programa.name);
         ImageManager.getInstance().loadUrlImage(mContext,programa.img_path,holder.iv_grouppic);
 
@@ -68,7 +68,7 @@ public class VideoOrPicGroupAdapter extends RecyclerView.Adapter<VideoOrPicGroup
         return mList.size();
     }
 
-    public void setData(List<VideoOrPicGroup> result) {
+    public void setData(List<OrVideoGroup> result) {
         mList = result;
         notifyDataSetChanged();
     }

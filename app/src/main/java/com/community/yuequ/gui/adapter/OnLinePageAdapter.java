@@ -13,23 +13,21 @@ import android.widget.TextView;
 
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
-import com.community.yuequ.gui.OnLineListActivity;
+import com.community.yuequ.gui.OnLineSecondListActivity;
 import com.community.yuequ.gui.OnLinePageFragment;
-import com.community.yuequ.gui.VideoOrPicGroupActivity;
-import com.community.yuequ.modle.RTextImage;
-import com.community.yuequ.modle.VideoOrPicGroup;
+import com.community.yuequ.modle.OrOnlineGroup;
 
 import java.util.List;
 
 public class OnLinePageAdapter extends RecyclerView.Adapter<OnLinePageAdapter.ViewHolder> {
     private OnLinePageFragment mFragment;
-    private List<RTextImage> mRTextImages;
+    private List<OrOnlineGroup> mOnlineGroups;
 
 
-    public OnLinePageAdapter(OnLinePageFragment fragment, List<RTextImage> programas) {
+    public OnLinePageAdapter(OnLinePageFragment fragment, List<OrOnlineGroup> programas) {
         super();
         mFragment = fragment;
-        mRTextImages = programas;
+        mOnlineGroups = programas;
 
     }
 
@@ -43,7 +41,7 @@ public class OnLinePageAdapter extends RecyclerView.Adapter<OnLinePageAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final RTextImage programa = mRTextImages.get(position);
+        final OrOnlineGroup programa = mOnlineGroups.get(position);
         String title = programa.name+"("+programa.program_cnt+")";
         holder.tv_label.setText(title);
         if(!TextUtils.isEmpty(programa.content_desc)) {
@@ -53,9 +51,9 @@ public class OnLinePageAdapter extends RecyclerView.Adapter<OnLinePageAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mFragment.getContext(),OnLineListActivity.class);
+                Intent intent = new Intent(mFragment.getContext(),OnLineSecondListActivity.class);
                 intent.putExtra("column_id",programa.id);
-                intent.putExtra("type","2");//图文
+//                intent.putExtra("type","2");//图文
                 intent.putExtra("column_name",programa.name);
                 mFragment.startActivity(intent);
             }
@@ -69,7 +67,7 @@ public class OnLinePageAdapter extends RecyclerView.Adapter<OnLinePageAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return mRTextImages.size();
+        return mOnlineGroups.size();
     }
 
     @Override

@@ -32,7 +32,7 @@ import okhttp3.Request;
 /**
  * 推荐页
  */
-public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
+public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener ,View.OnClickListener{
     public static final String TAG = RecommendFragment.class.getSimpleName();
     protected PageStatuLayout mStatuLayout;
     private RecommendAdapter mRecommendAdapter;
@@ -66,7 +66,8 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
 
         View convertView = inflater.inflate(R.layout.fragment_recommend, container, false);
 
-        mStatuLayout = new PageStatuLayout(convertView);
+        mStatuLayout = new PageStatuLayout(convertView)
+                .setReloadListener(this);
         mRecyclerView = (RecyclerView) convertView.findViewById(android.R.id.list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -316,4 +317,16 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ll_status:
+                if(!isLoading){
+                    initData();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

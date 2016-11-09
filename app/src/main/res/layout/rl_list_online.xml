@@ -13,13 +13,19 @@
     <RelativeLayout
         android:id="@+id/ll_preagram1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp">
         <com.community.yuequ.widget.FourThreeImageView
             android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:id="@+id/iv_image"
-            android:background="@color/grey200"
-            android:scaleType="centerCrop"/>
+            android:background="@color/grey50"
+            android:scaleType="centerInside"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,11 +35,11 @@
             android:layout_toEndOf="@id/iv_image"
             android:layout_toRightOf="@id/iv_image"
             android:id="@+id/tv_name"
-            android:lines="1"
+            android:maxLines="1"
             android:layout_marginTop="3dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:text="西部世界 第一部"/>
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,10 +50,10 @@
             android:layout_marginLeft="10dp"
             android:textSize="12sp"
             android:textColor="@color/grey600"
-            android:id="@+id/tv_desc2"
-            android:lines="1"
+            android:id="@+id/tv_desc"
+            android:maxLines="3"
             android:layout_marginTop="3dp"
-            android:text="2016/美国/科幻/西部"/>
+            />
 
     </RelativeLayout>
 

@@ -1,34 +1,29 @@
 package com.community.yuequ.gui.adapter;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
-import com.community.yuequ.gui.PicDetailActivity;
+import com.community.yuequ.gui.LiveVideoActivity;
+import com.community.yuequ.gui.OnLineSecondListActivity;
 import com.community.yuequ.gui.RecommendFragment;
 import com.community.yuequ.gui.VideoDetailActivity;
-import com.community.yuequ.gui.VideoOrPicGroupActivity;
-import com.community.yuequ.gui.VideoListActivity;
+import com.community.yuequ.gui.VideoSecondGroupActivity;
 import com.community.yuequ.imple.HomeData;
 import com.community.yuequ.modle.HomeItem;
 import com.community.yuequ.modle.HomeOnline;
 import com.community.yuequ.modle.HomeTitle;
 import com.community.yuequ.modle.RGroup;
 import com.community.yuequ.modle.RProgram;
-import com.community.yuequ.view.GroupImageView;
-import com.community.yuequ.view.MyGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +41,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int TYPE_LIST_VIDEO_2R = 2;
     private static final int TYPE_LIST_VIDEO_3R = 3;
     private static final int TYPE_LIST_VIDEO_GRID = 4;
-    private static final int TYPE_LIST_TEXTPIC = 5;
+    private static final int TYPE_LIST_ONLINE = 5;
 
 //    private static final int TYPE_LIST_P2 = 4;
 //    private static final int TYPE_LIST_P3 = 5;
@@ -84,8 +79,8 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 break;
             default:
-                View pic2Row = LayoutInflater.from(parent.getContext()).inflate(R.layout.rl_list_pic_2row, parent, false);
-                viewHolder = new Pic2RowViewHolder(pic2Row);
+                View onlineItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.rl_list_online, parent, false);
+                viewHolder = new OnlineViewHolder(onlineItem);
                 break;
         }
         return viewHolder;
@@ -101,31 +96,37 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
             final HomeTitle rGroup = (HomeTitle) getItem(position);
 
-            if("影视".equals(rGroup.titleName)){
-                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_yinshi);
-//                /// 这一步必须要做,否则不会显示.
-//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            }else if("娱乐".equals(rGroup.titleName)){
-                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_yule);
-                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            }else if("搞笑".equals(rGroup.titleName)){
-                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_gaoxiao);
-                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            }else{
-                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_online);
-                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            }
+//            if("影视".equals(rGroup.titleName)){
+//                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_yinshi);
+//                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+//            }else if("娱乐".equals(rGroup.titleName)){
+//                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_yule);
+//                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+//            }else if("搞笑".equals(rGroup.titleName)){
+//                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_gaoxiao);
+//                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+//            }else{
+//                Drawable drawable = ContextCompat.getDrawable(mFragment.getContext(), R.mipmap.icon_htitle_online);
+//                titleViewHolder.tv_title.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+//            }
 
             titleViewHolder.tv_title.setText(rGroup.titleName);
             titleViewHolder.rl_title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mFragment.getContext(), VideoOrPicGroupActivity.class);
-                    intent.putExtra("column_id", rGroup.id);
-                    intent.putExtra("type", rGroup.type);
-                    intent.putExtra("column_name", rGroup.titleName);
-                    mFragment.startActivity(intent);
+                    if("3".equals(rGroup.type)){//去直播列表页
+                        Intent intent = new Intent(mFragment.getContext(), OnLineSecondListActivity.class);
+                        intent.putExtra("column_id", rGroup.id);
+                        intent.putExtra("type", rGroup.type);
+                        intent.putExtra("column_name", rGroup.titleName);
+                        mFragment.startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(mFragment.getContext(), VideoSecondGroupActivity.class);
+                        intent.putExtra("column_id", rGroup.id);
+                        intent.putExtra("type", rGroup.type);
+                        intent.putExtra("column_name", rGroup.titleName);
+                        mFragment.startActivity(intent);
+                    }
                 }
             });
 
@@ -291,11 +292,42 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
 
 
-        } else if (holder instanceof Pic2RowViewHolder) {
-            Pic2RowViewHolder pic2RowViewHolder = ((Pic2RowViewHolder) holder);
-            final HomeOnline rGroup = (HomeOnline) getItem(position);
-
-
+        } else if (holder instanceof OnlineViewHolder) {
+            OnlineViewHolder onlineViewHolder = ((OnlineViewHolder) holder);
+            final HomeOnline online = (HomeOnline) getItem(position);
+            final RProgram program = online.mProgram;
+            if(program!=null){
+                onlineViewHolder.tv_name.setText(program.name);
+                onlineViewHolder.tv_desc.setText(program.remark);
+//                ImageManager.getInstance().loadUrlImage(mFragment.getContext(),program.img_path,onlineViewHolder.iv_image);
+                Glide
+                        .with(mFragment.getContext())
+                        .load(program.img_path)
+                        .placeholder(R.mipmap.jiazai)
+                        .dontAnimate()
+                        .into(onlineViewHolder.iv_image);
+            }else{
+                onlineViewHolder.tv_name.setText("");
+                onlineViewHolder.tv_desc.setText("");
+//                ImageManager.getInstance().loadUrlImage(mFragment.getContext(),"",onlineViewHolder.iv_image);
+                Glide
+                        .with(mFragment.getContext())
+                        .load("")
+                        .placeholder(R.mipmap.jiazai)
+                        .dontAnimate()
+                        .into(onlineViewHolder.iv_image);
+            }
+            onlineViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass(mFragment.getContext(), LiveVideoActivity.class);
+                    intent.putExtra("program", program);
+//                    intent.putExtra("column_id", program.id);
+//                    intent.putExtra("column_name", program.name);
+                    mFragment.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -419,7 +451,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 isFirst = false;
             }else{
                 for (int i = 0; group.plist!=null && i < group.plist.size(); i++) {
-                    HomeOnline item = new HomeOnline(TYPE_LIST_TEXTPIC);
+                    HomeOnline item = new HomeOnline(TYPE_LIST_ONLINE);
                     item.mProgram = group.plist.get(i);
                     tempData.add(item);
                 }
@@ -504,12 +536,12 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    public class Pic2RowViewHolder extends RecyclerView.ViewHolder {
+    public class OnlineViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_image;
         public TextView tv_name;
         public TextView tv_desc;
 
-        public Pic2RowViewHolder(View itemView) {
+        public OnlineViewHolder(View itemView) {
             super(itemView);
             iv_image = (ImageView) itemView.findViewById(R.id.iv_image);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);

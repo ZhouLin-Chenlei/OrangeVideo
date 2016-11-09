@@ -78,5 +78,7 @@
     </string>
     <string name="register_account">注册账户</string>
     <string name="forget_password">忘记密码</string>
+    <string name="program_pro">节目单</string>
+    <string name="action_register_in">注册</string>
 
 </resources>

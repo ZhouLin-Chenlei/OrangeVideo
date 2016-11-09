@@ -37,6 +37,7 @@ import com.community.yuequ.modle.InitMsg;
 import com.community.yuequ.modle.OrderTip;
 import com.community.yuequ.modle.StartUpImg;
 import com.community.yuequ.modle.UpgradeInfo;
+import com.community.yuequ.modle.UserInfo;
 import com.community.yuequ.util.FileTools;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -147,6 +148,7 @@ public class Session {
     private static Session mInstance;
 
     private InitMsg mInitMsg;
+    private UserInfo mUserInfo;
 
     /**
      * default constructor
@@ -496,5 +498,9 @@ public class Session {
                 edit.apply();
             }
         }
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+         mUserInfo = userInfo;
     }
 }

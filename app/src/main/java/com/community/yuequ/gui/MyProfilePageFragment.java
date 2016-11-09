@@ -4,7 +4,6 @@ package com.community.yuequ.gui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +71,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initData();
+//        initData();
     }
 
 
@@ -199,6 +198,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
             case R.id.rl_group_feedback:
                 break;
             case R.id.rl_group_about:
+                startActivity(new Intent(getActivity(),MyCenterActivity.class));
                 break;
 
         }

@@ -12,19 +12,18 @@ import android.widget.TextView;
 
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
-import com.community.yuequ.gui.VideoOrPicGroupActivity;
+import com.community.yuequ.gui.VideoSecondGroupActivity;
 import com.community.yuequ.gui.VideoPageFragment;
-import com.community.yuequ.modle.RTextImage;
-import com.community.yuequ.modle.VideoOrPicGroup;
+import com.community.yuequ.modle.OrVideoGroup;
 
 import java.util.List;
 
 public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.ViewHolder> {
     private VideoPageFragment mFragment;
-    private List<VideoOrPicGroup> mVideoOrPicGroups;
+    private List<OrVideoGroup> mVideoOrPicGroups;
 
 
-    public VideoPageAdapter(VideoPageFragment fragment, List<VideoOrPicGroup> list) {
+    public VideoPageAdapter(VideoPageFragment fragment, List<OrVideoGroup> list) {
         super();
         mFragment = fragment;
         mVideoOrPicGroups=list;
@@ -41,7 +40,7 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final VideoOrPicGroup rTextImage = mVideoOrPicGroups.get(position);
+        final OrVideoGroup rTextImage = mVideoOrPicGroups.get(position);
         String title = rTextImage.name+"("+rTextImage.program_cnt+")";
 
         holder.tv_label.setText(title);
@@ -54,7 +53,7 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mFragment.getContext(),VideoOrPicGroupActivity.class);
+                Intent intent = new Intent(mFragment.getContext(),VideoSecondGroupActivity.class);
                 intent.putExtra("column_id",rTextImage.id);
                 intent.putExtra("type","1");//视频
                 intent.putExtra("column_name",rTextImage.name);

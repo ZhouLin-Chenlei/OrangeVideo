@@ -12,6 +12,7 @@ import com.community.yuequ.Session;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.modle.Advert;
+import com.community.yuequ.util.DisplayUtil;
 
 /**
  * Created by Sai on 15/8/4.
@@ -30,9 +31,8 @@ public class NetworkImageHolderView implements Holder<Advert> {
 
     @Override
     public void UpdateUI(Context context, int position, Advert data) {
-        int banner_height = (int) YQApplication.getAppResources().getDimension(R.dimen.banner_height);
-//        ImageManager.getInstance().loadUrlImage(context,data.img_path,imageView);
-        int screenWidth = Session.get(YQApplication.getAppContext()).getScreenWidth();
+//        int banner_height = (int) YQApplication.getAppResources().getDimension(R.dimen.banner_height);
+//        int screenWidth = Session.get(YQApplication.getAppContext()).getScreenWidth();
 
         Glide
                 .with(context)
@@ -40,7 +40,7 @@ public class NetworkImageHolderView implements Holder<Advert> {
                 .centerCrop()
                 .placeholder(R.mipmap.jiazai)
                 .error(R.mipmap.jiazai)
-                .override(screenWidth,banner_height)
+//                .override(screenWidth,banner_height)
                 .dontAnimate()
                 .into(imageView);
     }

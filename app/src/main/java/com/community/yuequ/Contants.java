@@ -23,9 +23,9 @@ public class Contants {
     protected static String PROTOCOL = PROTOCOL_HTTP;
 //    public static String DOMAIN = "182.92.192.208:8088/yqi";
 
-    public static String DOMAIN = "182.92.192.208:8088/oli";
-    public static String PICDOMAIN = "http://182.92.192.208:8088/yqfile";
-
+//    public static String DOMAIN = "182.92.192.208:8088/oli";
+    public static String DOMAIN = "223.223.200.156:8081";
+    //http://223.223.200.156:8081/
     public static final String PRODUCTNAME = "yuequ";
     //系统初始化接口
     public static String URL_INIT = PROTOCOL+DOMAIN+"/system/init.shtml";
@@ -51,6 +51,14 @@ public class Contants {
     public static String URL_UPDATEUSER = PROTOCOL + DOMAIN +"/system/updateUser.shtml";
     //2.12	根据订购类型订购节目
     public static String URL_BUY = PROTOCOL + DOMAIN +"/order/buy.shtml";
+    //直播栏目列表
+    public static String URL_LIVELIST = PROTOCOL + DOMAIN +"/column/liveList.shtml";
+    //直播节目列表
+    public static String URL_LIVEPROGRAMLIST = PROTOCOL + DOMAIN +"/program/liveProgramList.shtml";
+    //直播节目单列表
+    public static String URL_LIVEPROGRAMORDERLIST = PROTOCOL + DOMAIN +"/program /liveProgramOrderList.shtml";
+    //注册
+    public static String URL_REGISTER = PROTOCOL + DOMAIN +"/user/register.shtml";
 
 
 }

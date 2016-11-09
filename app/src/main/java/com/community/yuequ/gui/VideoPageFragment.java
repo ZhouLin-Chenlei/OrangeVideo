@@ -15,8 +15,8 @@ import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.gui.adapter.VideoPageAdapter;
-import com.community.yuequ.modle.VideoOrPicGroup;
-import com.community.yuequ.modle.YQVideoOrPicGroupDao;
+import com.community.yuequ.modle.OrVideoGroup;
+import com.community.yuequ.modle.OrVideoGroupDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.PageStatuLayout;
@@ -34,15 +34,15 @@ import okhttp3.Request;
 /**
  * 点播一级界面
  */
-public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
     private final static String TAG = VideoPageFragment.class.getSimpleName();
     protected PageStatuLayout mStatuLayout;
     protected RecyclerView mRecyclerView;
     private VideoPageAdapter mListAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayoutManager mLayoutManager;
-    private YQVideoOrPicGroupDao imageDao;
-    public final List<VideoOrPicGroup> mProgramas =new ArrayList<>();
+    private OrVideoGroupDao mVideoGroupDao;
+    public final List<OrVideoGroup> mProgramas =new ArrayList<>();
     public VideoPageFragment() {
     }
 
@@ -85,6 +85,7 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
 
         mStatuLayout = new PageStatuLayout(convertView)
                 .setProgressBarVisibility(true)
+                .setReloadListener(this)
                 .setText(null)
                 .show();
         mRecyclerView = (RecyclerView) convertView.findViewById(android.R.id.list);
@@ -104,10 +105,10 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(imageDao!=null){
-            if(imageDao.result!=null&&!imageDao.result.isEmpty()){
+        if(mVideoGroupDao!=null){
+            if(mVideoGroupDao.result!=null&&!mVideoGroupDao.result.isEmpty()){
                 mProgramas.clear();
-                mProgramas.addAll(imageDao.result);
+                mProgramas.addAll(mVideoGroupDao.result);
                 mListAdapter.notifyDataSetChanged();
                 if (mStatuLayout != null) {
                     mStatuLayout.setProgressBarVisibility(false).setText(null).hide();
@@ -145,7 +146,7 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
                 .content(content)
                 .tag(TAG)
                 .build()
-                .execute(new JsonCallBack<YQVideoOrPicGroupDao>() {
+                .execute(new JsonCallBack<OrVideoGroupDao>() {
                     @Override
                     public void onError(Call call, Exception e,int id) {
                         if(isAdded()){
@@ -155,10 +156,10 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
                     }
 
                     @Override
-                    public void onResponse(YQVideoOrPicGroupDao response, int id) {
-                        imageDao  = response;
+                    public void onResponse(OrVideoGroupDao response, int id) {
+                        mVideoGroupDao  = response;
                         if(isAdded()){
-                            if(imageDao.result==null||imageDao.result.isEmpty()){
+                            if(mVideoGroupDao.result==null||mVideoGroupDao.result.isEmpty()){
                                 getDataEmpty();
                             }else{
                                 getDataAdequate();
@@ -205,7 +206,7 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
     //数据足够
     public void getDataAdequate() {
         mProgramas.clear();
-        mProgramas.addAll(imageDao.result);
+        mProgramas.addAll(mVideoGroupDao.result);
         mListAdapter.notifyDataSetChanged();
         completeRefresh();
 
@@ -218,9 +219,9 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
         }
         if (mStatuLayout != null) {
             mStatuLayout.setProgressBarVisibility(false);
-            if(imageDao==null && mListAdapter.getItemCount()==0){
+            if(mVideoGroupDao==null && mListAdapter.getItemCount()==0){
                 mStatuLayout.show().setText(getString(R.string.load_data_fail));
-            }else if(imageDao!=null && mListAdapter.getItemCount()==0){
+            }else if(mVideoGroupDao!=null && mListAdapter.getItemCount()==0){
                 mStatuLayout.show().setText(getString(R.string.no_data));
             }else {
                 mStatuLayout.hide();
@@ -246,5 +247,16 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
     public void onRefresh() {
         initData();
     }
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ll_status:
+                if(!isLoading){
+                    initData();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

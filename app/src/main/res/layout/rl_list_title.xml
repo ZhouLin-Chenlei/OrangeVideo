@@ -21,13 +21,13 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/base_list_margin_left"
-            android:drawableLeft="@mipmap/icon_htitle_yinshi"
-            android:drawablePadding="8dp"
+
             android:gravity="center_vertical"
             android:text="@string/about"
             android:textColor="@color/grey900"
             android:textSize="17sp"/>
-
+<!-- android:drawableLeft="@mipmap/icon_htitle_yinshi"
+            android:drawablePadding="8dp"-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

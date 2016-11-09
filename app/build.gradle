@@ -49,12 +49,18 @@ android {
     }
 }
 
+repositories{
+    flatDir{
+        dirs 'libs'//就是你放aar的目录地址
+    }
+}
 ext.supportLibVersion = '25.0.0'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':convenientbanner')
     compile project(':vitamio')
+    compile name:'SMSSDK-2.1.2',ext:'aar'
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
