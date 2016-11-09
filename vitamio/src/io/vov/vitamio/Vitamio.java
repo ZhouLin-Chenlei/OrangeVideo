@@ -16,8 +16,9 @@
 
 package io.vov.vitamio;
 
-
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION;
 
 import io.vov.vitamio.utils.CPU;
 import io.vov.vitamio.utils.ContextUtils;
@@ -41,9 +42,15 @@ public class Vitamio {
    * @param ctx Android Context
    * @return true if the Vitamio has been initialized.
    */
-  public static boolean isInitialized(Context ctx) {
+  @SuppressLint("NewApi")
+public static boolean isInitialized(Context ctx) {
     vitamioPackage = ctx.getPackageName();
-    vitamioLibraryPath = ContextUtils.getDataDir(ctx) + "lib/";
+    
+  if(VERSION.SDK_INT > 23) {
+    vitamioLibraryPath = ctx.getApplicationInfo().nativeLibraryDir + "/";
+    }else{
+	vitamioLibraryPath = ContextUtils.getDataDir(ctx) + "lib/";
+	}
     return true;
   }
 

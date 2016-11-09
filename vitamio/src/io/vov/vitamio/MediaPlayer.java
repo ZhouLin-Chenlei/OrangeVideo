@@ -28,6 +28,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -52,7 +53,6 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 /**
  * MediaPlayer class can be used to control playback of audio/video files and
@@ -212,22 +212,82 @@ public class MediaPlayer {
    *
    * @param preferHWDecoder MediaPlayer will try to use hardware accelerated decoder if true
    */
+  private static  boolean load_omxnative_lib(String path, String name){
+	  boolean load=false;
+	  if(path==""){
+		  load=loadOMX_native(name);
+	  }
+	  else{
+		  load=loadOMX_native(path + name);
+	  }
+	  return load;
+  }
+  private static  boolean loadVVO_native_lib(String path, String name){
+	  boolean load=false;
+	  if(path==""){
+		  load=loadVVO_native(name);
+	  }
+	  else{
+		  load=loadVVO_native(path + name);
+	  }
+	  return load;
+  }
+  
+  private static  boolean loadVAO_native_lib(String path, String name){
+	  boolean load=false;
+	  if(path==""){
+		  load=loadVAO_native(name);
+	  }
+	  else{
+		  load=loadVAO_native(path + name);
+	  }
+	  return load;
+  }
+
+  private static  boolean loadFFmpeg_native_lib(String path, String name){
+	  boolean load=false;
+	  if(path==""){
+		  load=loadFFmpeg_native(name);
+	  }
+	  else{
+		  load=loadFFmpeg_native(path + name);
+	  }
+	  return load;
+  }
+  private static  boolean load_lib(String path, String name){
+	  if(path==""){
+		  System.load(name);
+	  }
+	  else{
+		  System.load(path + name);
+	  }
+	  return true;
+  }
   public MediaPlayer(Context ctx, boolean preferHWDecoder) {
     mContext = ctx;
 
-    String LIB_ROOT = Vitamio.getLibraryPath();
+    String LIB_ROOT;
+	    if(VERSION.SDK_INT > 23) {
+    	LIB_ROOT = Vitamio.getLibraryPath();
+    }
+    else if(VERSION.SDK_INT > 20) {
+        LIB_ROOT = "";
+    }
+    else{
+    	LIB_ROOT = Vitamio.getLibraryPath();
+    }
 
     if (preferHWDecoder) {
       if (!NATIVE_OMX_LOADED.get()) {
         if (Build.VERSION.SDK_INT > 17)
-          loadOMX_native( LIB_ROOT + "libOMX.18.so");
+        	load_omxnative_lib( LIB_ROOT , "libOMX.18.so");
         
         else if (Build.VERSION.SDK_INT > 13)
-          loadOMX_native( LIB_ROOT +  "libOMX.14.so");
+        	load_omxnative_lib( LIB_ROOT ,  "libOMX.14.so");
         else if (Build.VERSION.SDK_INT > 10)
-          loadOMX_native( LIB_ROOT + "libOMX.11.so");
+        	load_omxnative_lib( LIB_ROOT , "libOMX.11.so");
         else
-          loadOMX_native( LIB_ROOT +  "libOMX.9.so");
+        	load_omxnative_lib( LIB_ROOT ,  "libOMX.9.so");
         NATIVE_OMX_LOADED.set(true);
       }
     } else {
@@ -251,25 +311,37 @@ public class MediaPlayer {
   }
 
   static {
-	String LIB_ROOT = Vitamio.getLibraryPath();
+	String LIB_ROOT;
+    if(VERSION.SDK_INT > 23) {
+    	LIB_ROOT = Vitamio.getLibraryPath();
+    }
+    else if(VERSION.SDK_INT > 20) {
+        LIB_ROOT = "";
+    }else{
+    	LIB_ROOT = Vitamio.getLibraryPath();
+    }
     try {
     
-  
-      System.load(  LIB_ROOT +  "libstlport_shared.so");
-      System.load(  LIB_ROOT +  "libvplayer.so");
-      loadFFmpeg_native( LIB_ROOT + "libffmpeg.so");
+    	if(VERSION.SDK_INT >= 24) {
+        	System.loadLibrary("stlport_shared");
+        	System.loadLibrary("vplayer");
+        }else{
+            load_lib(  LIB_ROOT ,  "libstlport_shared.so");
+            load_lib(  LIB_ROOT ,  "libvplayer.so");	
+        }
+    loadFFmpeg_native_lib( LIB_ROOT , "libffmpeg.so");    
       boolean vvo_loaded = false;
       if (Build.VERSION.SDK_INT > 8)
-        vvo_loaded = loadVVO_native( LIB_ROOT +  "libvvo.9.so");
+        vvo_loaded = loadVVO_native_lib( LIB_ROOT ,  "libvvo.9.so");
       else if (Build.VERSION.SDK_INT > 7)
-        vvo_loaded = loadVVO_native(  LIB_ROOT + "libvvo.8.so");
+        vvo_loaded = loadVVO_native_lib(  LIB_ROOT , "libvvo.8.so");
       else
-        vvo_loaded = loadVVO_native(  LIB_ROOT + "libvvo.7.so");
+        vvo_loaded = loadVVO_native_lib(  LIB_ROOT , "libvvo.7.so");
       if (!vvo_loaded) {
-        vvo_loaded = loadVVO_native(  LIB_ROOT +  "libvvo.j.so");
+        vvo_loaded = loadVAO_native_lib(  LIB_ROOT ,  "libvvo.j.so");
         Log.d("FALLBACK TO VVO JNI " + vvo_loaded);
       }
-      loadVAO_native( LIB_ROOT +  "libvao.0.so");
+      loadVAO_native_lib( LIB_ROOT ,  "libvao.0.so");
     } catch (java.lang.UnsatisfiedLinkError e) {
       Log.e("Error loading libs", e);
     }
@@ -1501,16 +1573,13 @@ private int audioTrackInit(int sampleRateInHz, int channels) {
      */
     public void onTimedTextUpdate(byte[] pixels, int width, int height);
   }
+    public static interface ShownHideListener {
+        public void show();
+        public boolean isShowing();
+        public void show(int time);
+        public void hide();
 
-  public static interface ShownHideListener {
-		public void show();
-		public boolean isShowing();
-		public void show(int time);
-		public void hide();
-
-	}
-  
-  
+    }
   /**
    * Class for MediaPlayer to return each audio/video/subtitle track's metadata.
    *
