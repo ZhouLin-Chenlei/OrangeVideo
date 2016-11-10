@@ -298,7 +298,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final RProgram program = online.mProgram;
             if(program!=null){
                 onlineViewHolder.tv_name.setText(program.name);
-                onlineViewHolder.tv_desc.setText(program.remark);
+                onlineViewHolder.tv_desc.setText("正在直播："+program.remark);
 //                ImageManager.getInstance().loadUrlImage(mFragment.getContext(),program.img_path,onlineViewHolder.iv_image);
                 Glide
                         .with(mFragment.getContext())

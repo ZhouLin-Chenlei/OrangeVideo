@@ -27,6 +27,7 @@ public class Contants {
     public static String DOMAIN = "223.223.200.156:8081";
     //http://223.223.200.156:8081/
     public static final String PRODUCTNAME = "yuequ";
+
     //系统初始化接口
     public static String URL_INIT = PROTOCOL+DOMAIN+"/system/init.shtml";
     //推荐接口

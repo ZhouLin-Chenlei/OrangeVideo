@@ -366,6 +366,18 @@ public class VideoView extends SurfaceView {
 			invalidate();
 		}
 	}
+
+	public void setVideoURI(Uri uri,long seek) {
+		mUri = uri;
+		mHeaders = null;
+		if (mUri != null) {
+			mSeekWhenPrepared = seek;
+			openVideo();
+			requestLayout();
+			invalidate();
+		}
+	}
+
 	public void stopPlayback() {
 		if (mMediaPlayer != null) {
 			mMediaPlayer.stop();

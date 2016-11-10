@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:id="@+id/tv_title1"
-                    android:text="精选影视 | "
                     android:lines="1"
                     android:textSize="16sp"/>
                 <TextView
@@ -52,7 +51,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:id="@+id/tv_title2"
-                    android:text="西部世界 第一季"
                     android:ellipsize="end"
                     android:lines="1"
                     android:textSize="16sp"/>
@@ -71,7 +69,6 @@
                 android:textColor="#959595"
                 android:textSize="13.5sp"
                 android:ellipsize="end"
-                android:text="《西部世界》该剧将乔纳森·诺兰担任主创，将于2015年在HBO电视台播出。HBO电视台宣布将改编迈克尔·克莱顿导演1973年电影《西部世界》，故"
                />
             
         </RelativeLayout>

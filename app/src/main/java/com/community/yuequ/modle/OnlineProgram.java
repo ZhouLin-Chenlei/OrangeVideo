@@ -25,4 +25,9 @@ public class OnlineProgram implements PlayData {
     public String getVideoUrl() {
         return contents;
     }
+
+    @Override
+    public String getVideType() {
+        return "3";
+    }
 }

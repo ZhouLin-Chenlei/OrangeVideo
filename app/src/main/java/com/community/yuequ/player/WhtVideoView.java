@@ -29,6 +29,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -64,6 +66,7 @@ import com.community.yuequ.R;
 import com.community.yuequ.imple.ActionBarShowHideListener;
 import com.community.yuequ.imple.PlayData;
 import com.community.yuequ.modle.RProgramDetail;
+import com.community.yuequ.util.MD5Util;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
@@ -175,7 +178,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	// private OnBuyListener onBuyListener;
 	private OnIndexChangeListener indexChangeListener;
 	private OnCompletionListener onCompletionListener;
-	private float mSeekTo = -1f;
+	private long mSeekTo = 0;
 	public static final IntentFilter SCREEN_FILTER = new IntentFilter(
 			Intent.ACTION_SCREEN_ON);
 	static {
@@ -1448,17 +1451,9 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 //		}
 		// WhtLog.i("TAG", "mSeekTo:"+mSeekTo+"/"+(int) (mSeekTo *
 		// mVideoView.getDuration()));
-		if (mSeekTo > 0 && mSeekTo < 1) {
-			seekTo(mSeekTo);
-		}
-		mSeekTo = -1;
-	}
-
-	public void seekTo(float percent) {
-		if (mVideoView != null)
-			mVideoView.seekTo((int) (percent * mVideoView.getDuration()));
 
 	}
+
 
 	@Override
 	public void onCompletion(MediaPlayer mp) {
@@ -1765,6 +1760,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 			index = 0;
 		this.mIndex = index;
 		url = videoBeans.get(index).getVideoUrl();
+		isLive = "3".equals(videoBeans.get(index).getVideType());
 		if (adapter != null) {
 			adapter.setSelection(index);
 		}
@@ -1779,11 +1775,14 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 			mUri = uri;
 
 		}
-		mSeekTo = getStartPosition();
+		if(!isLive ){
+			mSeekTo = getStartPosition();
+		}
 		String title = videoBeans.get(index).getTitle();
 		title = (title == null) ? "" : title;
 		setFileName(title);
-		mVideoView.setVideoURI(mUri);
+		mVideoView.setVideoURI(mUri,mSeekTo);
+		mSeekTo = 0;
 
 	}
 
@@ -1798,8 +1797,12 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	 */
 	public void resume() {
 		if (mVideoView != null) {
-			mVideoView.start();
-
+			if(mSeekTo==0){
+				mVideoView.start();
+			}else{
+				mVideoView.seekTo(mSeekTo);
+				mSeekTo = 0;
+			}
 		}
 		updatePausePlay();
 
@@ -1829,32 +1832,34 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 	public static final String SESSION_LAST_POSITION_SUFIX = ".lst";
 
 	private void savePosition() {
-		// WhtLog.i("TAG", "savePosition");
-		if (mVideoView != null && mUri != null) {
-//			PreferenceUtils.put(
-//					mUri.toString(),
-//					StringUtils.generateTime((int) (0.5 + mVideoView
-//							.getCurrentPosition()))
-//							+ " / "
-//							+ StringUtils.generateTime(mVideoView.getDuration()));
+		String positionKey = getPositionKey();
+
+		if (mVideoView != null && positionKey != null && !isLive) {
+
 			PreferenceUtils.reset(mContext);
 			if (mEnd){
-				PreferenceUtils.put(mUri + SESSION_LAST_POSITION_SUFIX, 1.0f);
-				mSeekTo = 1.0f;
+//				PreferenceUtils.put(mUri + SESSION_LAST_POSITION_SUFIX, 1.0f);
+				mSeekTo = 0;
 
 			}
 			else{
-				float pos = (float) (getCurrentPosition() / (double)mVideoView.getDuration());
-				PreferenceUtils.put(mUri + SESSION_LAST_POSITION_SUFIX,pos);
+				long pos = getCurrentPosition();
 				mSeekTo = pos;
+				PreferenceUtils.put(positionKey,pos);
 			}
 //			WhtLog.i("TAG", "savePosition-存- : "+(float) (getCurrentPosition() / (double)mVideoView.getDuration()));
-
 		}
 	}
 
-	private float getStartPosition() {
-		float pos = PreferenceUtils.getFloat(mUri+ SESSION_LAST_POSITION_SUFIX, 7.7f);
+	private String getPositionKey(){
+		String key = null;
+		if(mUri!=null){
+			key = MD5Util.MD5(mUri.getPath())+SESSION_LAST_POSITION_SUFIX;
+		}
+		return key;
+	}
+	private long getStartPosition() {
+		long pos = PreferenceUtils.getLong(getPositionKey(), 0);
 //		WhtLog.i("TAG", "getStartPosition-取- : "+pos);
 		return pos;
 
@@ -1865,64 +1870,61 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 		this.onCompletionListener = onCompletionListener;
 	}
 
-//	@Override
-//	public void onRestoreInstanceState(Parcelable state) {
-//		SavedState savedState = (SavedState) state;
-//		super.onRestoreInstanceState(savedState.getSuperState());
-//		mIndex = savedState.mIndex;
-//		mSeekTo = savedState.mSeekTo;
-//		mUrl = savedState.mUrl;
-//		if(mUrl!=null){
-//			mUri  = Uri.parse(mUrl);
-//		}
-//
-//		requestLayout();
-//	}
+	@Override
+	public void onRestoreInstanceState(Parcelable state) {
+		SavedState savedState = (SavedState) state;
+		super.onRestoreInstanceState(savedState.getSuperState());
+		mIndex = savedState.mIndex;
+		mSeekTo = savedState.mSeekTo;
+		mUri = savedState.mUrl;
 
-//	@Override
-//	public Parcelable onSaveInstanceState() {
-//		Parcelable superState = super.onSaveInstanceState();
-//		SavedState savedState = new SavedState(superState);
-//		savedState.mIndex = mIndex;
-//		savedState.mSeekTo = mSeekTo;
-//		savedState.mUrl = mUrl;
-//		return savedState;
-//	}
-//	static class SavedState extends BaseSavedState {
-//		int mIndex;
-//		float mSeekTo;
-//		String mUrl;
-//		public SavedState(Parcelable superState) {
-//			super(superState);
-//		}
-//
-//		private SavedState(Parcel in) {
-//			super(in);
-//			mIndex = in.readInt();
-//			mSeekTo = in.readFloat();
-//			mUrl = in.readString();
-//
-//		}
-//
-//		@Override
-//		public void writeToParcel(Parcel dest, int flags) {
-//			super.writeToParcel(dest, flags);
-//			dest.writeInt(mIndex);
-//			dest.writeFloat(mSeekTo);
-//			dest.writeString(mUrl);
-//		}
-//
-//		public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
-//			@Override
-//			public SavedState createFromParcel(Parcel in) {
-//				return new SavedState(in);
-//			}
-//
-//			@Override
-//			public SavedState[] newArray(int size) {
-//				return new SavedState[size];
-//			}
-//		};
-//	}
+		requestLayout();
+	}
+
+	@Override
+	public Parcelable onSaveInstanceState() {
+		Parcelable superState = super.onSaveInstanceState();
+		SavedState savedState = new SavedState(superState);
+		savedState.mIndex = mIndex;
+		savedState.mSeekTo = getCurrentPosition();
+		savedState.mUrl = mUri;
+		return savedState;
+	}
+	static class SavedState extends BaseSavedState {
+		int mIndex;
+		long mSeekTo;
+		Uri mUrl;
+		public SavedState(Parcelable superState) {
+			super(superState);
+		}
+
+		private SavedState(Parcel in) {
+			super(in);
+			mIndex = in.readInt();
+			mSeekTo = in.readLong();
+			mUrl = in.readParcelable(Uri.class.getClassLoader());
+
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			super.writeToParcel(dest, flags);
+			dest.writeInt(mIndex);
+			dest.writeLong(mSeekTo);
+			dest.writeParcelable(mUrl,flags);
+		}
+
+		public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+			@Override
+			public SavedState createFromParcel(Parcel in) {
+				return new SavedState(in);
+			}
+
+			@Override
+			public SavedState[] newArray(int size) {
+				return new SavedState[size];
+			}
+		};
+	}
 
 }

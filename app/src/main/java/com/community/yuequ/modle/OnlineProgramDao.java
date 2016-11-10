@@ -10,5 +10,13 @@ import java.util.LinkedHashMap;
 public class OnlineProgramDao {
     public int errorCode;
     public String errorMessage;
-    public LinkedHashMap<String,ArrayList<OnlineProgram>> result;
+    public OnlineProgramDaoResult result;
+
+    public class OnlineProgramDaoResult{
+        public int livingOrderId;
+        public long currTime;
+        public LinkedHashMap<String,ArrayList<OnlineProgram>> orderMap;
+    }
+
+
 }

@@ -177,7 +177,7 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
                     @Override
                     public void onBefore(Request request,int id) {
                         isLoading = true;
-                        if(mListAdapter.getItemCount()==0){
+                        if(mListAdapter.getItemCount()<=1){
                             mStatuLayout.show()
                                     .setProgressBarVisibility(true)
                                     .setText(null);

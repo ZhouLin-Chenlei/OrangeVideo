@@ -41,20 +41,41 @@ public class OnLinePageAdapter extends RecyclerView.Adapter<OnLinePageAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final OrOnlineGroup programa = mOnlineGroups.get(position);
-        String title = programa.name+"("+programa.program_cnt+")";
+        final OrOnlineGroup onlineGroup = mOnlineGroups.get(position);
+        String title = onlineGroup.name+"("+onlineGroup.program_cnt+")";
         holder.tv_label.setText(title);
-        if(!TextUtils.isEmpty(programa.content_desc)) {
-            holder.tv_group_desc.setText(programa.content_desc);
+        holder.tv_group_desc.setText(onlineGroup.content_desc);
+
+        if(!TextUtils.isEmpty(onlineGroup.title)){
+            int indexOf = onlineGroup.title.indexOf('|');
+            int length = onlineGroup.title.length();
+            if(indexOf!=-1){
+                String title1 = onlineGroup.title.substring(0,indexOf+1);
+                holder.tv_title1.setText(title1);
+                if(indexOf+1 < length){
+                    String title2 = onlineGroup.title.substring(indexOf+1,length);
+                    holder.tv_title2.setText(title2);
+                }else{
+                    holder.tv_title2.setText("");
+                }
+
+            }else{
+                holder.tv_title2.setText(onlineGroup.title);
+            }
+
+
+        }else{
+//            holder.tv_title1.setText("");
+//            holder.tv_title2.setText("");
         }
-        ImageManager.getInstance().loadUrlImage(mFragment, programa.img_path, holder.iv_groupcover);
+        ImageManager.getInstance().loadUrlImage(mFragment, onlineGroup.img_path, holder.iv_groupcover);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mFragment.getContext(),OnLineSecondListActivity.class);
-                intent.putExtra("column_id",programa.id);
+                intent.putExtra("column_id",onlineGroup.id);
 //                intent.putExtra("type","2");//图文
-                intent.putExtra("column_name",programa.name);
+                intent.putExtra("column_name",onlineGroup.name);
                 mFragment.startActivity(intent);
             }
         });

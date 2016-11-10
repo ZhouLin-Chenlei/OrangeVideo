@@ -7,4 +7,6 @@ package com.community.yuequ.imple;
 public interface PlayData {
     public  String getTitle();
     public  String getVideoUrl();
+    public  String getVideType();
+
 }

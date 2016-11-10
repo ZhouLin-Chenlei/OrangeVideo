@@ -40,23 +40,46 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final OrVideoGroup rTextImage = mVideoOrPicGroups.get(position);
-        String title = rTextImage.name+"("+rTextImage.program_cnt+")";
+        final OrVideoGroup videoGroup = mVideoOrPicGroups.get(position);
+        String title = videoGroup.name+"("+videoGroup.program_cnt+")";
 
         holder.tv_label.setText(title);
-        if(!TextUtils.isEmpty(rTextImage.content_desc)){
-            holder.tv_group_desc.setText(rTextImage.content_desc);
+        if(!TextUtils.isEmpty(videoGroup.content_desc)){
+            holder.tv_group_desc.setText(videoGroup.content_desc);
         }
 
-        ImageManager.getInstance().loadUrlImage(mFragment,rTextImage.img_path,holder.iv_groupcover);
+        if(!TextUtils.isEmpty(videoGroup.title)){
+            int indexOf = videoGroup.title.indexOf('|');
+            int length = videoGroup.title.length();
+            if(indexOf!=-1){
+                String title1 = videoGroup.title.substring(0,indexOf+1);
+                holder.tv_title1.setText(title1);
+                if(indexOf+1 < length){
+                    String title2 = videoGroup.title.substring(indexOf+1,length);
+                    holder.tv_title2.setText(title2);
+                }else{
+                    holder.tv_title2.setText("");
+                }
+
+            }else{
+                holder.tv_title2.setText(videoGroup.title);
+            }
+
+
+        }else{
+//            holder.tv_title1.setText("");
+//            holder.tv_title2.setText("");
+        }
+
+        ImageManager.getInstance().loadUrlImage(mFragment,videoGroup.img_path,holder.iv_groupcover);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mFragment.getContext(),VideoSecondGroupActivity.class);
-                intent.putExtra("column_id",rTextImage.id);
+                intent.putExtra("column_id",videoGroup.id);
                 intent.putExtra("type","1");//视频
-                intent.putExtra("column_name",rTextImage.name);
+                intent.putExtra("column_name",videoGroup.name);
                 mFragment.startActivity(intent);
             }
         });

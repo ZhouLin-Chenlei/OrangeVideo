@@ -174,7 +174,7 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
                     @Override
                     public void onBefore(Request request,int id) {
                         isLoading = true;
-                        if(mGroupAdapter.getItemCount()==0){
+                        if(mGroupAdapter.getItemCount()<=1){
                             mStatuLayout.show()
                                     .setProgressBarVisibility(true)
                                     .setText(null);

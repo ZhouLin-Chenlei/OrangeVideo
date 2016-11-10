@@ -57,4 +57,9 @@ public class RProgramDetail implements Serializable,PlayData {
     public String getVideoUrl() {
         return video_path;
     }
+
+    @Override
+    public String getVideType() {
+        return type;
+    }
 }

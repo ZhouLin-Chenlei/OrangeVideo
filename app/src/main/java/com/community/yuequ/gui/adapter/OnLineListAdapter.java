@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.gui.LiveVideoActivity;
@@ -58,9 +59,14 @@ public class OnLineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ViewHolder viewHolder = (ViewHolder) holder;
             final RProgram programa = mList.get(position);
             viewHolder.tv_title.setText(programa.name);
-            viewHolder.tv_desc.setText(programa.remark);
-            ImageManager.getInstance().loadUrlImage(mContext, programa.img_path, viewHolder.iv_img);
-
+            viewHolder.tv_desc.setText("正在直播："+programa.remark);
+//            ImageManager.getInstance().loadUrlImage(mContext, programa.img_path, viewHolder.iv_img);
+            Glide
+                    .with(mContext)
+                    .load( programa.img_path)
+                    .placeholder(R.mipmap.jiazai)
+                    .dontAnimate()
+                    .into(viewHolder.iv_img);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -8,9 +8,9 @@
     <com.community.yuequ.widget.FourThreeImageView
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:background="@color/grey400"
+        android:background="@color/grey50"
         android:id="@+id/iv_img"
-        android:scaleType="centerCrop"/>
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

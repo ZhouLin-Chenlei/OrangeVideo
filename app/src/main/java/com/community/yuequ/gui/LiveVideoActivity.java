@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,13 +75,11 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
     private Session mSession;
     private RProgram mRProgram;
 
-    private OnlineProgramDao mOnlineProgramDao;
+    private OnlineProgramDao.OnlineProgramDaoResult mOnlineProgramDaoResult;
     private boolean isLoading = false;
 
     private boolean mCreated = false;
 
-    private OnlineProgram playProgram = null;
-    final List<OnLineProgramListAdapter> mOnLineProgramListAdapters = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +128,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 
 
         if (mRProgram != null) {
-            mTitleView.setText(mRProgram.name);
+            mTitleView.setText(mRProgram.remark);
             tv_live_pro.setText(mRProgram.name);
             Glide
                     .with(this)
@@ -149,22 +148,19 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
 
             case R.id.iv_play_cc:
-                if(mOnlineProgramDao==null){
+                if(mRProgram==null){
                     Toast.makeText(LiveVideoActivity.this, "获取视频信息失败！", Toast.LENGTH_SHORT).show();
                 }else{
-                    if(playProgram!=null){
 
-                        if(mActionBar!=null && mActionBar.isShowing()){
-                            mActionBar.hide();
-                        }
-                        iv_video_cover.setVisibility(View.GONE);
-                        iv_play_cc.setVisibility(View.GONE);
-                        ArrayList<PlayData> programDetails = new ArrayList<>();
-                        programDetails.add(playProgram);
-                        mVideoView.open(this, false, programDetails);
-                        mVideoView.play(0);
-
+                    if(mActionBar!=null && mActionBar.isShowing()){
+                        mActionBar.hide();
                     }
+                    iv_video_cover.setVisibility(View.GONE);
+                    iv_play_cc.setVisibility(View.GONE);
+                    ArrayList<PlayData> programDetails = new ArrayList<>();
+                    programDetails.add(mRProgram);
+                    mVideoView.open(this, false, programDetails);
+                    mVideoView.play(0);
 
                 }
                 break;
@@ -254,21 +250,40 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void display() {
-        if (mOnlineProgramDao != null && mOnlineProgramDao.result!=null) {
+        Log.i("tag,","ddddd");
+        if (mOnlineProgramDaoResult != null && mOnlineProgramDaoResult.orderMap!=null) {
 
             List<Pair<String,ArrayList<OnlineProgram>>> pairList = new ArrayList<>();
-            LinkedHashMap<String, ArrayList<OnlineProgram>> result = mOnlineProgramDao.result;
+            LinkedHashMap<String, ArrayList<OnlineProgram>> result = mOnlineProgramDaoResult.orderMap;
             Iterator<Map.Entry<String, ArrayList<OnlineProgram>>> iterator = result.entrySet().iterator();
+            int pos = 0;
+            int index = 0;
+            String today = DateUtil.formatDate(mOnlineProgramDaoResult.currTime);
             while (iterator.hasNext()) {
                 Map.Entry<String, ArrayList<OnlineProgram>> next = iterator.next();
                 String key = next.getKey();
                 ArrayList<OnlineProgram> val = next.getValue();
+
+                if(today.equals(key)){
+                    index = pos;
+                    key = "今天";
+                }
+
                 Pair<String,ArrayList<OnlineProgram>> programPair = new Pair<>(key,val);
                 pairList.add(programPair);
+
+                pos++;
             }
             mViewPager.setOffscreenPageLimit(pairList.size()-1);
-            mViewPager.setAdapter(new MyPagerAdapter(this,pairList));
+            mViewPager.setAdapter(new MyPagerAdapter(this,pairList,mOnlineProgramDaoResult.livingOrderId));
             mTabLayout.setupWithViewPager(mViewPager);
+            final int tabSelected = index;
+            mTabLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mTabLayout.setTabSelected(tabSelected);
+                }
+            });
 
         }
     }
@@ -277,7 +292,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
             return;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("program_id", mRProgram.id);
-        hashMap.put("order_date", DateUtil.getTodayDate());
+//        hashMap.put("order_date", DateUtil.getTodayDate());
         String content = "";
         try {
             content = AESUtil.encode(new Gson().toJson(hashMap));
@@ -310,7 +325,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onResponse(OnlineProgramDao response,int id) {
                         isLoading = false;
-                        mOnlineProgramDao = response;
+                        mOnlineProgramDaoResult = response.result;
                         display();
                         if (mStatuLayout != null) {
                             if(response.errorCode!=Contants.HTTP_OK){
@@ -358,21 +373,12 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
     class MyPagerAdapter extends PagerAdapter implements TabAdapter {
         Activity mActivity;
         List<Pair<String,ArrayList<OnlineProgram>>> mList;
+        private int playId;
 
-
-
-        public MyPagerAdapter(Activity activity,List<Pair<String,ArrayList<OnlineProgram>>> list) {
+        public MyPagerAdapter(Activity activity, List<Pair<String, ArrayList<OnlineProgram>>> list, int id) {
             mActivity = activity;
             mList = list;
-            mOnLineProgramListAdapters.clear();
-            if(mList!=null){
-                for (int i = 0;i<mList.size();i++){
-                    Pair<String, ArrayList<OnlineProgram>> listPair = mList.get(i);
-                    OnLineProgramListAdapter adapter = new OnLineProgramListAdapter(mActivity,listPair.second);
-                    mOnLineProgramListAdapters.add(adapter);
-                }
-            }
-
+            this.playId = id;
         }
 
         @Override
@@ -397,9 +403,9 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public QTabView.TabTitle getTitle(int position) {
-            String title = mList.get(position).first;
+            String tabTitle = mList.get(position).first;
             return new QTabView.TabTitle.Builder(LiveVideoActivity.this)
-                    .setContent(title==null ? "": title)
+                    .setContent(tabTitle)
                     .setTextColor(ContextCompat.getColor(LiveVideoActivity.this,R.color.white),ContextCompat.getColor(LiveVideoActivity.this,R.color.grey700))
                     .build();
         }
@@ -408,9 +414,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
         public int getBackground(int position) {
             return 0;
         }
-        public int getItemPosition(Object object){
-            return POSITION_NONE;
-         }
+
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == object;
@@ -418,8 +422,8 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            LayoutInflater inflater = mActivity.getLayoutInflater();
-            View view = inflater.inflate(R.layout.live_prolist_page_item, container, false);
+
+            View view = View.inflate(container.getContext(),R.layout.live_prolist_page_item,null);
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
             TextView textView = (TextView) view.findViewById(R.id.tv_text);
             Pair<String, ArrayList<OnlineProgram>> pair = mList.get(position);
@@ -428,11 +432,22 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
             recyclerView.setLayoutManager(mLayoutManager);
 
             recyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-
+            OnLineProgramListAdapter lineProgramListAdapter = new OnLineProgramListAdapter(mActivity,pair.second,playId);
 //            recyclerView.addOnScrollListener(mScrollListener);
 
-            recyclerView.setAdapter(mOnLineProgramListAdapters.get(position));
+            recyclerView.setAdapter(lineProgramListAdapter);
+            final int selectedPosition = lineProgramListAdapter.getSelectedPosition();
 
+            if(selectedPosition !=0){
+                final RecyclerView rview = recyclerView;
+                rview.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        rview.scrollToPosition(selectedPosition);
+                    }
+                });
+
+            }
             if(pair.second!=null && !pair.second.isEmpty()){
                 textView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -455,11 +470,24 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 
     public class OnLineProgramListAdapter extends RecyclerView.Adapter<PViewHolder>{
         private Activity mContext;
-        private ArrayList<OnlineProgram> mList;
+        private ArrayList<OnlineProgram> mOnlinePrograms;
+        private int playId;
+        private int selectedPosition = 0;
 
-        public OnLineProgramListAdapter(Activity activity,ArrayList<OnlineProgram> list){
+        public OnLineProgramListAdapter(Activity activity, ArrayList<OnlineProgram> list, int id){
             this.mContext = activity;
-            this.mList = list;
+            this.mOnlinePrograms = list;
+            this.playId = id;
+//            setHasStableIds(true);
+            if(mOnlinePrograms!=null){
+                for (int i = 0;i<mOnlinePrograms.size();i++){
+                    if(playId==mOnlinePrograms.get(i).id){
+                        selectedPosition = i;
+                        break;
+                    }
+                }
+
+            }
         }
 
 
@@ -473,11 +501,12 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onBindViewHolder(PViewHolder holder, int position) {
-            final OnlineProgram onlineProgram = mList.get(position);
-            if(onlineProgram==playProgram){
+            final OnlineProgram onlineProgram = mOnlinePrograms.get(position);
+            if(onlineProgram.id==playId){
                 holder.tv_title.setTextColor(ContextCompat.getColor(mContext,R.color.colorPrimary));
                 holder.tv_time.setTextColor(ContextCompat.getColor(mContext,R.color.colorPrimary));
                 holder.tv_play.setVisibility(View.VISIBLE);
+
             }else{
                 holder.tv_title.setTextColor(ContextCompat.getColor(mContext,R.color.grey900));
                 holder.tv_time.setTextColor(ContextCompat.getColor(mContext,R.color.grey900));
@@ -485,45 +514,40 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
             }
             holder.tv_title.setText(onlineProgram.name);
             holder.tv_time.setText(onlineProgram.begin_time);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    playProgram = onlineProgram;
-
-                     if(mActionBar!=null && mActionBar.isShowing()){
-                        mActionBar.hide();
-                    }
-                    iv_video_cover.setVisibility(View.GONE);
-                    iv_play_cc.setVisibility(View.GONE);
-                    ArrayList<PlayData> programDetails = new ArrayList<>();
-                    programDetails.add(playProgram);
-                    mVideoView.open(mContext, false, programDetails);
-                    mVideoView.play(0);
-
-                    for (OnLineProgramListAdapter adapter : mOnLineProgramListAdapters){
-
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            });
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    playProgram = onlineProgram;
+//
+//                     if(mActionBar!=null && mActionBar.isShowing()){
+//                        mActionBar.hide();
+//                    }
+//                    iv_video_cover.setVisibility(View.GONE);
+//                    iv_play_cc.setVisibility(View.GONE);
+//                    ArrayList<PlayData> programDetails = new ArrayList<>();
+//                    programDetails.add(playProgram);
+//                    mVideoView.open(mContext, false, programDetails);
+//                    mVideoView.play(0);
+//
+//                    for (OnLineProgramListAdapter adapter : mOnLineProgramListAdapters){
+//
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                }
+//            });
         }
 
         @Override
         public int getItemCount() {
-            if(mList==null)return 0;
-            return mList.size();
+            if(mOnlinePrograms==null)return 0;
+            return mOnlinePrograms.size();
         }
 
 
 
-        public void setData(ArrayList<OnlineProgram> result) {
-            mList = result;
-            notifyDataSetChanged();
+        public int getSelectedPosition() {
+            return selectedPosition;
         }
-
-
-
-
     }
 
     public class PViewHolder extends RecyclerView.ViewHolder{
