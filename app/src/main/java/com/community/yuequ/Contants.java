@@ -65,6 +65,8 @@ public class Contants {
     public static String URL_REGISTER = PROTOCOL + DOMAIN +"/user/register.shtml";
     //登录
     public static String URL_LOGIN = PROTOCOL + DOMAIN +"/user/login.shtml";
+    //收藏节目列表
+    public static String URL_USERCOLLECTIONSLIST = PROTOCOL + DOMAIN +"/user/userCollectionsList.shtml";
 
 
 }

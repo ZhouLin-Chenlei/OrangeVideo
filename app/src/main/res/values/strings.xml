@@ -90,4 +90,6 @@
     <string name="prompt_password_verify">再次输入确认密码</string>
     <string name="action_register_finish">完成注册</string>
     <string name="register_wiat">注册中…</string>
+    <string name="account_safety">账户安全</string>
+    <string name="my_profile">个人资料</string>
 </resources>

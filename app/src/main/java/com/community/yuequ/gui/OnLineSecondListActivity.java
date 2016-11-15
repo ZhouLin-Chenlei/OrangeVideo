@@ -158,7 +158,7 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
                         }
 
                         if (mStatuLayout != null) {
-                            if(mGroupAdapter.getItemCount()==0){
+                            if(mGroupAdapter.getItemCount()==1){
                                 mStatuLayout.show()
                                         .setProgressBarVisibility(false)
                                         .setText(getString(R.string.no_data));

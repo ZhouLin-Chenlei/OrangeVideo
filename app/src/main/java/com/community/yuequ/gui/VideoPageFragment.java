@@ -81,7 +81,7 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View convertView = inflater.inflate(R.layout.fragment_video, container, false);
+        View convertView = inflater.inflate(R.layout.comm_list_layout, container, false);
 
         mStatuLayout = new PageStatuLayout(convertView)
                 .setProgressBarVisibility(true)
