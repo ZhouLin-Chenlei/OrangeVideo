@@ -12,6 +12,9 @@ public class Contants {
     public static final String SHOWTYPE_EDIT = "3";
 
 
+
+    public static final String ACTION_LOGIN = "com.oli.receivers.login";
+
     //201：游客，202：包月会员，203：按次订购会员
     public static final int HTTP_NO = 201;
     public static final int HTTP_VIP = 202;
@@ -60,6 +63,8 @@ public class Contants {
     public static String URL_LIVEPROGRAMORDERLIST = PROTOCOL + DOMAIN +"/program /liveProgramOrderList.shtml";
     //注册
     public static String URL_REGISTER = PROTOCOL + DOMAIN +"/user/register.shtml";
+    //登录
+    public static String URL_LOGIN = PROTOCOL + DOMAIN +"/user/login.shtml";
 
 
 }

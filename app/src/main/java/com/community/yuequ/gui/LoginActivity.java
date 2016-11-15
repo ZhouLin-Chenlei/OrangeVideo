@@ -3,8 +3,12 @@ package com.community.yuequ.gui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -30,32 +34,36 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.community.yuequ.Contants;
 import com.community.yuequ.R;
+import com.community.yuequ.Session;
+import com.community.yuequ.YQApplication;
+import com.community.yuequ.modle.UserInfoDao;
+import com.community.yuequ.modle.callback.JsonCallBack;
+import com.community.yuequ.util.AESUtil;
+import com.community.yuequ.util.Validator;
+import com.community.yuequ.widget.DialogManager;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+
+import okhttp3.Call;
+import okhttp3.Request;
 
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
+public class LoginActivity extends AppCompatActivity implements OnClickListener{
+    private static final String TAG = "LoginActivity";
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mPhoneView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -63,13 +71,15 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mTitleView;
     private TextView tv_register_account;
     private TextView tv_forget_password;
-
+    private Button mSignInButton;
+    private Session mSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        registerReceiver();
+        mSession = Session.get(this);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(mToolbar);
@@ -80,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.mipmap.login_page_back);
         }
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPhoneView = (AutoCompleteTextView) findViewById(R.id.atv_phone);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -94,29 +104,42 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(this);
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tv_register_account = (TextView) findViewById(R.id.tv_register_account);
         tv_forget_password = (TextView) findViewById(R.id.tv_forget_password);
 
+        tv_register_account.setOnClickListener(this);
 
-        tv_register_account.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
-            }
-        });
     }
 
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Contants.ACTION_LOGIN);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,filter);
 
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(Contants.ACTION_LOGIN.equals(action)){
+                finish();
+
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+        super.onDestroy();
+
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -124,61 +147,131 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+
 
         // Reset errors.
-        mEmailView.setError(null);
+        mPhoneView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String phone = mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
+        if(TextUtils.isEmpty(phone)){
+            Toast.makeText(this, R.string.input_phone, Toast.LENGTH_SHORT).show();
+        }else if(!Validator.isMobile(phone)){
+            mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
+
+        }else if(TextUtils.isEmpty(password)){
+            Toast.makeText(this, R.string.prompt_password, Toast.LENGTH_SHORT).show();
+        }else{
+            login(phone,password);
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
+    }
+
+
+        private void login(String phone, String password) {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("login_name",phone);
+            hashMap.put("login_password", password);
+
+            String content = "";
+            try {
+                content = AESUtil.encode(new Gson().toJson(hashMap));
+            } catch (Exception e) {
+                throw new RuntimeException("加密错误！");
+            }
+            if (TextUtils.isEmpty(content)) {
+                Toast.makeText(YQApplication.getAppContext(), R.string.unknow_erro, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            OkHttpUtils
+                    .postString()
+                    .url(Contants.URL_LOGIN)
+                    .content(content)
+                    .tag(TAG)
+                    .build()
+                    .execute(new LoginCallBack(this));
         }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.sign_in_button:
+                attemptLogin();
+                break;
+            case R.id.tv_register_account:
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                break;
+
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+
+    public static class LoginCallBack extends JsonCallBack<UserInfoDao> {
+        private WeakReference<LoginActivity> mWeakReference;
+
+        public LoginCallBack(LoginActivity activity) {
+            mWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int id) {
+            LoginActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onError();
+            }
+        }
+
+        @Override
+        public void onBefore(Request request, int id) {
+            super.onBefore(request, id);
+            LoginActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onBefore();
+            }
+        }
+
+        @Override
+        public void onResponse(UserInfoDao response, int id) {
+            LoginActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onResponse(response);
+            }
+        }
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+    private void onResponse(UserInfoDao response) {
+        showProgress(false);
+        mSignInButton.setEnabled(true);
+        if(response!=null && response.result!=null){
+            Toast.makeText(this, "登录成功！", Toast.LENGTH_SHORT).show();
+            mSession.setUserInfo(response.result);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Contants.ACTION_LOGIN));
+            finish();
+
+        }else{
+            if(response!=null && !TextUtils.isEmpty(response.errorMessage)){
+                Toast.makeText(this, response.errorMessage, Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "登录失败！", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+
+    private void onBefore() {
+        showProgress(true);
+        mSignInButton.setEnabled(false);
+    }
+
+    private void onError() {
+        showProgress(false);
+        mSignInButton.setEnabled(true);
+        Toast.makeText(this, "登录失败！", Toast.LENGTH_SHORT).show();
+    }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -213,70 +306,6 @@ public class LoginActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 //            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            showProgress(true);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
         }
     }
 

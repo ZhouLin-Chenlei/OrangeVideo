@@ -2,7 +2,9 @@ package com.community.yuequ.gui;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -11,44 +13,50 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.Session;
-import com.community.yuequ.YQApplication;
-import com.community.yuequ.modle.UserInfoDao;
-import com.community.yuequ.modle.callback.JsonCallBack;
-import com.community.yuequ.util.AESUtil;
+import com.community.yuequ.util.Validator;
 import com.community.yuequ.widget.DialogManager;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-import okhttp3.Call;
-import okhttp3.Request;
+import cn.smssdk.utils.SMSLog;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnCancelListener, Handler.Callback {
     private final static String TAG = RegisterActivity.class.getSimpleName();
+
+    public static final long millisInFuture = 60*1000;
+    public static final long countDownInterval = 1*1000;
+
+
     private Toolbar mToolbar;
     private TextView mTitleView;
 
-    private EditText mEmailView;
-    private EditText mPasswordView;
-    private Session mSession;
+    private EditText mPhoneView;
+    private EditText mCodeView;
+    private Button mButtonNext;
+    private Button mButtonCode;
+
+
     private ProgressDialog mProgressDialog;
-
-    //此APPKEY仅供测试使用，且不定期失效，请到mob.com后台申请正式APPKEY
-    private static String APPKEY = "f3fc6baa9ac4";
+    private static String APPKEY = "18fdf500cd85e";
     // 填写从短信SDK应用后台注册得到的APPSECRET
-    private static String APPSECRET = "7f3dedcb36d92deebcb373af921d635a";
+    private static String APPSECRET = "db7dc0fdcf972fac2078f31023b0dada";
 
+
+
+    private boolean countDown = false;
+    private String phone;
+    protected MyTimer myTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +69,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
         }
-        mSession = Session.get(this);
-        mTitleView.setText(getString(R.string.action_register_in));
-        mEmailView = (EditText) findViewById(R.id.email);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        findViewById(R.id.email_register_button).setOnClickListener(this);
+        mTitleView.setText(getString(R.string.action_register_in));
+        mPhoneView = (EditText) findViewById(R.id.et_phone);
+
+        mCodeView = (EditText) findViewById(R.id.et_code);
+        mButtonNext = (Button)findViewById(R.id.next_register_button);
+        mButtonNext.setOnClickListener(this);
+        mButtonCode = (Button) findViewById(R.id.code_register_button);
+        mButtonCode.setOnClickListener(this);
     }
 
     private void initSDK() {
@@ -96,74 +107,70 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.email_register_button:
-                register();
+            case R.id.next_register_button:
+                next();
+                break;
+            case R.id.code_register_button:
+
+                if(countDown){
+
+
+                }else{
+                    phone =  mPhoneView.getText().toString();
+                    if(TextUtils.isEmpty(phone)){
+                        Toast.makeText(this,  R.string.input_phone, Toast.LENGTH_SHORT).show();
+                    }else if(!Validator.isMobile(phone)){
+                        mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
+                    }else{
+
+                        mProgressDialog = DialogManager.getProgressDialog(this, "获取验证码...", this);
+                        mProgressDialog.setCanceledOnTouchOutside(false);
+                        mProgressDialog.show();
+                        mButtonCode.setEnabled(false);
+                        SMSSDK.getVerificationCode("86", phone.trim(), null);
+                    }
+                }
+
                 break;
 
         }
     }
 
-    private void register() {
+    private void next() {
 
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+        mPhoneView.setError(null);
+        mCodeView.setError(null);
 
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        phone = mPhoneView.getText().toString();
+        String code = mCodeView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
+//                        Intent intent = new Intent(RegisterActivity.this,RegiestNextActivity.class);
+//                        intent.putExtra("phone",phone);
+//                        intent.putExtra("result",true);
+//                        startActivity(intent);
+//                        finish();
+
+
+        if(TextUtils.isEmpty(phone)){
+            Toast.makeText(this, R.string.input_phone, Toast.LENGTH_SHORT).show();
+        }else if(!Validator.isMobile(phone)){
+            mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
+
+        }else if(TextUtils.isEmpty(code)){
+            Toast.makeText(this, R.string.input_code, Toast.LENGTH_SHORT).show();
+        }else{
+            smsVerifyRequset(phone,code);
         }
+    }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
+    private void smsVerifyRequset(String phone, String verificationCode) {
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("login_name", email);
-            hashMap.put("login_password", password);
-
-            String content = "";
-            try {
-                content = AESUtil.encode(new Gson().toJson(hashMap));
-            } catch (Exception e) {
-                throw new RuntimeException("加密错误！");
-            }
-            if (TextUtils.isEmpty(content)) {
-                Toast.makeText(YQApplication.getAppContext(), R.string.unknow_erro, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            OkHttpUtils
-                    .postString()
-                    .url(Contants.URL_REGISTER)
-                    .content(content)
-                    .tag(TAG)
-                    .build()
-                    .execute(new RegisterCallBack(this));
-
-
-        }
+        mProgressDialog = DialogManager.getProgressDialog(this, "校验验证码...", this);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+        SMSSDK.submitVerificationCode("86", phone, verificationCode);
     }
 
     @Override
@@ -172,88 +179,92 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         int result = msg.arg2;
         Object data = msg.obj;
 
-        if (result == SMSSDK.RESULT_COMPLETE) {
-            //回调完成
-            if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                //提交验证码成功
+        if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+            /** 提交验证码 */
+            afterSubmit(result, data);
+        } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+            /** 获取验证码成功后的执行动作 */
+            afterGet(result, data);
+        }else if (event == SMSSDK.EVENT_GET_VOICE_VERIFICATION_CODE) {
 
-            } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                //获取验证码成功
-
-            } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
-                //返回支持发送验证码的国家列表
-
-
-            }
-        } else {
-            Throwable throwable = (Throwable) data;
-            throwable.printStackTrace();
-            Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
+
         return false;
     }
 
-
-    public static class RegisterCallBack extends JsonCallBack<UserInfoDao> {
-        private WeakReference<RegisterActivity> mWeakReference;
-
-        public RegisterCallBack(RegisterActivity activity) {
-            mWeakReference = new WeakReference<>(activity);
+    private void afterGet(int result, Object data) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
 
-        @Override
-        public void onError(Call call, Exception e, int id) {
-            RegisterActivity registerActivity = mWeakReference.get();
-            if (registerActivity != null) {
-                registerActivity.onError();
+        if (result == SMSSDK.RESULT_COMPLETE) {
+            countDown();
+        }else{
+            mButtonCode.setEnabled(true);
+            ((Throwable) data).printStackTrace();
+            Throwable throwable = (Throwable) data;
+            // 根据服务器返回的网络错误，给toast提示
+            int status = 0;
+            try {
+                JSONObject object = new JSONObject(throwable.getMessage());
+                String des = object.optString("detail");
+                status = object.optInt("status");
+                if (!TextUtils.isEmpty(des)) {
+                    Toast.makeText(this, des, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } catch (JSONException e) {
+                SMSLog.getInstance().w(e);
+            }
+
+            Toast.makeText(this, "获取验证码失败！", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+    }
+
+    private void countDown() {
+        //成功了才倒计时
+        countDown = true;
+        myTimer = new MyTimer(millisInFuture, countDownInterval);
+        myTimer.start();
+    }
+
+    private void afterSubmit(int result, Object data) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+
+        if (result == SMSSDK.RESULT_COMPLETE) {
+            if(myTimer!=null){
+                myTimer.cancel();
+//                mButtonCode.setEnabled(true);
+            }
+
+//            Toast.makeText(this, "验证码校验成功", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(RegisterActivity.this,RegiestNextActivity.class);
+            intent.putExtra("phone",phone);
+            intent.putExtra("result",true);
+            startActivity(intent);
+            finish();
+
+        }else{
+            ((Throwable) data).printStackTrace();
+            // 验证码不正确
+            String message = ((Throwable) data).getMessage();
+            int resId = 0;
+            try {
+                JSONObject json = new JSONObject(message);
+                int status = json.getInt("status");
+                Toast.makeText(this, "验证码不正确:"+status, Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
-
-        @Override
-        public void onResponse(UserInfoDao response, int id) {
-            RegisterActivity registerActivity = mWeakReference.get();
-            if (registerActivity != null) {
-                registerActivity.onResponse(response);
-            }
-        }
-
-        @Override
-        public void onBefore(Request request, int id) {
-            RegisterActivity registerActivity = mWeakReference.get();
-            if (registerActivity != null) {
-                registerActivity.onBefore();
-            }
-        }
     }
 
-    protected void onResponse(UserInfoDao response) {
-        if (mProgressDialog != null) {
-            mProgressDialog.cancel();
-        }
-        mSession.setUserInfo(response.result);
-    }
-
-    protected void onBefore() {
-        mProgressDialog = DialogManager.getProgressDialog(this, "注册中...", this);
-        mProgressDialog.show();
-
-    }
-
-    protected void onError() {
-        if (mProgressDialog != null) {
-            mProgressDialog.cancel();
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
 
     @Override
     public void onCancel(DialogInterface dialogInterface) {
@@ -262,9 +273,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onDestroy() {
-        OkHttpUtils.getInstance().cancelTag(TAG);
+
         // 销毁回调监听接口
         SMSSDK.unregisterAllEventHandler();
+        if(myTimer!=null){
+            countDown = false;
+            myTimer.cancel();
+        }
         super.onDestroy();
     }
 
@@ -275,6 +290,34 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     *
+     *  倒计时
+     * */
+    private class MyTimer extends CountDownTimer {
+
+        public MyTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            int s = (int) (millisUntilFinished/1000);
+            mButtonCode.setText(getString(R.string.txt_later_retry,s));
+        }
+
+
+        @Override
+        public void onFinish() {
+            countDown = false;
+            mButtonCode.setText(R.string.getcode);
+            mButtonCode.setEnabled(true);
+        }
+
     }
 }
 

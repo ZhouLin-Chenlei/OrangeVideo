@@ -1,5 +1,6 @@
 package com.community.yuequ.contorl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -80,7 +81,7 @@ public class ImageManager {
     }
 
     // 加载网络圆型图片
-    public void loadCircleImage(Context context, String url, ImageView imageView) {
+    public void loadCircleImage(Activity context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .placeholder(R.mipmap.jiazai)
@@ -89,7 +90,16 @@ public class ImageManager {
                 .transform(new GlideCircleTransform(context))
                 .into(imageView);
     }
-
+    // 加载网络圆型图片
+    public void loadCircleImage(Fragment context, String url, ImageView imageView) {
+        Glide.with(context)
+                .load(url)
+                .placeholder(R.mipmap.jiazai)
+//                .error(R.mipmap.qowu)
+                .crossFade()
+                .transform(new GlideCircleTransform(context.getContext()))
+                .into(imageView);
+    }
     // 加载drawable圆型图片
     public void loadCircleResImage(Context context, int resId, ImageView imageView) {
         Glide.with(context)

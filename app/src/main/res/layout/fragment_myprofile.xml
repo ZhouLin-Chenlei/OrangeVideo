@@ -15,19 +15,26 @@
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
             android:id="@+id/ll_ligin_head"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
-
-            <ImageView
+            <FrameLayout
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:background="@mipmap/head_cover_bg">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/iv_head"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@mipmap/defalut_portrait"/>
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:layout_gravity="center"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FFFFFFFF"/>
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -48,7 +55,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
-                        android:text="@string/app_name"
                         android:textColor="@color/white"
                         android:textSize="18sp"/>
 
@@ -67,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:lines="1"
-                    android:text="ID:123456"
                     android:textColor="@color/white"
                     android:textSize="13sp"/>
 
@@ -84,7 +89,6 @@
                     android:paddingRight="8dp"
                     android:paddingStart="8dp"
                     android:paddingTop="5dp"
-                    android:text="@string/app_name"
                     android:textColor="@color/white"
                     android:textSize="14sp"/>
             </LinearLayout>

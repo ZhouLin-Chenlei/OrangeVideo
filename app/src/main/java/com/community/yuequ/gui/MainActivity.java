@@ -9,6 +9,7 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import com.community.yuequ.bottombar.OnTabSelectListener;
 import com.community.yuequ.imple.DialogConfListener;
 import com.community.yuequ.modle.InitMsg;
 import com.community.yuequ.modle.OrderTip;
+import com.community.yuequ.modle.UserInfo;
 import com.community.yuequ.util.TabMessage;
 import com.community.yuequ.widget.WelComeTipsDialog;
 
@@ -94,21 +96,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setToolbar(int id){
         mTitleView.setText(TabMessage.get(this,id));
-//        String tag = getTag(id);
-//        if(ID_MYPROFILE.equals(tag)){
+        String tag = getTag(id);
+        if(ID_MYPROFILE.equals(tag)){
+            setMyProfileToolbar();
+
+        }else{
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null && !actionBar.isShowing()) {
+                actionBar.show();
+            }
+        }
+
+    }
+
+    public void setMyProfileToolbar(){
+        UserInfo userInfo = mSession.getUserInfo();
+        if(userInfo!=null){
+            mTitleView.setText("");
+        }else{
+
+        }
+
 //            ActionBar actionBar = getSupportActionBar();
 //            if (actionBar != null && actionBar.isShowing()) {
 //                actionBar.hide();
 //            }
-//        }else{
-//            ActionBar actionBar = getSupportActionBar();
-//            if (actionBar != null && !actionBar.isShowing()) {
-//                actionBar.show();
-//            }
-//        }
-
     }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

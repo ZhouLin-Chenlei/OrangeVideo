@@ -186,10 +186,18 @@ public class VideoPageFragment extends BaseTabFragment implements SwipeRefreshLa
 
     protected void getDataBefore() {
         super.getDataBefore();
+
+        if(mListAdapter.getItemCount()==0){
+            mStatuLayout.show().setProgressBarVisibility(true).setText(null);
+        }else {
+            mStatuLayout.hide();
+        }
     }
 
     protected void getDataFail() {
         super.getDataFail();
+        mListAdapter.notifyDataSetChanged();
+        completeRefresh();
     }
     protected void getDataAfter() {
         super.getDataAfter();

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
+    <item android:state_pressed="true" android:state_enabled="true">
         <shape>
-            <solid android:color="#ffff610a"/>
+            <solid android:color="#ffff610a" />
             <!-- 圆角 -->  
                 
             <corners
@@ -15,7 +15,22 @@
         </shape>
     </item>
 
-    <item android:state_pressed="false">
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="#9e9e9e"/>
+            <!-- 圆角 -->  
+                
+            <corners
+                android:bottomLeftRadius="3dp"
+                android:bottomRightRadius="3dp"
+                android:topLeftRadius="3dp"
+                android:topRightRadius="3dp"/>
+
+
+        </shape>
+    </item>
+
+    <item android:state_pressed="false" android:state_enabled="true">
 
         <shape>
 

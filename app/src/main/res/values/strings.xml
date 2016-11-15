@@ -65,13 +65,13 @@
     <string name="title_activity_login">登录</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">手机号 / 邮箱</string>
-    <string name="prompt_password">密码</string>
+    <string name="prompt_phone">输入11位手机号</string>
+    <string name="prompt_password">输入密码</string>
     <string name="action_sign_in">登录</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+
+    <string name="error_invalid_password">密码长度为6-16位</string>
+    <string name="error_incorrect_password">密码智能包含字母或数字</string>
+    <string name="error_discord_password">密码输入不一致</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -80,5 +80,14 @@
     <string name="forget_password">忘记密码</string>
     <string name="program_pro">节目单</string>
     <string name="action_register_in">注册</string>
-
+    <string name="prompt_code">验证码</string>
+    <string name="getcode">获取验证码</string>
+    <string name="action_register_next">下一步</string>
+    <string name="input_phone">请输入手机号码！</string>
+    <string name="txt_phonenumber_erro">手机号格式错误！</string>
+    <string name="txt_later_retry">%1$d秒后重试</string>
+    <string name="input_code">请输入验证码</string>
+    <string name="prompt_password_verify">再次输入确认密码</string>
+    <string name="action_register_finish">完成注册</string>
+    <string name="register_wiat">注册中…</string>
 </resources>

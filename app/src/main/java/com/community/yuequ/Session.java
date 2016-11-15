@@ -503,4 +503,7 @@ public class Session {
     public void setUserInfo(UserInfo userInfo) {
          mUserInfo = userInfo;
     }
+    public UserInfo getUserInfo(){
+        return mUserInfo;
+    }
 }
