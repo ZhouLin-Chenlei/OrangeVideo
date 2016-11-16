@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
         tv_forget_password = (TextView) findViewById(R.id.tv_forget_password);
 
         tv_register_account.setOnClickListener(this);
+        tv_forget_password.setOnClickListener(this);
 
     }
 
@@ -204,6 +205,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
                 break;
             case R.id.tv_register_account:
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                break;
+            case R.id.tv_forget_password:
+                startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
                 break;
 
         }

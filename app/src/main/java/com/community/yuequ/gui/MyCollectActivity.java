@@ -37,8 +37,8 @@ import okhttp3.Call;
 import okhttp3.Request;
 
 
-public class MyCenterActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
-    private static final String TAG = "MyCenterActivity";
+public class MyCollectActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
+    private static final String TAG = "MyCollectActivity";
 
     private ImageButton ib_back;
     private Button bt_edit;
@@ -65,7 +65,7 @@ public class MyCenterActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_center);
+        setContentView(R.layout.activity_my_collect);
         mSession = Session.get(this);
 
         ib_back = (ImageButton) findViewById(R.id.ib_back);

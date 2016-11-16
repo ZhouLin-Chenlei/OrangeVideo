@@ -248,7 +248,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
 
             case R.id.ll_ligin_head:
 
-                startActivity(new Intent(getActivity(),MyCenterActivity.class));
+                startActivity(new Intent(getActivity(),MyCollectActivity.class));
                 break;
             case R.id.rl_nologin_head:
                 startActivity(new Intent(getActivity(),LoginActivity.class));
@@ -260,7 +260,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
             case R.id.rl_group_feedback:
                 break;
             case R.id.rl_group_about:
-                startActivity(new Intent(getActivity(),MyCenterActivity.class));
+                startActivity(new Intent(getActivity(),MyCollectActivity.class));
                 break;
 
         }

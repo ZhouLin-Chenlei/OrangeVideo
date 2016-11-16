@@ -89,7 +89,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpgradeDialog.
                 Glide.with(this)
                         .load("file://" + localPath.getAbsolutePath())
                         .crossFade()
-                        .error(R.mipmap.index)
+                        .error(R.mipmap.welcome)
                         .into(new SimpleTarget<GlideDrawable>() {
                             @Override
                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -105,7 +105,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpgradeDialog.
                         });
 
             }else{
-                imge.setImageResource(R.mipmap.index);
+                imge.setImageResource(R.mipmap.welcome);
             }
         }
 
@@ -241,23 +241,23 @@ public class WelcomeActivity extends AppCompatActivity implements UpgradeDialog.
 
     protected void startMainActivity() {
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int localVersion = preferences.getInt("version", 0);
-        int versionCode = mSession.getVersionCode();
-
-        if(localVersion != versionCode){
-            Intent intent = new Intent(this, GuideActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("version",versionCode);
-            editor.apply();
-        }else{
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        int localVersion = preferences.getInt("version", 0);
+//        int versionCode = mSession.getVersionCode();
+//
+//        if(localVersion != versionCode){
+//            Intent intent = new Intent(this, GuideActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+//
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putInt("version",versionCode);
+//            editor.apply();
+//        }else{
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }
+//        }
 
         finish();
     }

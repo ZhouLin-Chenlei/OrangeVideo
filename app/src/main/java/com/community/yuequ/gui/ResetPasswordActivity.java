@@ -3,12 +3,12 @@ package com.community.yuequ.gui;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
-import com.community.yuequ.Session;
 import com.community.yuequ.util.Validator;
 import com.community.yuequ.widget.DialogManager;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -32,8 +31,8 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import cn.smssdk.utils.SMSLog;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnCancelListener, Handler.Callback {
-    private final static String TAG = RegisterActivity.class.getSimpleName();
+public class ResetPasswordActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnCancelListener, Handler.Callback {
+    private final static String TAG = ResetPasswordActivity.class.getSimpleName();
 
     public static final long millisInFuture = 60*1000;
     public static final long countDownInterval = 1*1000;
@@ -59,7 +58,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_reset_password);
+
         initSDK();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        mTitleView.setText(getString(R.string.action_register_in));
+        mTitleView.setText(getString(R.string.find_password));
         mPhoneView = (EditText) findViewById(R.id.et_phone);
 
         mCodeView = (EditText) findViewById(R.id.et_code);
@@ -145,23 +145,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String code = mCodeView.getText().toString();
 
 
-//                        Intent intent = new Intent(RegisterActivity.this,RegiestNextActivity.class);
-//                        intent.putExtra("phone",phone);
-//                        intent.putExtra("result",true);
-//                        startActivity(intent);
-//                        finish();
+                        Intent intent = new Intent(this,ResetPasswordNextActivity.class);
+                        intent.putExtra("phone",phone);
+                        intent.putExtra("result",true);
+                        startActivity(intent);
+                        finish();
 
 
-        if(TextUtils.isEmpty(phone)){
-            Toast.makeText(this, R.string.input_phone, Toast.LENGTH_SHORT).show();
-        }else if(!Validator.isMobile(phone)){
-            mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
-
-        }else if(TextUtils.isEmpty(code)){
-            Toast.makeText(this, R.string.input_code, Toast.LENGTH_SHORT).show();
-        }else{
-            smsVerifyRequset(phone,code);
-        }
+//        if(TextUtils.isEmpty(phone)){
+//            Toast.makeText(this, R.string.input_phone, Toast.LENGTH_SHORT).show();
+//        }else if(!Validator.isMobile(phone)){
+//            mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
+//
+//        }else if(TextUtils.isEmpty(code)){
+//            Toast.makeText(this, R.string.input_code, Toast.LENGTH_SHORT).show();
+//        }else{
+//            smsVerifyRequset(phone,code);
+//        }
     }
 
     private void smsVerifyRequset(String phone, String verificationCode) {
@@ -243,7 +243,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 //            Toast.makeText(this, "验证码校验成功", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(RegisterActivity.this,RegiestNextActivity.class);
+            Intent intent = new Intent(this,ResetPasswordNextActivity.class);
             intent.putExtra("phone",phone);
             intent.putExtra("result",true);
             startActivity(intent);
@@ -319,4 +319,3 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 }
-

@@ -2,10 +2,10 @@ package com.community.yuequ.gui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,6 +18,7 @@ import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.Session;
 import com.community.yuequ.YQApplication;
+import com.community.yuequ.modle.MessageBean;
 import com.community.yuequ.modle.UserInfoDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class RegiestNextActivity extends AppCompatActivity implements View.OnClickListener{
+public class ResetPasswordNextActivity extends AppCompatActivity implements View.OnClickListener{
     private final static String TAG = "RegiestNextActivity";
     private String phone;
 
@@ -49,7 +50,7 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_next);
+        setContentView(R.layout.activity_resetpassword_next);
         Intent intent = getIntent();
         phone = intent.getStringExtra("phone");
 
@@ -62,7 +63,7 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
             actionBar.setDisplayShowTitleEnabled(false);
         }
         mSession = Session.get(this);
-        mTitleView.setText(getString(R.string.action_register_in));
+        mTitleView.setText(getString(R.string.find_password));
 
         mPhoneView = (TextView) findViewById(R.id.tv_phone);
         et_password = (EditText) findViewById(R.id.et_password);
@@ -82,13 +83,13 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.register_button:
-                register();
+                reset();
                 break;
 
         }
     }
 
-    private void register(){
+    private void reset(){
 
 
         String password = et_password.getText().toString();
@@ -110,7 +111,7 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
     private void requset(String phone, String password) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("login_name",phone);
-        hashMap.put("login_password", password);
+        hashMap.put("password", password);
 
         String content = "";
         try {
@@ -124,23 +125,23 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
         }
         OkHttpUtils
                 .postString()
-                .url(Contants.URL_REGISTER)
+                .url(Contants.URL_RESETPASSWORD)
                 .content(content)
                 .tag(TAG)
                 .build()
-                .execute(new RegisterCallBack(this));
+                .execute(new ResetCallBack(this));
     }
 
-    public static class RegisterCallBack extends JsonCallBack<UserInfoDao> {
-        private WeakReference<RegiestNextActivity> mWeakReference;
+    public static class ResetCallBack extends JsonCallBack<MessageBean> {
+        private WeakReference<ResetPasswordNextActivity> mWeakReference;
 
-        public RegisterCallBack(RegiestNextActivity activity) {
+        public ResetCallBack(ResetPasswordNextActivity activity) {
             mWeakReference = new WeakReference<>(activity);
         }
 
         @Override
         public void onError(Call call, Exception e, int id) {
-            RegiestNextActivity activity = mWeakReference.get();
+            ResetPasswordNextActivity activity = mWeakReference.get();
             if (activity != null) {
                 activity.onError();
             }
@@ -149,35 +150,35 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
         @Override
         public void onBefore(Request request, int id) {
             super.onBefore(request, id);
-            RegiestNextActivity activity = mWeakReference.get();
+            ResetPasswordNextActivity activity = mWeakReference.get();
             if (activity != null) {
                 activity.onBefore();
             }
         }
 
         @Override
-        public void onResponse(UserInfoDao response, int id) {
-            RegiestNextActivity activity = mWeakReference.get();
+        public void onResponse(MessageBean response, int id) {
+            ResetPasswordNextActivity activity = mWeakReference.get();
             if (activity != null) {
                 activity.onResponse(response);
             }
         }
     }
 
-    private void onResponse(UserInfoDao response) {
+    private void onResponse(MessageBean response) {
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();
-        if(response!=null&&response.result!=null){
-            Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
-            mSession.setUserInfo(response.result);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Contants.ACTION_LOGIN));
+        if(response!=null&&response.errorCode==200){
+            Toast.makeText(this, "密码修改成功，请用新密码登录！", Toast.LENGTH_LONG).show();
+//            mSession.setUserInfo(response.result);
+//            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Contants.ACTION_LOGIN));
             finish();
 
         }else{
             if(!TextUtils.isEmpty(response.errorMessage)){
                 Toast.makeText(this, response.errorMessage, Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "密码修改失败！", Toast.LENGTH_SHORT).show();
 
             }
         }
@@ -191,7 +192,7 @@ public class RegiestNextActivity extends AppCompatActivity implements View.OnCli
     private void onError() {
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();
-        Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "密码修改失败！", Toast.LENGTH_SHORT).show();
     }
 
     @Override

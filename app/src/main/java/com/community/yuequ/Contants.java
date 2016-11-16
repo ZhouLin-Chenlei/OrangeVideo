@@ -12,6 +12,10 @@ public class Contants {
     public static final String SHOWTYPE_EDIT = "3";
 
 
+    public static final String APPKEY = "18fdf500cd85e";
+    public static final String APPSECRET = "db7dc0fdcf972fac2078f31023b0dada";
+    public static final String COUNTRY_CODE = "86";
+
 
     public static final String ACTION_LOGIN = "com.oli.receivers.login";
 
@@ -67,6 +71,8 @@ public class Contants {
     public static String URL_LOGIN = PROTOCOL + DOMAIN +"/user/login.shtml";
     //收藏节目列表
     public static String URL_USERCOLLECTIONSLIST = PROTOCOL + DOMAIN +"/user/userCollectionsList.shtml";
+    //重置密码
+    public static String URL_RESETPASSWORD = PROTOCOL + DOMAIN +"/user/resetPassword.shtml ";
 
 
 }

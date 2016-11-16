@@ -92,4 +92,10 @@
     <string name="register_wiat">注册中…</string>
     <string name="account_safety">账户安全</string>
     <string name="my_profile">个人资料</string>
+
+
+    <string name="find_password">找回密码</string>
+    <string name="prompt_new_password">请输入新密码</string>
+    <string name="prompt_new_password_verify">请再次输入新密码</string>
+    <string name="reset_password">重置密码</string>
 </resources>
