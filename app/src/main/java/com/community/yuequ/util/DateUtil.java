@@ -1,5 +1,6 @@
 package com.community.yuequ.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,4 +32,34 @@ public class DateUtil {
         return sdf.format(new Date(timeInMillis));
     }
 
+    /**
+     *   * 将日期格式的字符串转换为长整型
+     *   *
+     *   * @param date
+     *   * @param format
+     *   * @return
+     *  
+     */
+    public static long stringToLong(String strTime, String formatType) throws ParseException {
+        Date date = stringToDate(strTime, formatType); // String类型转成date类型
+        if (date == null) {
+            return 0;
+        } else {
+            long currentTime = dateToLong(date); // date类型转成long类型
+            return currentTime;
+        }
+    }
+
+    public static Date stringToDate(String strTime, String formatType) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(formatType);
+        Date date = null;
+        date = formatter.parse(strTime);
+        return date;
+    }
+
+    // date类型转换为long类型
+    // date要转换的date类型的时间
+    public static long dateToLong(Date date) {
+        return date.getTime();
+    }
 }

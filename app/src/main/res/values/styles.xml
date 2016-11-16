@@ -76,4 +76,14 @@
         </item>
     </style>
 
+
+    <style name="myprofile_right_arrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@mipmap/icon_gray_arrow</item>
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
 </resources>

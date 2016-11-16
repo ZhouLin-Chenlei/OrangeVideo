@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.BROADCAST_SMS"/>
     -->
 
+
     <!-- PROTECTION_NORMAL -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -20,7 +21,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
@@ -170,11 +171,32 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".gui.ResetPasswordActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".gui.ResetPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".gui.ResetPasswordNextActivity"
+        <activity
+            android:name=".gui.ResetPasswordNextActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".gui.MyprofileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".gui.EditInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".gui.SecurityCenterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".gui.EditPasswordActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>

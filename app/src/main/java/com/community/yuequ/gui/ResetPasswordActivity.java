@@ -69,7 +69,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        mTitleView.setText(getString(R.string.find_password));
+        mTitleView.setText(getString(R.string.reset_password));
         mPhoneView = (EditText) findViewById(R.id.et_phone);
 
         mCodeView = (EditText) findViewById(R.id.et_code);
@@ -145,23 +145,23 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
         String code = mCodeView.getText().toString();
 
 
-                        Intent intent = new Intent(this,ResetPasswordNextActivity.class);
-                        intent.putExtra("phone",phone);
-                        intent.putExtra("result",true);
-                        startActivity(intent);
-                        finish();
+//                        Intent intent = new Intent(this,ResetPasswordNextActivity.class);
+//                        intent.putExtra("phone",phone);
+//                        intent.putExtra("result",true);
+//                        startActivity(intent);
+//                        finish();
 
 
-//        if(TextUtils.isEmpty(phone)){
-//            Toast.makeText(this, R.string.input_phone, Toast.LENGTH_SHORT).show();
-//        }else if(!Validator.isMobile(phone)){
-//            mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
-//
-//        }else if(TextUtils.isEmpty(code)){
-//            Toast.makeText(this, R.string.input_code, Toast.LENGTH_SHORT).show();
-//        }else{
-//            smsVerifyRequset(phone,code);
-//        }
+        if(TextUtils.isEmpty(phone)){
+            Toast.makeText(this, R.string.input_phone, Toast.LENGTH_SHORT).show();
+        }else if(!Validator.isMobile(phone)){
+            mPhoneView.setError(getString(R.string.txt_phonenumber_erro));
+
+        }else if(TextUtils.isEmpty(code)){
+            Toast.makeText(this, R.string.input_code, Toast.LENGTH_SHORT).show();
+        }else{
+            smsVerifyRequset(phone,code);
+        }
     }
 
     private void smsVerifyRequset(String phone, String verificationCode) {

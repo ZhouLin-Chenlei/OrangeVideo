@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_security_center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.community.yuequ.gui.SecurityCenterActivity">
+    <include layout="@layout/toolbar"/>
+
+
+    <RelativeLayout
+        style="@style/MyProfile_Group_Style"
+        android:id="@+id/rl_edit_password"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16sp"
+            android:layout_marginStart="16sp"
+            android:text="@string/edit_password"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_gray_arrow"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/grey300"/>
+    <RelativeLayout
+        style="@style/MyProfile_Group_Style"
+        android:id="@+id/rl_reset_password">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16sp"
+            android:layout_marginStart="16sp"
+            android:text="@string/reset_password"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_gray_arrow"/>
+    </RelativeLayout>
+
+</LinearLayout>

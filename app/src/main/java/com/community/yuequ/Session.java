@@ -506,4 +506,9 @@ public class Session {
     public UserInfo getUserInfo(){
         return mUserInfo;
     }
+
+    public boolean isLogin(){
+
+        return  mUserInfo!=null;
+    }
 }

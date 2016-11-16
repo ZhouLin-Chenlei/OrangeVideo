@@ -70,8 +70,8 @@
     <string name="action_sign_in">登录</string>
 
     <string name="error_invalid_password">密码长度为6-16位</string>
-    <string name="error_incorrect_password">密码智能包含字母或数字</string>
-    <string name="error_discord_password">密码输入不一致</string>
+    <string name="error_incorrect_password">密码只能包含字母或数字</string>
+    <string name="error_discord_password">两次密码输入不一致</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -94,8 +94,31 @@
     <string name="my_profile">个人资料</string>
 
 
-    <string name="find_password">找回密码</string>
     <string name="prompt_new_password">请输入新密码</string>
     <string name="prompt_new_password_verify">请再次输入新密码</string>
     <string name="reset_password">重置密码</string>
+    <string name="head">头像</string>
+    <string name="nickname">昵称</string>
+    <string name="gender">性别</string>
+    <string name="birthday">出生年月</string>
+    <string name="describe">个性签名</string>
+    <string name="account_security">账号安全</string>
+    <string name="logout">退出登录</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="gender_unknow">保密</string>
+    <string name="prompt_nickname">昵称字数不能超过20个字</string>
+    <string name="prompt_desc">个性签名字数不超过140个字</string>
+    <string name="ok">确定</string>
+    <string name="edit_profile">编辑资料</string>
+
+    <string name="no_camera">照相功能未找到！</string>
+    <string name="no_sdcard">SD卡不可用！</string>
+    <string name="pic_notfound">图片未找到</string>
+    <string name="commit">提交</string>
+    <string name="edit_password">修改密码</string>
+    <string name="old_passowrd">原始密码</string>
+    <string name="edit">修改</string>
+    <string name="hint_edit_newpassword">6-16位新密码</string>
+    <string name="hint_edit_newpassword_verify">再次输入新密码</string>
 </resources>

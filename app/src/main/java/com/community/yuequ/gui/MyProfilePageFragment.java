@@ -61,7 +61,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
 
     private RelativeLayout rl_group_about;
 
-
+    private Session mSession;
     public MyProfilePageFragment() {
         // Required empty public constructor
     }
@@ -83,6 +83,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Contants.ACTION_LOGIN);
+        filter.addAction(Contants.ACTION_LOGOUT);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver,filter);
 
     }
@@ -94,14 +95,20 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
             if(Contants.ACTION_LOGIN.equals(action)){
                 display();
 
+            }else if(Contants.ACTION_LOGOUT.equals(action)){
+                display();
+
+            }else if(Contants.ACTION_EDIT_USERINFO.equals(action)){
+                display();
+
             }
         }
     };
 
     private void display() {
-        Session session = Session.get(getActivity());
-        UserInfo userInfo = session.getUserInfo();
-        if(userInfo!=null){
+
+        if(mSession.isLogin()){
+            UserInfo userInfo = mSession.getUserInfo();
             rl_nologin_head.setVisibility(View.GONE);
             ll_ligin_head.setVisibility(View.VISIBLE);
             ImageManager.getInstance().loadUrlImage(this,userInfo.head_img_path,iv_head);
@@ -119,9 +126,6 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
             rl_nologin_head.setVisibility(View.VISIBLE);
             ll_ligin_head.setVisibility(View.GONE);
 
-
-
-
         }
         ((MainActivity)getActivity()).setMyProfileToolbar();
 
@@ -131,6 +135,8 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mSession = Session.get(getActivity());
+
         registerReceiver();
         View convertView = inflater.inflate(R.layout.fragment_myprofile, container, false);
 
@@ -247,8 +253,13 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
         switch (view.getId()){
 
             case R.id.ll_ligin_head:
-
-                startActivity(new Intent(getActivity(),MyCollectActivity.class));
+                if(mSession.isLogin()) {
+                    Intent intent_myprofile = new Intent(getActivity(), MyprofileActivity.class);
+                    intent_myprofile.putExtra("user", mSession.getUserInfo());
+                    startActivity(intent_myprofile);
+                }else{
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }
                 break;
             case R.id.rl_nologin_head:
                 startActivity(new Intent(getActivity(),LoginActivity.class));
@@ -256,6 +267,14 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
             case R.id.rl_group_history:
                 break;
             case R.id.rl_group_collect:
+                if(mSession.isLogin()){
+                    Intent intent_collect = new Intent(getActivity(), MyCollectActivity.class);
+                    intent_collect.putExtra("user",mSession.getUserInfo());
+                    startActivity(intent_collect);
+
+                }else{
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }
                 break;
             case R.id.rl_group_feedback:
                 break;

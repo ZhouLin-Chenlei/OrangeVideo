@@ -1,5 +1,6 @@
 package com.community.yuequ.gui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,13 +61,18 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
     private int lastVisibleItem;
     private int mPage = 1;
     private boolean isLoading = false;
-    private Session mSession;
+
     public OrOnlineListDao.OrOnlineListBean mOnlineListBean;
+    private UserInfo mUserInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_collect);
-        mSession = Session.get(this);
+        Intent intent = getIntent();
+        if(intent!=null){
+            mUserInfo = (UserInfo) intent.getSerializableExtra("user");
+        }
 
         ib_back = (ImageButton) findViewById(R.id.ib_back);
         bt_edit = (Button) findViewById(R.id.bt_edit);
@@ -103,19 +109,19 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
     }
 
     private void displayUser() {
-        UserInfo userInfo = mSession.getUserInfo();
-        if(userInfo!=null){
 
-            ImageManager.getInstance().loadUrlImage(this,userInfo.head_img_path,mImageView);
-            tv_name.setText(userInfo.nick_name);
-            if("女".equals(userInfo.sex)){
+        if(mUserInfo!=null){
+
+            ImageManager.getInstance().loadUrlImage(this,mUserInfo.head_img_path,mImageView);
+            tv_name.setText(mUserInfo.nick_name);
+            if("女".equals(mUserInfo.sex)){
                 iv_gender.setImageResource(R.mipmap.icon_female);
             }else{
                 iv_gender.setImageResource(R.mipmap.icon_male);
             }
 //            String idStr = "ID："+userInfo.id;
 //            tv_userid.setText(idStr);
-            tv_desc.setText(userInfo.person_sign);
+            tv_desc.setText(mUserInfo.person_sign);
 
 
         }

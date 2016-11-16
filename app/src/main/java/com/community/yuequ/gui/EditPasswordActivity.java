@@ -2,12 +2,12 @@ package com.community.yuequ.gui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,10 +16,8 @@ import android.widget.Toast;
 
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
-import com.community.yuequ.Session;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.modle.MessageBean;
-import com.community.yuequ.modle.UserInfoDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.util.Validator;
@@ -33,84 +31,75 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class ResetPasswordNextActivity extends AppCompatActivity implements View.OnClickListener{
-    private final static String TAG = "RegiestNextActivity";
-    private String phone;
-
+public class EditPasswordActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "EditPasswordActivity";
     private Toolbar mToolbar;
     private TextView mTitleView;
-    private Session mSession;
 
-    private TextView mPhoneView;
-    private EditText et_password;
-    private EditText et_password_verify;
-    private Button register_button;
+    private EditText old_password;
+    private EditText new_password;
+    private EditText new_password_verify;
+    private Button edit_button;
     private ProgressDialog mProgressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resetpassword_next);
-        Intent intent = getIntent();
-        phone = intent.getStringExtra("phone");
-
-
+        setContentView(R.layout.activity_edit_password);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
+        mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+        mTitleView .setText(R.string.edit_password);
+
+        old_password = (EditText) findViewById(R.id.old_password);
+        new_password = (EditText) findViewById(R.id.new_password);
+        new_password_verify = (EditText) findViewById(R.id.new_password_verify);
+        edit_button = (Button) findViewById(R.id.edit_button);
+        edit_button.setOnClickListener(this);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
-        mSession = Session.get(this);
-        mTitleView.setText(getString(R.string.reset_password));
-
-        mPhoneView = (TextView) findViewById(R.id.tv_phone);
-        et_password = (EditText) findViewById(R.id.et_password);
-        et_password_verify = (EditText) findViewById(R.id.et_password_verify);
-        register_button = (Button) findViewById(R.id.register_button);
-
-        register_button.setOnClickListener(this);
-
-        mPhoneView.setText(phone);
-
-
-
-
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.register_button:
-                reset();
+            case R.id.edit_button:
+                edit();
                 break;
-
         }
     }
 
-    private void reset(){
+    private void edit() {
 
+        String oldPassword= old_password.getText().toString();
+        String newPassword = new_password.getText().toString();
+        String password2 = new_password_verify.getText().toString();
 
-        String password = et_password.getText().toString();
-        String password2 = et_password_verify.getText().toString();
+        if(TextUtils.isEmpty(oldPassword)){
+            Toast.makeText(this, "请输入原始密码", Toast.LENGTH_SHORT).show();
+        }else if(TextUtils.isEmpty(newPassword)){
+            Toast.makeText(this, "请输入新密码", Toast.LENGTH_SHORT).show();
+        }else if(!Validator.isPassword(newPassword)){
+            new_password.setError(getString(R.string.error_incorrect_password));
 
-        if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, R.string.error_invalid_password, Toast.LENGTH_SHORT).show();
-        }else if(!Validator.isPassword(password)){
-            et_password.setError(getString(R.string.error_incorrect_password));
-
-        }else if(!password.equals(password2)){
+        }else if(!newPassword.equals(password2)){
             Toast.makeText(this, R.string.error_discord_password, Toast.LENGTH_SHORT).show();
         }else{
-            requset(phone,password);
+            requset(oldPassword,newPassword);
         }
-
     }
 
-    private void requset(String phone, String password) {
+    private void requset(String old_password,String password ) {
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("login_name",phone);
+        hashMap.put("old_password",old_password);
         hashMap.put("password", password);
 
         String content = "";
@@ -125,23 +114,24 @@ public class ResetPasswordNextActivity extends AppCompatActivity implements View
         }
         OkHttpUtils
                 .postString()
-                .url(Contants.URL_RESETPASSWORD)
+                .url(Contants.URL_UPDATEPASSWORD)
                 .content(content)
                 .tag(TAG)
                 .build()
-                .execute(new ResetCallBack(this));
+                .execute(new EditCallBack(this));
     }
 
-    public static class ResetCallBack extends JsonCallBack<MessageBean> {
-        private WeakReference<ResetPasswordNextActivity> mWeakReference;
 
-        public ResetCallBack(ResetPasswordNextActivity activity) {
+    public static class EditCallBack extends JsonCallBack<MessageBean> {
+        private WeakReference<EditPasswordActivity> mWeakReference;
+
+        public EditCallBack(EditPasswordActivity activity) {
             mWeakReference = new WeakReference<>(activity);
         }
 
         @Override
         public void onError(Call call, Exception e, int id) {
-            ResetPasswordNextActivity activity = mWeakReference.get();
+            EditPasswordActivity activity = mWeakReference.get();
             if (activity != null) {
                 activity.onError();
             }
@@ -150,7 +140,7 @@ public class ResetPasswordNextActivity extends AppCompatActivity implements View
         @Override
         public void onBefore(Request request, int id) {
             super.onBefore(request, id);
-            ResetPasswordNextActivity activity = mWeakReference.get();
+            EditPasswordActivity activity = mWeakReference.get();
             if (activity != null) {
                 activity.onBefore();
             }
@@ -158,7 +148,7 @@ public class ResetPasswordNextActivity extends AppCompatActivity implements View
 
         @Override
         public void onResponse(MessageBean response, int id) {
-            ResetPasswordNextActivity activity = mWeakReference.get();
+            EditPasswordActivity activity = mWeakReference.get();
             if (activity != null) {
                 activity.onResponse(response);
             }
@@ -169,7 +159,7 @@ public class ResetPasswordNextActivity extends AppCompatActivity implements View
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();
         if(response!=null&&response.errorCode==200){
-            Toast.makeText(this, "密码修改成功，请用新密码登录！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "密码修改成功！", Toast.LENGTH_LONG).show();
 //            mSession.setUserInfo(response.result);
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Contants.ACTION_EDIT_PASSOWRD));
             finish();
@@ -193,12 +183,5 @@ public class ResetPasswordNextActivity extends AppCompatActivity implements View
         if(mProgressDialog!=null)
             mProgressDialog.dismiss();
         Toast.makeText(this, "密码修改失败！", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        OkHttpUtils.getInstance().cancelTag(TAG);
-        super.onDestroy();
-
     }
 }

@@ -19,6 +19,7 @@ public class DialogManager {
 		dialog.setMessage(message);
 		dialog.setIndeterminate(true);
 		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(false);
 		dialog.setOnCancelListener(listener);
 		
 		return dialog;

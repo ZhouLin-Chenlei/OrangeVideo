@@ -18,6 +18,9 @@ public class Contants {
 
 
     public static final String ACTION_LOGIN = "com.oli.receivers.login";
+    public static final String ACTION_LOGOUT = "com.oli.receivers.logout";
+    public static final String ACTION_EDIT_USERINFO = "com.oli.receivers.edit_userinfo";
+    public static final String ACTION_EDIT_PASSOWRD = "com.oli.receivers.edit_password";
 
     //201：游客，202：包月会员，203：按次订购会员
     public static final int HTTP_NO = 201;
@@ -72,7 +75,13 @@ public class Contants {
     //收藏节目列表
     public static String URL_USERCOLLECTIONSLIST = PROTOCOL + DOMAIN +"/user/userCollectionsList.shtml";
     //重置密码
-    public static String URL_RESETPASSWORD = PROTOCOL + DOMAIN +"/user/resetPassword.shtml ";
+    public static String URL_RESETPASSWORD = PROTOCOL + DOMAIN +"/user/resetPassword.shtml";
+    //上传头像
+    public static String URL_UPDATEHEAD = PROTOCOL + DOMAIN +"/user/updateHead.shtml";
+    //修改用户信息
+    public static String URL_UPDATEUSERINFO = PROTOCOL + DOMAIN +"/user/updateUser.shtml";
+    //修改密码
+    public static String URL_UPDATEPASSWORD = PROTOCOL + DOMAIN +"/user/updatePassword.shtml";
 
 
 }
