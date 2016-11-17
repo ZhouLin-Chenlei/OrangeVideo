@@ -85,6 +85,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
         IntentFilter filter = new IntentFilter();
         filter.addAction(Contants.ACTION_LOGIN);
         filter.addAction(Contants.ACTION_LOGOUT);
+        filter.addAction(Contants.ACTION_EDIT_USERINFO);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver,filter);
 
     }
@@ -267,7 +268,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                 break;
             case R.id.rl_group_history:
 
-                
+
                 break;
             case R.id.rl_group_collect:
                 if(mSession.isLogin()){

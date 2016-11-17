@@ -1,7 +1,11 @@
 package com.community.yuequ.gui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,11 +26,13 @@ import com.community.yuequ.Session;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.gui.adapter.MyCenterCollectAdapter;
+import com.community.yuequ.modle.CollectListDao;
 import com.community.yuequ.modle.OrOnlineListDao;
 import com.community.yuequ.modle.UserInfo;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerGridItemDecoration;
+import com.community.yuequ.view.DividerItemDecoration;
 import com.community.yuequ.view.SwipeRefreshLayout;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -62,18 +68,23 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
     private int mPage = 1;
     private boolean isLoading = false;
 
-    public OrOnlineListDao.OrOnlineListBean mOnlineListBean;
+    public CollectListDao.CollectListBean mCollectListBean;
     private UserInfo mUserInfo;
+    private Session mSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver();
         setContentView(R.layout.activity_my_collect);
         Intent intent = getIntent();
         if(intent!=null){
             mUserInfo = (UserInfo) intent.getSerializableExtra("user");
         }
-
+        mSession = Session.get(this);
+        if(mUserInfo==null){
+            mUserInfo = mSession.getUserInfo();
+        }
         ib_back = (ImageButton) findViewById(R.id.ib_back);
         bt_edit = (Button) findViewById(R.id.bt_edit);
         tv_name = (TextView) findViewById(R.id.tv_name);
@@ -95,7 +106,7 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addOnScrollListener(mScrollListener);
-        mRecyclerView.addItemDecoration(new DividerGridItemDecoration(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mCollectAdapter = new MyCenterCollectAdapter(this);
         mRecyclerView.setAdapter(mCollectAdapter);
 
@@ -107,6 +118,26 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
         getdata(1);
 
     }
+
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Contants.ACTION_EDIT_USERINFO);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,filter);
+
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+           if(Contants.ACTION_EDIT_USERINFO.equals(action)){
+               mUserInfo = mSession.getUserInfo();
+               displayUser();
+
+            }
+        }
+    };
+
 
     private void displayUser() {
 
@@ -160,6 +191,9 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
                 finish();
                 break;
             case R.id.bt_edit:
+                Intent intent_myprofile = new Intent(this, MyprofileActivity.class);
+                intent_myprofile.putExtra("user", mUserInfo);
+                startActivity(intent_myprofile);
 
                 break;
             case R.id.ll_status:
@@ -193,7 +227,7 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
                 .url(url)
                 .tag(TAG)
                 .build()
-                .execute(new JsonCallBack<OrOnlineListDao>() {
+                .execute(new JsonCallBack<CollectListDao>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         if (mSwipeRefreshLayout != null) {
@@ -215,21 +249,21 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
                     }
 
                     @Override
-                    public void onResponse(OrOnlineListDao response,int id) {
+                    public void onResponse(CollectListDao response,int id) {
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                         if(response!=null && response.result!=null){
                             mPage = page;
-                            mOnlineListBean = response.result;
+                            mCollectListBean = response.result;
 
                             if(mPage==1){
-                                mCollectAdapter.setData(mOnlineListBean.list);
+                                mCollectAdapter.setData(mCollectListBean.list);
 
                             }else{
-                                mCollectAdapter.addData(mOnlineListBean.list);
+                                mCollectAdapter.addData(mCollectListBean.list);
                             }
-                            if(mPage >= mOnlineListBean.total_page){
+                            if(mPage >= mCollectListBean.total_page){
                                 mCollectAdapter.setLoadMoreViewVisibility(View.VISIBLE);
                                 mCollectAdapter.setLoadMoreViewText(getString(R.string.load_data_adequate));
                             }else{
@@ -286,8 +320,9 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
     }
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+        super.onDestroy();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

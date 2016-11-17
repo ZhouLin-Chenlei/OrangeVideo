@@ -105,15 +105,6 @@
                     android:text="@string/forget_password"
                     android:id="@+id/tv_forget_password"/>
             </LinearLayout>
-
-            <!-- Login progress -->
-            <ProgressBar
-                android:id="@+id/login_progress"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

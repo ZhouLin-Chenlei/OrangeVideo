@@ -3,6 +3,7 @@ package com.community.yuequ.gui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
     // UI references.
     private AutoCompleteTextView mPhoneView;
     private EditText mPasswordView;
-    private View mProgressView;
+
     private View mLoginFormView;
     private Toolbar mToolbar;
     private TextView mTitleView;
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
     private TextView tv_forget_password;
     private Button mSignInButton;
     private Session mSession;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
         mSignInButton.setOnClickListener(this);
 
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+
         tv_register_account = (TextView) findViewById(R.id.tv_register_account);
         tv_forget_password = (TextView) findViewById(R.id.tv_forget_password);
 
@@ -249,7 +251,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
     }
 
     private void onResponse(UserInfoDao response) {
-        showProgress(false);
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
         mSignInButton.setEnabled(true);
         if(response!=null && response.result!=null){
             Toast.makeText(this, "登录成功！", Toast.LENGTH_SHORT).show();
@@ -267,52 +271,19 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
     }
 
     private void onBefore() {
-        showProgress(true);
+        mProgressDialog = DialogManager.getProgressDialog(this,"登录中...");
+        mProgressDialog.show();
         mSignInButton.setEnabled(false);
     }
 
     private void onError() {
-        showProgress(false);
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
         mSignInButton.setEnabled(true);
         Toast.makeText(this, "登录失败！", Toast.LENGTH_SHORT).show();
     }
 
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//                }
-//            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

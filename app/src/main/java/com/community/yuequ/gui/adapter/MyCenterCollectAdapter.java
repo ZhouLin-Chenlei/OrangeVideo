@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.community.yuequ.R;
 import com.community.yuequ.gui.LiveVideoActivity;
+import com.community.yuequ.modle.Collect;
 import com.community.yuequ.modle.RProgram;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private View footView;
     private static final int TYPE_LIST = 0;
     private static final int TYPE_FOOT_VIEW = 1;
-    private List<RProgram> mList;
+    private List<Collect> mList;
     public MyCenterCollectAdapter(Activity activity){
         this.mContext = activity;
     }
@@ -53,25 +54,32 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
-            final RProgram programa = mList.get(position);
-            viewHolder.tv_title.setText(programa.name);
-            viewHolder.tv_desc.setText("正在直播："+programa.remark);
+            final Collect collect = mList.get(position);
+            viewHolder.tv_title.setText(collect.program_name);
+            viewHolder.tv_desc.setText("正在直播："+collect.remark);
 //            ImageManager.getInstance().loadUrlImage(mContext, programa.img_path, viewHolder.iv_img);
             Glide
                     .with(mContext)
-                    .load( programa.img_path)
+                    .load( collect.program_img_path)
                     .placeholder(R.mipmap.jiazai)
                     .dontAnimate()
                     .into(viewHolder.iv_img);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    RProgram program = new RProgram();
+                    program.id = collect.program_id;
+                    program.name = collect.program_name;
+                    program.img_path = collect.program_img_path;
+                    program.remark = collect.remark;
+                    program.isCollection = collect.isCollection;
+
                     Intent intent = new Intent();
                     intent.setClass(mContext, LiveVideoActivity.class);
-                    intent.putExtra("program", programa);
+                    intent.putExtra("program", program);
 //                    intent.putExtra("column_id", programa.id);
 //                    intent.putExtra("column_name", programa.name);
                     mContext.startActivity(intent);
@@ -114,11 +122,11 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return ((TextView) footView.findViewById(R.id.tv_loading_more)).getText().toString();
     }
 
-    public void setData(List<RProgram> result) {
+    public void setData(List<Collect> result) {
         mList = result;
         notifyDataSetChanged();
     }
-    public void addData(List<RProgram> list) {
+    public void addData(List<Collect> list) {
         if (list != null && !list.isEmpty()) {
             mList.addAll(list);
             notifyDataSetChanged();

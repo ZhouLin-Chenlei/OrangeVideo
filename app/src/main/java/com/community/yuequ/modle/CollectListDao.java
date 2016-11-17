@@ -1,9 +1,20 @@
 package com.community.yuequ.modle;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/11/17.
  */
 
 public class CollectListDao {
-    //{"errorCode":200,"errorMessage":"查询成功","result":{"total_cnt":0,"total_page":1,"list":[]}}
+    public int errorCode;
+    public String errorMessage;
+    public CollectListBean result;
+
+    public static class CollectListBean{
+        public int total_cnt;//总页数
+        public int total_page;//总页数
+        public List<Collect> list;
+
+    }
 }
