@@ -26,7 +26,7 @@ public class GenderChoiceDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setCancelable(false);
+
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

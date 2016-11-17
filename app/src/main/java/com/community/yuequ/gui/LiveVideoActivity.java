@@ -1,6 +1,7 @@
 package com.community.yuequ.gui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -29,11 +30,14 @@ import com.community.yuequ.Session;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.imple.ActionBarShowHideListener;
 import com.community.yuequ.imple.PlayData;
+import com.community.yuequ.modle.MessageBean;
 import com.community.yuequ.modle.OnlineProgram;
 import com.community.yuequ.modle.OnlineProgramDao;
 import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.player.WhtVideoView;
+import com.community.yuequ.share.ShareFragmentDialog;
+import com.community.yuequ.share.ShareHelper;
 import com.community.yuequ.transformations.BlurTransformation;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.util.DateUtil;
@@ -43,9 +47,11 @@ import com.community.yuequ.verticaltablayout.widget.QTabView;
 import com.community.yuequ.verticaltablayout.widget.TabView;
 import com.community.yuequ.view.DividerItemDecoration;
 import com.community.yuequ.view.PageStatuLayout;
+import com.community.yuequ.widget.DialogManager;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +62,8 @@ import java.util.Map;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class LiveVideoActivity extends AppCompatActivity implements View.OnClickListener,ActionBarShowHideListener,VerticalTabLayout.OnTabSelectedListener {
+public class LiveVideoActivity extends AppCompatActivity implements View.OnClickListener,ActionBarShowHideListener,
+        VerticalTabLayout.OnTabSelectedListener,ShareFragmentDialog.ShareListener {
     private static final String TAG = LiveVideoActivity.class.getSimpleName();
     private ActionBar mActionBar;
     private TextView mTitleView;
@@ -79,6 +86,16 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
     private boolean isLoading = false;
 
     private boolean mCreated = false;
+    private ProgressDialog mProgressDialog;
+    private ShareFragmentDialog shareFragmentDialog;
+    private ShareHelper mShareHelper;
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mShareHelper.onNewIntent(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +103,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_live_video);
 
         mSession = Session.get(this);
+        mShareHelper = new ShareHelper(this,savedInstanceState);
         Intent intent = getIntent();
         mRProgram = (RProgram) intent.getSerializableExtra("program");
 
@@ -121,7 +139,9 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 //        mViewPager.addOnPageChangeListener(this);
         mTabLayout.addOnTabSelectedListener(this);
         iv_play_cc.setOnClickListener(this);
-
+        iv_collect.setOnClickListener(this);
+        iv_share.setOnClickListener(this);
+        iv_load.setOnClickListener(this);
 
         mVideoView.setVDVideoViewContainer((ViewGroup) mVideoView
                 .getParent());
@@ -130,6 +150,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
         if (mRProgram != null) {
             mTitleView.setText(mRProgram.remark);
             tv_live_pro.setText(mRProgram.name);
+            setCollectButton("true".equalsIgnoreCase(mRProgram.isCollection));
             Glide
                     .with(this)
                     .load(mRProgram.img_path)
@@ -169,8 +190,158 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
                     getData();
                 }
                 break;
+            case R.id.iv_collect:
+
+                if(mSession.isLogin()){
+                    boolean collect = false;
+
+                    if(mRProgram!=null){
+                        collect = !"true".equalsIgnoreCase(mRProgram.isCollection);
+                    }
+                    collect(collect);
+
+                }else{
+                    Toast.makeText(this, "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.iv_share:
+
+                shareFragmentDialog = ShareFragmentDialog.newInstance();
+                shareFragmentDialog.show(getSupportFragmentManager(),"dialog");
+
+
+                break;
+            case R.id.iv_load:
+
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     *
+     * @param collect :true表示执行收藏操作
+     */
+    private void collect(boolean collect) {
+        if(mRProgram==null)
+
+            return;
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("program_id", mRProgram.id);
+        String content = "";
+        try {
+            content = AESUtil.encode(new Gson().toJson(hashMap));
+        } catch (Exception e) {
+            throw new RuntimeException("加密错误！");
+        }
+        if (TextUtils.isEmpty(content)) {
+            Toast.makeText(YQApplication.getAppContext(), R.string.unknow_erro, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String url = null;
+        if(collect){
+            url = Contants.URL_COLLECTPROGRAM;
+        }else{
+            url = Contants.URL_DELCOLLECTPROGRAM;
+        }
+
+        OkHttpUtils
+                .postString()
+                .content(content)
+                .url(url)
+                .tag(TAG)
+                .build()
+                .execute(new CollectCallback(this,collect));
+    }
+
+    @Override
+    public void share(int code) {
+        if(code==ShareFragmentDialog.SHARE_SINA){
+            mShareHelper.sendMessage(getString(R.string.app_name)+":"+mRProgram.getVideoUrl());
+
+        }else if(code ==ShareFragmentDialog.SHARE_WEIXIN){
+            mShareHelper.sendTextToWX(false,getString(R.string.app_name)+":"+mRProgram.getVideoUrl());
+        }else{
+            mShareHelper.sendTextToWX(true,getString(R.string.app_name)+":"+mRProgram.getVideoUrl());
+        }
+    }
+
+
+    public static class CollectCallback extends JsonCallBack<MessageBean> {
+        private WeakReference<LiveVideoActivity> mWeakReference;
+        private final boolean mCollect;
+
+        public CollectCallback(LiveVideoActivity activity, boolean collect) {
+            mWeakReference = new WeakReference<>(activity);
+            this.mCollect = collect;
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int id) {
+            LiveVideoActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onCollectError(mCollect);
+            }
+        }
+
+        @Override
+        public void onBefore(Request request, int id) {
+            super.onBefore(request, id);
+            LiveVideoActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onCollectBefore(mCollect);
+            }
+        }
+
+        @Override
+        public void onResponse(MessageBean response, int id) {
+            LiveVideoActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onCollectResponse(mCollect,response);
+            }
+        }
+    }
+
+    private void onCollectError(boolean collect) {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        Toast.makeText(this, collect ?"收藏失败！":"取消收藏失败！", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onCollectBefore(boolean collect) {
+        String message = "收藏中...";
+        if(!collect){
+            message = "取消收藏...";
+        }
+        mProgressDialog = DialogManager.getProgressDialog(this,message);
+        mProgressDialog.show();
+    }
+
+    private void onCollectResponse(boolean collect,MessageBean response) {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+
+        if(response.errorCode==200){
+            Toast.makeText(this, collect ? "收藏成功！" : "取消收藏！", Toast.LENGTH_SHORT).show();
+            if(mRProgram!=null){
+                mRProgram.isCollection = String.valueOf(collect);
+                setCollectButton(collect);
+
+                //跟新列表数据
+                Intent intent = new Intent();
+                intent.putExtra("id",mRProgram.id);
+                intent.putExtra("isCollection",mRProgram.isCollection);
+                setResult(RESULT_OK,intent);
+            }
+        }else{
+            if(!TextUtils.isEmpty(response.errorMessage)){
+                Toast.makeText(this, response.errorMessage, Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, collect ?"收藏失败！":"取消收藏失败！", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -249,8 +420,17 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
         super.onDestroy();
     }
 
+
+    protected void  setCollectButton(boolean collect){
+
+        if(collect){
+            iv_collect.setImageResource(R.mipmap.icon_collect);
+        }else{
+            iv_collect.setImageResource(R.drawable.btn_collect_selector);
+        }
+    }
     private void display() {
-        Log.i("tag,","ddddd");
+
         if (mOnlineProgramDaoResult != null && mOnlineProgramDaoResult.orderMap!=null) {
 
             List<Pair<String,ArrayList<OnlineProgram>>> pairList = new ArrayList<>();

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.gui.LiveVideoActivity;
+import com.community.yuequ.gui.OnLineSecondListActivity;
 import com.community.yuequ.modle.RProgram;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class OnLineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     intent.putExtra("program", programa);
 //                    intent.putExtra("column_id", programa.id);
 //                    intent.putExtra("column_name", programa.name);
-                    mContext.startActivity(intent);
+                    mContext.startActivityForResult(intent, OnLineSecondListActivity.CODE_REFRESH);
                 }
             });
         }
@@ -115,6 +116,9 @@ public class OnLineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return ((TextView) footView.findViewById(R.id.tv_loading_more)).getText().toString();
     }
 
+    public List<RProgram> getList(){
+        return mList;
+    }
     public void setData(List<RProgram> result) {
         mList = result;
         notifyDataSetChanged();

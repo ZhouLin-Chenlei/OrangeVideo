@@ -17,6 +17,7 @@ import com.community.yuequ.R;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.gui.adapter.OnLineListAdapter;
 import com.community.yuequ.modle.OrOnlineListDao;
+import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerItemDecoration;
@@ -26,12 +27,14 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Request;
 
 public class OnLineSecondListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener {
     public static final String TAG = OnLineSecondListActivity.class.getSimpleName();
+    public static final int CODE_REFRESH = 17;
     private Toolbar mToolbar;
     private TextView mTitleView;
     private  PageStatuLayout mStatuLayout;
@@ -254,5 +257,33 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==CODE_REFRESH){
+            if(resultCode==RESULT_OK){
+                int id = data.getIntExtra("id",0);
+                String isCollection = data.getStringExtra("isCollection");
+
+                if(mGroupAdapter!=null ){
+                    List<RProgram> list = mGroupAdapter.getList();
+                    if(list!=null){
+                        for(int i = 0;i<list.size();i++){
+                            RProgram program = list.get(i);
+                            if(program.id==id){
+                                program.isCollection = isCollection;
+                            }
+
+
+                        }
+                    }
+
+                }
+            }
+
+        }
+
     }
 }

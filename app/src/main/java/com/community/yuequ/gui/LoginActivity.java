@@ -177,6 +177,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("login_name",phone);
             hashMap.put("login_password", password);
+            hashMap.put("imei", mSession.getIMEI());
 
             String content = "";
             try {

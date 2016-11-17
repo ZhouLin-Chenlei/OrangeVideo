@@ -80,3 +80,5 @@
   **[] $VALUES;
   public *;
 }
+
+-keep class com.tencent.mm.sdk.** {*;}

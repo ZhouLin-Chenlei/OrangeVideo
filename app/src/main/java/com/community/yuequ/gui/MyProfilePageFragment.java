@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
@@ -258,13 +259,15 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                     intent_myprofile.putExtra("user", mSession.getUserInfo());
                     startActivity(intent_myprofile);
                 }else{
-                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                    Toast.makeText(getContext(), "请先登录后再操作！", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.rl_nologin_head:
                 startActivity(new Intent(getActivity(),LoginActivity.class));
                 break;
             case R.id.rl_group_history:
+
+                
                 break;
             case R.id.rl_group_collect:
                 if(mSession.isLogin()){
@@ -273,13 +276,13 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                     startActivity(intent_collect);
 
                 }else{
-                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                    Toast.makeText(getContext(), "请先登录后再操作！", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.rl_group_feedback:
                 break;
             case R.id.rl_group_about:
-                startActivity(new Intent(getActivity(),MyCollectActivity.class));
+
                 break;
 
         }

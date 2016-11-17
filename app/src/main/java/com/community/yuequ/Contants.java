@@ -17,6 +17,18 @@ public class Contants {
     public static final String COUNTRY_CODE = "86";
 
 
+    public static final String WX_APP_ID = "wx3ad75346593f9ef6";
+
+    // 新浪微博相关
+    public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
+    public static final String WeiBo_APP_KEY = "2409447434";
+
+    public static final String SCOPE =
+            "email,direct_messages_read,direct_messages_write,"
+                    + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
+                    + "follow_app_official_microblog," + "invitation_write";
+
+
     public static final String ACTION_LOGIN = "com.oli.receivers.login";
     public static final String ACTION_LOGOUT = "com.oli.receivers.logout";
     public static final String ACTION_EDIT_USERINFO = "com.oli.receivers.edit_userinfo";
@@ -31,9 +43,8 @@ public class Contants {
 
     protected static final String PROTOCOL_HTTP = "http://";
     protected static String PROTOCOL = PROTOCOL_HTTP;
-//    public static String DOMAIN = "182.92.192.208:8088/yqi";
 
-//    public static String DOMAIN = "182.92.192.208:8088/oli";
+//    public static String DOMAIN = "192.168.5.127:8080/oli";
     public static String DOMAIN = "223.223.200.156:8081";
     //http://223.223.200.156:8081/
     public static final String PRODUCTNAME = "yuequ";
@@ -82,6 +93,10 @@ public class Contants {
     public static String URL_UPDATEUSERINFO = PROTOCOL + DOMAIN +"/user/updateUser.shtml";
     //修改密码
     public static String URL_UPDATEPASSWORD = PROTOCOL + DOMAIN +"/user/updatePassword.shtml";
+    //节目收藏
+    public static String URL_COLLECTPROGRAM = PROTOCOL + DOMAIN +"/user/collectProgram.shtml";
+    //取消收藏
+    public static String URL_DELCOLLECTPROGRAM = PROTOCOL + DOMAIN +"/user/delCollectProgram.shtml";
 
 
 }
