@@ -9,11 +9,11 @@ import com.community.yuequ.R;
  */
 public class TabMessage {
     public static String get(Activity activity,int menuItemId) {
-        String message = activity.getString(R.string.main_tab_home);
+        String message = activity.getString(R.string.app_name);
 
         switch (menuItemId) {
             case R.id.tab_home:
-                message = activity.getString(R.string.main_tab_home);
+                message = activity.getString(R.string.app_name);
                 break;
             case R.id.tab_online:
                 message = activity.getString(R.string.main_tab_online);

@@ -50,7 +50,7 @@ public class VideoSecondGroupActivity extends AppCompatActivity implements Swipe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_group);
+        setContentView(R.layout.activity_comm_list_layout);
 
         Intent intent = getIntent();
         column_id = intent.getIntExtra("column_id",0);

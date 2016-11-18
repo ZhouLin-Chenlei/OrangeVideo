@@ -35,6 +35,7 @@ import com.community.yuequ.modle.RProgramDetailDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.player.VideoViewActivity;
 import com.community.yuequ.player.WhtVideoView;
+import com.community.yuequ.provider.History;
 import com.community.yuequ.transformations.BlurTransformation;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.PageStatuLayout;
@@ -117,6 +118,13 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 .bitmapTransform(new BlurTransformation(this))
                 .into(iv_video_cover);
 
+            YQApplication.runBackground(new Runnable() {
+                @Override
+                public void run() {
+                    History.deleteHistory(VideoDetailActivity.this,mRProgram.id);
+                    History.addHistory(VideoDetailActivity.this,mRProgram);
+                }
+            });
 
         }
         getData();

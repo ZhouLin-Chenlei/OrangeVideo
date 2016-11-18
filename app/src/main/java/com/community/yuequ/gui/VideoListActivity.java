@@ -31,7 +31,7 @@ import okhttp3.Call;
 import okhttp3.Request;
 
 public class VideoListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
-    public static final String TAG = VideoListActivity.class.getSimpleName();
+    private static final String TAG = VideoListActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
     private TextView mTitleView;
@@ -54,7 +54,7 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_group);
+        setContentView(R.layout.activity_comm_list_layout);
         Intent intent = getIntent();
         column_id = intent.getIntExtra("column_id",0);
         from = intent.getIntExtra("from",0);
@@ -123,7 +123,7 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
                         mListAdapter.setLoadMoreViewVisibility(View.VISIBLE);
                         mListAdapter.setLoadMoreViewText(getString(R.string.load_data_fail));
                         if (mStatuLayout != null) {
-                            if(mListAdapter.getItemCount()==0){
+                            if(mListAdapter.getItemCount()<=1){
                                 mStatuLayout.show()
                                         .setProgressBarVisibility(false)
                                         .setText(getString(R.string.load_data_fail));
@@ -161,7 +161,7 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
 
 
                         if (mStatuLayout != null) {
-                            if(mListAdapter.getItemCount()==0){
+                            if(mListAdapter.getItemCount()<=1){
                                 mStatuLayout.show()
                                         .setProgressBarVisibility(false)
                                         .setText(getString(R.string.no_data));

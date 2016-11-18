@@ -55,7 +55,7 @@ public class PicListActivity extends AppCompatActivity implements SwipeRefreshLa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_group);
+        setContentView(R.layout.activity_comm_list_layout);
         Intent intent = getIntent();
         column_id = intent.getIntExtra("column_id",0);
         from = intent.getIntExtra("from",0);

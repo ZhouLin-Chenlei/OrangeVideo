@@ -268,7 +268,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                 break;
             case R.id.rl_group_history:
 
-
+                startActivity(new Intent(getActivity(),HistoryActivity.class));
                 break;
             case R.id.rl_group_collect:
                 if(mSession.isLogin()){
@@ -283,7 +283,10 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
             case R.id.rl_group_feedback:
                 break;
             case R.id.rl_group_about:
-
+                Intent intent=new Intent(getActivity(),AvdWebActivity.class);
+                intent.putExtra("title",getString(R.string.about));
+                intent.putExtra("link_url","https://www.baidu.com");
+                startActivity(intent);
                 break;
 
         }

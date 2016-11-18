@@ -57,7 +57,7 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_group);
+        setContentView(R.layout.activity_comm_list_layout);
 
         Intent intent = getIntent();
         column_id = intent.getIntExtra("column_id",0);
@@ -124,7 +124,7 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
                         mGroupAdapter.setLoadMoreViewVisibility(View.VISIBLE);
                         mGroupAdapter.setLoadMoreViewText(getString(R.string.load_data_fail));
                         if (mStatuLayout != null) {
-                            if(mGroupAdapter.getItemCount()==0){
+                            if(mGroupAdapter.getItemCount()<=1){
                                 mStatuLayout.show()
                                         .setProgressBarVisibility(false)
                                         .setText(getString(R.string.load_data_fail));
@@ -161,7 +161,7 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
                         }
 
                         if (mStatuLayout != null) {
-                            if(mGroupAdapter.getItemCount()==1){
+                            if(mGroupAdapter.getItemCount()<=1){
                                 mStatuLayout.show()
                                         .setProgressBarVisibility(false)
                                         .setText(getString(R.string.no_data));

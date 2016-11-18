@@ -196,26 +196,34 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".gui.EditPasswordActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".gui.EditPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <!--微博分享-->
+        <!-- 微博分享 -->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:windowSoftInputMode="adjustResize">
         </activity>
-
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:label="@string/app_name"
             android:exported="true"
+            android:label="@string/app_name"
             android:launchMode="singleTop">
         </activity>
 
+        <provider
+            android:name=".provider.OliProvider"
+            android:authorities="com.orange.vedio"
+            android:exported="false"/>
 
+        <activity android:name=".gui.HistoryActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
