@@ -20,8 +20,11 @@
 
 package com.community.yuequ.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.view.inputmethod.InputMethodManager;
 
 import java.io.File;
 
@@ -94,4 +97,13 @@ public class AndroidUtil {
     public static Uri FileToUri(File file) {
         return Uri.fromFile(file);
     }
+
+
+    public static void hideSoftInput(Activity activity){
+        InputMethodManager imm =(InputMethodManager)activity.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm!=null){
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(),0);
+        }
+    }
+
 }

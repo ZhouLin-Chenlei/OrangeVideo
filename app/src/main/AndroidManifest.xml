@@ -220,7 +220,12 @@
             android:authorities="com.orange.vedio"
             android:exported="false"/>
 
-        <activity android:name=".gui.HistoryActivity"
+        <activity
+            android:name=".gui.HistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".gui.FeedBackActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>

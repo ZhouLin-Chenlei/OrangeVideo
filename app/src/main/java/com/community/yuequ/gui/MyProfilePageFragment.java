@@ -281,6 +281,7 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                 }
                 break;
             case R.id.rl_group_feedback:
+                startActivity(new Intent(getActivity(),FeedBackActivity.class));
                 break;
             case R.id.rl_group_about:
                 Intent intent=new Intent(getActivity(),AvdWebActivity.class);

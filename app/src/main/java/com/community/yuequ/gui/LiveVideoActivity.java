@@ -258,12 +258,12 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void share(int code) {
         if(code==ShareFragmentDialog.SHARE_SINA){
-            mShareHelper.sendMessage(getString(R.string.app_name)+":"+mRProgram.getVideoUrl());
+            mShareHelper.sendMessage(getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.getVideoUrl());
 
         }else if(code ==ShareFragmentDialog.SHARE_WEIXIN){
-            mShareHelper.sendTextToWX(false,getString(R.string.app_name)+":"+mRProgram.getVideoUrl());
+            mShareHelper.sendTextToWX(false,getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.getVideoUrl());
         }else{
-            mShareHelper.sendTextToWX(true,getString(R.string.app_name)+":"+mRProgram.getVideoUrl());
+            mShareHelper.sendTextToWX(true,getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.getVideoUrl());
         }
     }
 

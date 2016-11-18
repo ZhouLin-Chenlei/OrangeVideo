@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:divider="@drawable/linearlayout_compat_1px"
-    app:showDividers="middle"
+    app:showDividers="middle|end|beginning"
     android:background="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
         android:id="@+id/ll_share_sina"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:gravity="center_vertical">
         <ImageView
             android:layout_width="wrap_content"
@@ -39,8 +39,8 @@
         android:id="@+id/ll_share_weixin"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:gravity="center_vertical"
         style="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
         <ImageView
@@ -63,8 +63,8 @@
         android:id="@+id/ll_share_weixin_relations"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:gravity="center_vertical">
         <ImageView
             android:layout_width="wrap_content"

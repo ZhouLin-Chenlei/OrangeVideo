@@ -58,9 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbar.setElevation(0);
-        }
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);

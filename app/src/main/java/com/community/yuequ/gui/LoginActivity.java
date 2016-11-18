@@ -49,6 +49,7 @@ import com.community.yuequ.YQApplication;
 import com.community.yuequ.modle.UserInfoDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
+import com.community.yuequ.util.AndroidUtil;
 import com.community.yuequ.util.Validator;
 import com.community.yuequ.widget.DialogManager;
 import com.google.gson.Gson;
@@ -99,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    AndroidUtil.hideSoftInput(LoginActivity.this);
                     attemptLogin();
                     return true;
                 }
@@ -140,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+        OkHttpUtils.getInstance().cancelTag(TAG);
         super.onDestroy();
 
     }
@@ -204,6 +207,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.sign_in_button:
+                AndroidUtil.hideSoftInput(LoginActivity.this);
                 attemptLogin();
                 break;
             case R.id.tv_register_account:
