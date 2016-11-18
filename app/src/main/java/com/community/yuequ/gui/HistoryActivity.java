@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.community.yuequ.R;
 import com.community.yuequ.gui.adapter.HistoryListAdapter;
 import com.community.yuequ.gui.adapter.VideoListAdapter;
 import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.provider.History;
+import com.community.yuequ.view.ContextMenuRecyclerView;
 import com.community.yuequ.view.DividerItemDecoration;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
@@ -29,7 +33,7 @@ public class HistoryActivity extends AppCompatActivity implements SwipeRefreshLa
     private PageStatuLayout mStatuLayout;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    public ContextMenuRecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private HistoryListAdapter mListAdapter;
     private GetHistoryTask historyTask;
@@ -46,7 +50,7 @@ public class HistoryActivity extends AppCompatActivity implements SwipeRefreshLa
         setSupportActionBar(mToolbar);
         mTitleView = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         mTitleView.setText(R.string.history);
-        mRecyclerView = (RecyclerView) findViewById(android.R.id.list);
+        mRecyclerView = (ContextMenuRecyclerView) findViewById(android.R.id.list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -62,6 +66,8 @@ public class HistoryActivity extends AppCompatActivity implements SwipeRefreshLa
         mRecyclerView.setAdapter(mListAdapter);
         mListAdapter.setLoadMoreViewVisibility(View.GONE);
         mListAdapter.setLoadMoreViewText(getString(R.string.loading_data));
+
+        registerForContextMenu(mRecyclerView);
 
 
         loadHistory();
@@ -96,6 +102,42 @@ public class HistoryActivity extends AppCompatActivity implements SwipeRefreshLa
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (menuInfo == null)
+            return;
+        // Do not show the menu of media group.
+        ContextMenuRecyclerView.RecyclerContextMenuInfo info = (ContextMenuRecyclerView.RecyclerContextMenuInfo)menuInfo;
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.video_list, menu);
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        ContextMenuRecyclerView.RecyclerContextMenuInfo info = (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
+        return info != null && handleContextItemSelected(item, info.position);
+    }
+    private boolean handleContextItemSelected(MenuItem menu, final int position) {
+        if (position >= mListAdapter.getItemCount()){
+            return false;
+        }
+        RProgram item = mListAdapter.getItem(position);
+        if (item == null)
+            return false;
+        int delete = History.deleteHistory(this,item.id);
+        if(delete>0){
+            mListAdapter.remove(position);
+
+        }else{
+            Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+
+    }
     protected class GetHistoryTask extends AsyncTask<Void,Void,List<RProgram>>{
         private AppCompatActivity mActivity;
 

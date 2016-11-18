@@ -3,6 +3,8 @@ package com.community.yuequ.gui.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.MainThread;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,11 @@ import android.widget.TextView;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
+import com.community.yuequ.gui.HistoryActivity;
 import com.community.yuequ.gui.VideoDetailActivity;
 import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.provider.History;
+import com.community.yuequ.view.ContextMenuRecyclerView;
 
 import java.util.List;
 
@@ -23,13 +27,13 @@ import java.util.List;
  * modou
  */
 public class HistoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
+    private HistoryActivity mContext;
     private View footView;
     private static final int TYPE_LIST = 0;
     private static final int TYPE_FOOT_VIEW = 1;
     private List<RProgram> programs;
 
-    public HistoryListAdapter(Context context) {
+    public HistoryListAdapter(HistoryActivity context) {
         this.mContext = context;
     }
 
@@ -136,7 +140,21 @@ public class HistoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    @Nullable
+    public RProgram getItem(int position) {
+        if (position < 0 || position >= programs.size())
+            return null;
+        else
+            return programs.get(position);
+    }
+    @MainThread
+    public void remove(int position) {
+        if (position == -1)
+            return;
+        programs.remove(position);
+        notifyItemRemoved(position);
+    }
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
         public ImageView iv_cover;
         public ImageView iv_play;
         public TextView tv_name;
@@ -146,7 +164,17 @@ public class HistoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             iv_cover = (ImageView) itemView.findViewById(R.id.iv_cover);
             iv_play = (ImageView) itemView.findViewById(R.id.iv_play);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
+            itemView.setOnLongClickListener(this);
+        }
 
+//        public void onMoreClick(View v) {
+//            mContext.openContextMenu(getLayoutPosition());
+//        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mContext.mRecyclerView.openContextMenu(getLayoutPosition());
+            return true;
         }
     }
 

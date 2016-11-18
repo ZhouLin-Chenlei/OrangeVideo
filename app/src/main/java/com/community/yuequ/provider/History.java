@@ -28,14 +28,15 @@ public class History {
         return _id;
     }
 
-    public static void deleteHistory(Context context, int programId) {
-        if (programId == -1) return;
+    public static int deleteHistory(Context context, int programId) {
+        if (programId == -1) return 0;
 
         ContentResolver contentResolver = context.getContentResolver();
         String selection =RProgram.Columns.PID+"=?";
         String[] selectionArgs = new String[]{ String.valueOf(programId) };
 //        Uri uri = ContentUris.withAppendedId(RProgram.Columns.CONTENT_URI, programId);
-        contentResolver.delete(RProgram.Columns.CONTENT_URI, selection, selectionArgs);
+        int delete = contentResolver.delete(RProgram.Columns.CONTENT_URI, selection, selectionArgs);
+        return delete;
 
     }
 
