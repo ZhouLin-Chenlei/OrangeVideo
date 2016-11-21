@@ -117,9 +117,10 @@ public class VideoView extends SurfaceView {
 			mVideoWidth = mp.getVideoWidth();
 			mVideoHeight = mp.getVideoHeight();
 //			mVideoAspectRatio = mp.getVideoAspectRatio();
+			long duration = mMediaPlayer.getDuration();
 
 			long seekToPosition = mSeekWhenPrepared;
-			if (seekToPosition != 0)
+			if (seekToPosition != 0 && duration > seekToPosition)
 				seekTo(seekToPosition);
 
 			if (mVideoWidth != 0 && mVideoHeight != 0) {

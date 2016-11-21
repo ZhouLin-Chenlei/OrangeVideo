@@ -331,7 +331,7 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 		if (isLive) {
 			mLiveTextView.setVisibility(View.VISIBLE);
 			mProgress.setVisibility(View.GONE);
-			mCurrentTime.setVisibility(View.GONE);
+			mCurrentTime.setVisibility(View.VISIBLE);
 			mEndTime.setVisibility(View.GONE);
 		} else {
 			mLiveTextView.setVisibility(View.GONE);
@@ -1504,7 +1504,14 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 			case MediaPlayer.MEDIA_INFO_DOWNLOAD_RATE_CHANGED:
 				// downloadRateView.setText("" + extra + "kb/s" + "  ");
 				// setDownloadRate("" + extra + "kb/s" + "  ");
-
+				if (mVideoView.isPlaying()) {
+					pb.setVisibility(View.GONE);
+					loadRateView.setText("");
+					loadRateView.setVisibility(View.GONE);
+				}else{
+					pb.setVisibility(View.VISIBLE);
+					loadRateView.setVisibility(View.VISIBLE);
+				}
 				break;
 		}
 		return true;
@@ -1761,6 +1768,9 @@ public class WhtVideoView extends FrameLayout implements OnPreparedListener,
 		this.mIndex = index;
 		url = videoBeans.get(index).getVideoUrl();
 		isLive = "3".equals(videoBeans.get(index).getVideType());
+		setIsLive(isLive);
+		pb.setVisibility(View.VISIBLE);
+		loadRateView.setVisibility(View.VISIBLE);
 		if (adapter != null) {
 			adapter.setSelection(index);
 		}

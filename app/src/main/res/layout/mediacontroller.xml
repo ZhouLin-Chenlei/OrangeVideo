@@ -131,10 +131,9 @@
 
                 <View
                     android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="8dip"
-                    android:layout_marginTop="8dip"
-                    android:background="@android:color/white"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/grey300"
                     android:contentDescription="@null" />
 
                 <ImageButton
