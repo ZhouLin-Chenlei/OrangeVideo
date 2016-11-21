@@ -122,6 +122,7 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Contants.ACTION_EDIT_USERINFO);
+        filter.addAction(Contants.ACTION_LOGOUT);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,filter);
 
     }
@@ -134,7 +135,11 @@ public class MyCollectActivity extends AppCompatActivity implements SwipeRefresh
                mUserInfo = mSession.getUserInfo();
                displayUser();
 
-            }
+            }else if(Contants.ACTION_LOGOUT.equals(action)){
+               if(isFinishing()){
+                   finish();
+               }
+           }
         }
     };
 
