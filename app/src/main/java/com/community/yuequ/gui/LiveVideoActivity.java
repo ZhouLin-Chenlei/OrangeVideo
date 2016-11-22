@@ -201,7 +201,8 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
                     collect(collect);
 
                 }else{
-                    Toast.makeText(this, "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this,LoginActivity.class));
                 }
                 break;
             case R.id.iv_share:
@@ -258,12 +259,12 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void share(int code) {
         if(code==ShareFragmentDialog.SHARE_SINA){
-            mShareHelper.sendMessage(getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.getVideoUrl());
+            mShareHelper.sendMessage(getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.img_path);
 
         }else if(code ==ShareFragmentDialog.SHARE_WEIXIN){
-            mShareHelper.sendTextToWX(false,getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.getVideoUrl());
+            mShareHelper.sendTextToWX(false,getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.img_path);
         }else{
-            mShareHelper.sendTextToWX(true,getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.getVideoUrl());
+            mShareHelper.sendTextToWX(true,getString(R.string.app_name)+"正在播出["+mRProgram.remark+"]:"+mRProgram.img_path);
         }
     }
 

@@ -99,6 +99,8 @@ public class Contants {
     public static String URL_DELCOLLECTPROGRAM = PROTOCOL + DOMAIN +"/user/delCollectProgram.shtml";
     //反馈
     public static String URL_ADDFEEDBACK = PROTOCOL + DOMAIN +"/user/addFeedBack.shtml";
+    //关于
+    public static String URL_ABOUT = PROTOCOL + DOMAIN +"/system/about.shtml";
 
 
 }

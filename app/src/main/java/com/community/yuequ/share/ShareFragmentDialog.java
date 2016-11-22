@@ -47,9 +47,8 @@ public class ShareFragmentDialog extends DialogFragment implements View.OnClickL
 
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.tips)
                 .setView(view)
-                .setNeutralButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dismiss();

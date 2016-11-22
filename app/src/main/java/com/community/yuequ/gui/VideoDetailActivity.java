@@ -1,5 +1,6 @@
 package com.community.yuequ.gui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -36,9 +37,12 @@ import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.player.VideoViewActivity;
 import com.community.yuequ.player.WhtVideoView;
 import com.community.yuequ.provider.History;
+import com.community.yuequ.share.ShareFragmentDialog;
+import com.community.yuequ.share.ShareHelper;
 import com.community.yuequ.transformations.BlurTransformation;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.PageStatuLayout;
+import com.community.yuequ.widget.DialogManager;
 import com.community.yuequ.widget.GoChargDialog;
 import com.community.yuequ.widget.InputPhoneNumberDialog;
 import com.google.gson.Gson;
@@ -51,7 +55,7 @@ import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.Request;
 
-public class VideoDetailActivity extends AppCompatActivity implements View.OnClickListener,ActionBarShowHideListener {
+public class VideoDetailActivity extends AppCompatActivity implements View.OnClickListener,ActionBarShowHideListener,ShareFragmentDialog.ShareListener{
     public static final String TAG = VideoDetailActivity.class.getSimpleName();
 
     private ActionBar mActionBar;
@@ -63,6 +67,8 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
     private ImageButton iv_play_cc;
     private TextView tv_detail;
 
+    private ImageView iv_collect;
+    private ImageView iv_share;
 
     private RProgram mRProgram;
     private Session mSession;
@@ -71,11 +77,20 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
 
     private boolean mCreated = false;
 
+    private ProgressDialog mProgressDialog;
+    private ShareFragmentDialog shareFragmentDialog;
+    private ShareHelper mShareHelper;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mShareHelper.onNewIntent(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail);
         mSession = Session.get(this);
+        mShareHelper = new ShareHelper(this,savedInstanceState);
         Intent intent = getIntent();
         mRProgram = (RProgram) intent.getSerializableExtra("program");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -99,8 +114,12 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
         iv_play_cc = (ImageButton) findViewById(R.id.iv_play_cc);
         tv_detail = (TextView) findViewById(R.id.tv_detail);
 
-        iv_play_cc.setOnClickListener(this);
+        iv_collect = (ImageView) findViewById(R.id.iv_collect);
+        iv_share = (ImageView) findViewById(R.id.iv_share);
 
+        iv_play_cc.setOnClickListener(this);
+        iv_collect.setOnClickListener(this);
+        iv_share.setOnClickListener(this);
 
         mVideoView.setVDVideoViewContainer((ViewGroup) mVideoView
                 .getParent());
@@ -143,6 +162,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                     .load(programDetail.img_path)
                     .bitmapTransform(new BlurTransformation(this))
                     .into(iv_video_cover);
+            setCollectButton(false);
         }
     }
 
@@ -261,11 +281,167 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                     getData();
                 }
                 break;
+            case R.id.iv_collect:
+
+                if(mSession.isLogin()){
+                    boolean collect = false;
+
+                    if(mRProgram!=null){
+                        collect = !"true".equalsIgnoreCase(mRProgram.isCollection);
+                    }
+                    collect(collect);
+
+                }else{
+//                    Toast.makeText(this, "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this,LoginActivity.class));
+                }
+                break;
+            case R.id.iv_share:
+
+                shareFragmentDialog = ShareFragmentDialog.newInstance();
+                shareFragmentDialog.show(getSupportFragmentManager(),"dialog");
+
+
+                break;
             default:
                 break;
         }
     }
 
+    /**
+     *
+     * @param collect :true表示执行收藏操作
+     */
+    private void collect(boolean collect) {
+        if(mRProgram==null)
+
+            return;
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("program_id", mRProgram.id);
+        String content = "";
+        try {
+            content = AESUtil.encode(new Gson().toJson(hashMap));
+        } catch (Exception e) {
+            throw new RuntimeException("加密错误！");
+        }
+        if (TextUtils.isEmpty(content)) {
+            Toast.makeText(YQApplication.getAppContext(), R.string.unknow_erro, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String url = null;
+        if(collect){
+            url = Contants.URL_COLLECTPROGRAM;
+        }else{
+            url = Contants.URL_DELCOLLECTPROGRAM;
+        }
+
+        OkHttpUtils
+                .postString()
+                .content(content)
+                .url(url)
+                .tag(TAG)
+                .build()
+                .execute(new CollectCallback(this,collect));
+    }
+
+    @Override
+    public void share(int code) {
+        if(code==ShareFragmentDialog.SHARE_SINA){
+            mShareHelper.sendMessage(getString(R.string.app_name)+"视频["+mRProgram.name+"]:"+mRProgram.img_path);
+
+        }else if(code ==ShareFragmentDialog.SHARE_WEIXIN){
+            mShareHelper.sendTextToWX(false,getString(R.string.app_name)+"视频["+mRProgram.name+"]:"+mRProgram.img_path);
+        }else{
+            mShareHelper.sendTextToWX(true,getString(R.string.app_name)+"视频["+mRProgram.name+"]:"+mRProgram.img_path);
+        }
+    }
+
+
+    public static class CollectCallback extends JsonCallBack<MessageBean> {
+        private WeakReference<VideoDetailActivity> mWeakReference;
+        private final boolean mCollect;
+
+        public CollectCallback(VideoDetailActivity activity, boolean collect) {
+            mWeakReference = new WeakReference<>(activity);
+            this.mCollect = collect;
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int id) {
+            VideoDetailActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onCollectError(mCollect);
+            }
+        }
+
+        @Override
+        public void onBefore(Request request, int id) {
+            super.onBefore(request, id);
+            VideoDetailActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onCollectBefore(mCollect);
+            }
+        }
+
+        @Override
+        public void onResponse(MessageBean response, int id) {
+            VideoDetailActivity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.onCollectResponse(mCollect,response);
+            }
+        }
+    }
+
+    private void onCollectError(boolean collect) {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+        Toast.makeText(this, collect ?"收藏失败！":"取消收藏失败！", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onCollectBefore(boolean collect) {
+        String message = "收藏中...";
+        if(!collect){
+            message = "取消收藏...";
+        }
+        mProgressDialog = DialogManager.getProgressDialog(this,message);
+        mProgressDialog.show();
+    }
+
+    private void onCollectResponse(boolean collect,MessageBean response) {
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+
+        if(response.errorCode==200){
+            Toast.makeText(this, collect ? "收藏成功！" : "取消收藏！", Toast.LENGTH_SHORT).show();
+            if(mRProgram!=null){
+                mRProgram.isCollection = String.valueOf(collect);
+                setCollectButton(collect);
+
+                //跟新列表数据
+                Intent intent = new Intent();
+                intent.putExtra("id",mRProgram.id);
+                intent.putExtra("isCollection",mRProgram.isCollection);
+                setResult(RESULT_OK,intent);
+            }
+        }else{
+            if(!TextUtils.isEmpty(response.errorMessage)){
+                Toast.makeText(this, response.errorMessage, Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, collect ?"收藏失败！":"取消收藏失败！", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    protected void  setCollectButton(boolean collect){
+
+        if(collect){
+            iv_collect.setImageResource(R.mipmap.icon_collect);
+        }else{
+            iv_collect.setImageResource(R.drawable.btn_collect_selector);
+        }
+    }
 
     @Override
     protected void onPause() {

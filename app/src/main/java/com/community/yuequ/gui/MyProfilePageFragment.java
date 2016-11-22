@@ -260,7 +260,8 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                     intent_myprofile.putExtra("user", mSession.getUserInfo());
                     startActivity(intent_myprofile);
                 }else{
-                    Toast.makeText(getContext(), "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
                 }
                 break;
             case R.id.rl_nologin_head:
@@ -277,14 +278,16 @@ public class MyProfilePageFragment extends BaseTabFragment implements View.OnCli
                     startActivity(intent_collect);
 
                 }else{
-                    Toast.makeText(getContext(), "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(getContext(), "请先登录后再操作！", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
                 }
                 break;
             case R.id.rl_group_feedback:
                 startActivity(new Intent(getActivity(),FeedBackActivity.class));
                 break;
             case R.id.rl_group_about:
-                Intent intent=new Intent(getActivity(),AvdWebActivity.class);
+                Intent intent=new Intent(getActivity(),AboutActivity.class);
                 intent.putExtra("title",getString(R.string.about));
                 intent.putExtra("link_url","https://www.baidu.com");
                 startActivity(intent);
