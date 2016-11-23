@@ -66,14 +66,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/10001/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/10001/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/10001/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test10001/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test10001/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test10001/assets" type="java-test-resource" />
@@ -82,6 +74,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test10001/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test10001/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test10001/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest10001/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/assets" type="java-resource" />
@@ -133,12 +133,12 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/design/25.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/gridlayout-v7/25.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/transition/25.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.bumptech.glide/okhttp3-integration/1.4.0/jars" />
@@ -175,22 +175,22 @@
     <orderEntry type="library" exported="" name="PhotoView-1.3.1" level="project" />
     <orderEntry type="library" exported="" name="SMSSDK-2.1.2-" level="project" />
     <orderEntry type="library" exported="" name="weiboSDKCore_3.1.4" level="project" />
-    <orderEntry type="library" exported="" name="support-fragment-25.0.0" level="project" />
-    <orderEntry type="library" exported="" name="support-core-ui-25.0.0" level="project" />
-    <orderEntry type="library" exported="" name="support-core-utils-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-fragment-25.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-core-ui-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="gridlayout-v7-25.0.0" level="project" />
     <orderEntry type="library" exported="" name="glide-3.7.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-core-utils-25.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="MobTools-2016.1012.1447" level="project" />
     <orderEntry type="library" exported="" name="gson-2.7" level="project" />
     <orderEntry type="library" exported="" name="circleimageview-2.1.0" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-25.0.0" level="project" />
-    <orderEntry type="library" exported="" name="support-media-compat-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-compat-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="transition-25.0.0" level="project" />
-    <orderEntry type="library" exported="" name="support-compat-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-25.0.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.3.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" exported="" name="support-media-compat-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-25.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-25.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
@@ -199,5 +199,12 @@
     <orderEntry type="library" exported="" name="okhttputils-2.6.2" level="project" />
     <orderEntry type="module" module-name="convenientbanner" exported="" />
     <orderEntry type="module" module-name="vitamio" exported="" />
+    <orderEntry type="library" exported="" name="support-annotations-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-media-compat-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-compat-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-fragment-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-core-ui-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="support-core-utils-25.0.0" level="project" />
   </component>
 </module>

@@ -41,7 +41,7 @@
         android:maxLines="1"
         android:layout_marginTop="3dp"
         android:textSize="12.5sp"
-        android:text="279人观看"
+        android:id="@+id/tv_playcnt"
         android:textColor="@color/orange700"/>
 
     <RelativeLayout

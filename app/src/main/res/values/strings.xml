@@ -137,4 +137,9 @@
     <string name="feedback_describe">说点什么...</string>
     <string name="send_feedback">发送</string>
     <string name="delete">删除</string>
+
+
+    <string name="tab_vediocollect">点播收藏</string>
+    <string name="tab_onlinecollect">直播收藏</string>
+    <string name="txt_playcnt">%1$s人观看</string>
 </resources>

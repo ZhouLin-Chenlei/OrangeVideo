@@ -101,6 +101,8 @@ public class Contants {
     public static String URL_ADDFEEDBACK = PROTOCOL + DOMAIN +"/user/addFeedBack.shtml";
     //关于
     public static String URL_ABOUT = PROTOCOL + DOMAIN +"/system/about.shtml";
+    //统计播放次数
+    public static String URL_PLAYCNT = PROTOCOL + DOMAIN +"/program/playcnt.shtml";
 
 
 }

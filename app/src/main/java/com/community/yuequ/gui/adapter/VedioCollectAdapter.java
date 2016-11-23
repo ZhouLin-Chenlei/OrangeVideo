@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.community.yuequ.R;
 import com.community.yuequ.gui.LiveVideoActivity;
+import com.community.yuequ.gui.VideoDetailActivity;
 import com.community.yuequ.modle.Collect;
 import com.community.yuequ.modle.RProgram;
 
@@ -20,13 +21,13 @@ import java.util.List;
 /**
  * modou
  */
-public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class VedioCollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Fragment mFragment;
     private View footView;
     private static final int TYPE_LIST = 0;
     private static final int TYPE_FOOT_VIEW = 1;
     private List<Collect> mList;
-    public MyCenterCollectAdapter(Fragment fragment){
+    public VedioCollectAdapter(Fragment fragment){
         this.mFragment = fragment;
     }
 
@@ -37,15 +38,15 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
             case TYPE_LIST:
-                viewHolder = new MyCenterCollectAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_online_list, parent, false));
+                viewHolder = new VedioCollectAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_online_list, parent, false));
                 break;
             case TYPE_FOOT_VIEW:
                 footView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_footview_layout, parent, false);
                 footView.setVisibility(View.GONE);
-                viewHolder = new MyCenterCollectAdapter.FootViewHolder(footView);
+                viewHolder = new VedioCollectAdapter.FootViewHolder(footView);
                 break;
             default:
-                viewHolder = new MyCenterCollectAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_online_list, parent, false));
+                viewHolder = new VedioCollectAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_online_list, parent, false));
                 break;
         }
         return viewHolder;
@@ -78,7 +79,7 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     program.isCollection = collect.isCollection;
 
                     Intent intent = new Intent();
-                    intent.setClass(mFragment.getActivity(), LiveVideoActivity.class);
+                    intent.setClass(mFragment.getActivity(), VideoDetailActivity.class);
                     intent.putExtra("program", program);
 //                    intent.putExtra("column_id", programa.id);
 //                    intent.putExtra("column_name", programa.name);

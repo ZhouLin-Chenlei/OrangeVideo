@@ -20,4 +20,5 @@ public class OrVideoGroup {
     public int program_cnt;
     public String icon_path;
     public String title;
+    public String play_cnt;
 }

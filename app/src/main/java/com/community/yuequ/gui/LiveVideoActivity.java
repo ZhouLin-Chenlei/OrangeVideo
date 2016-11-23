@@ -41,6 +41,7 @@ import com.community.yuequ.share.ShareHelper;
 import com.community.yuequ.transformations.BlurTransformation;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.util.DateUtil;
+import com.community.yuequ.util.PlayCountHelper;
 import com.community.yuequ.verticaltablayout.TabAdapter;
 import com.community.yuequ.verticaltablayout.VerticalTabLayout;
 import com.community.yuequ.verticaltablayout.widget.QTabView;
@@ -182,7 +183,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
                     programDetails.add(mRProgram);
                     mVideoView.open(this, false, programDetails);
                     mVideoView.play(0);
-
+                    PlayCountHelper.count(null,mRProgram.id);
                 }
                 break;
             case R.id.ll_status:
@@ -222,7 +223,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
 
     /**
      *
-     * @param collect :true表示执行收藏操作
+     * @param collect :true表示执行收藏操作,false取消收藏
      */
     private void collect(boolean collect) {
         if(mRProgram==null)
@@ -230,7 +231,14 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
             return;
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("program_id", mRProgram.id);
-        String content = "";
+        String url;
+        if(collect){
+            url = Contants.URL_COLLECTPROGRAM;
+//            hashMap.put("type", "1");//1：视频，2：图文，3：直播
+        }else{
+            url = Contants.URL_DELCOLLECTPROGRAM;
+        }
+        String content;
         try {
             content = AESUtil.encode(new Gson().toJson(hashMap));
         } catch (Exception e) {
@@ -239,12 +247,6 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
         if (TextUtils.isEmpty(content)) {
             Toast.makeText(YQApplication.getAppContext(), R.string.unknow_erro, Toast.LENGTH_SHORT).show();
             return;
-        }
-        String url = null;
-        if(collect){
-            url = Contants.URL_COLLECTPROGRAM;
-        }else{
-            url = Contants.URL_DELCOLLECTPROGRAM;
         }
 
         OkHttpUtils

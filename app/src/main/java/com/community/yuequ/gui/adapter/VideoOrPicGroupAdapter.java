@@ -43,6 +43,7 @@ public class VideoOrPicGroupAdapter extends RecyclerView.Adapter<VideoOrPicGroup
     public void onBindViewHolder(VideoOrPicGroupAdapter.ViewHolder holder, int position) {
         final OrVideoGroup programa = mList.get(position);
         holder.tv_group_name.setText(programa.name);
+        holder.tv_playcnt.setText(mContext.getString(R.string.txt_playcnt,programa.play_cnt));
         ImageManager.getInstance().loadUrlImage(mContext,programa.img_path,holder.iv_grouppic);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,11 +77,13 @@ public class VideoOrPicGroupAdapter extends RecyclerView.Adapter<VideoOrPicGroup
     public class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView iv_grouppic;
         public TextView tv_group_name;
+        public TextView tv_playcnt;
 
         public ViewHolder(View itemView) {
             super(itemView);
             iv_grouppic = (ImageView) itemView.findViewById(R.id.iv_grouppic);
             tv_group_name = (TextView) itemView.findViewById(R.id.tv_group_name);
+            tv_playcnt = (TextView) itemView.findViewById(R.id.tv_playcnt);
         }
     }
 }
