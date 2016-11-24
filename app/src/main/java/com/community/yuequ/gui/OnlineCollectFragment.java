@@ -1,6 +1,7 @@
 package com.community.yuequ.gui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,9 @@ import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.gui.adapter.MyCenterCollectAdapter;
+import com.community.yuequ.modle.Collect;
 import com.community.yuequ.modle.CollectListDao;
+import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerItemDecoration;
@@ -27,6 +30,7 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -272,4 +276,35 @@ public class OnlineCollectFragment extends Fragment implements SwipeRefreshLayou
     public void onRefresh() {
         getdata(1);
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==17){
+            if(resultCode==18){
+                int id = data.getIntExtra("id",0);
+                String isCollection = data.getStringExtra("isCollection");
+
+                if(mCollectAdapter!=null ){
+                    List<Collect> list = mCollectAdapter.getList();
+                    if(list!=null){
+                        for(int i = 0;i<list.size();i++){
+                            Collect collect = list.get(i);
+                            if(collect.program_id==id && "false".equals(isCollection)){
+                                list.remove(i);
+                                mCollectAdapter.notifyItemRemoved(i);
+                            }
+
+
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+    }
+
 }

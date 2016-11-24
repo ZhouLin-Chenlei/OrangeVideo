@@ -82,7 +82,7 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     intent.putExtra("program", program);
 //                    intent.putExtra("column_id", programa.id);
 //                    intent.putExtra("column_name", programa.name);
-                    mFragment.startActivity(intent);
+                    mFragment.startActivityForResult(intent,17);
                 }
             });
         }
@@ -131,6 +131,10 @@ public class MyCenterCollectAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             mList.addAll(list);
             notifyDataSetChanged();
         }
+    }
+
+    public List<Collect> getList() {
+        return mList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

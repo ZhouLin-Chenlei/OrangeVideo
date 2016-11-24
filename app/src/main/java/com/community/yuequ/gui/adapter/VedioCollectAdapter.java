@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.community.yuequ.R;
+import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.gui.LiveVideoActivity;
 import com.community.yuequ.gui.VideoDetailActivity;
 import com.community.yuequ.modle.Collect;
@@ -38,15 +39,16 @@ public class VedioCollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
             case TYPE_LIST:
-                viewHolder = new VedioCollectAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_online_list, parent, false));
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_video_list, parent, false);
+                viewHolder = new ViewHolder(view);
                 break;
             case TYPE_FOOT_VIEW:
                 footView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_footview_layout, parent, false);
                 footView.setVisibility(View.GONE);
-                viewHolder = new VedioCollectAdapter.FootViewHolder(footView);
+                viewHolder = new FootViewHolder(footView);
                 break;
             default:
-                viewHolder = new VedioCollectAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_online_list, parent, false));
+                viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_video_list, parent, false));
                 break;
         }
         return viewHolder;
@@ -59,15 +61,10 @@ public class VedioCollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
             final Collect collect = mList.get(position);
-            viewHolder.tv_title.setText(collect.program_name);
-            viewHolder.tv_desc.setText("正在直播："+collect.remark);
-//            ImageManager.getInstance().loadUrlImage(mContext, programa.img_path, viewHolder.iv_img);
-            Glide
-                    .with(mFragment)
-                    .load( collect.program_img_path)
-                    .placeholder(R.mipmap.jiazai)
-                    .dontAnimate()
-                    .into(viewHolder.iv_img);
+            viewHolder.tv_name.setText(collect.program_name);
+//            viewHolder.tv_desc.setText("正在直播："+collect.remark);
+            ImageManager.getInstance().loadUrlImage(mFragment,collect.program_img_path, viewHolder.iv_cover);
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -83,7 +80,7 @@ public class VedioCollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     intent.putExtra("program", program);
 //                    intent.putExtra("column_id", programa.id);
 //                    intent.putExtra("column_name", programa.name);
-                    mFragment.startActivity(intent);
+                    mFragment.startActivityForResult(intent,17);
                 }
             });
         }
@@ -134,18 +131,24 @@ public class VedioCollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        public ImageView iv_img;
-        public TextView tv_title;
-        public TextView tv_desc;
+    public List<Collect> getList() {
+        return mList;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView iv_cover;
+        public ImageView iv_play;
+        public TextView tv_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            iv_img = (ImageView) itemView.findViewById(R.id.iv_img);
-            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
-            tv_desc = (TextView) itemView.findViewById(R.id.tv_desc);
+            iv_cover = (ImageView) itemView.findViewById(R.id.iv_cover);
+            iv_play = (ImageView) itemView.findViewById(R.id.iv_play);
+            tv_name = (TextView) itemView.findViewById(R.id.tv_name);
+
         }
     }
+
     static class FootViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvLoadingMore;
