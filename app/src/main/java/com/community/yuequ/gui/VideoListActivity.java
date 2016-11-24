@@ -17,6 +17,7 @@ import com.community.yuequ.R;
 import com.community.yuequ.YQApplication;
 import com.community.yuequ.gui.adapter.VideoListAdapter;
 import com.community.yuequ.modle.PicListDao;
+import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.util.AESUtil;
 import com.community.yuequ.view.DividerItemDecoration;
@@ -26,13 +27,14 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Request;
 
 public class VideoListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener{
     private static final String TAG = VideoListActivity.class.getSimpleName();
-
+//    public  static final int CODE_REFRESH = 17;
     private Toolbar mToolbar;
     private TextView mTitleView;
     private PageStatuLayout mStatuLayout;
@@ -263,5 +265,33 @@ public class VideoListActivity extends AppCompatActivity implements SwipeRefresh
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==17){
+            if(resultCode==18){
+                int id = data.getIntExtra("id",0);
+                String isCollection = data.getStringExtra("isCollection");
+
+                if(mListAdapter!=null ){
+                    List<RProgram> list = mListAdapter.getList();
+                    if(list!=null){
+                        for(int i = 0;i<list.size();i++){
+                            RProgram program = list.get(i);
+                            if(program.id==id){
+                                program.isCollection = isCollection;
+                            }
+
+
+                        }
+                    }
+
+                }
+            }
+
+        }
+
     }
 }

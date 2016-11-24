@@ -129,7 +129,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
             mTitleView.setText(mRProgram.name);
 
             tv_detail.setText(mRProgram.remark);
-
+            setCollectButton("true".equalsIgnoreCase(mRProgram.isCollection));
 //            ImageManager.getInstance().loadUrlImage(this, mRProgram.img_path, iv_video_cover);
 
             Glide
@@ -163,7 +163,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                     .load(programDetail.img_path)
                     .bitmapTransform(new BlurTransformation(this))
                     .into(iv_video_cover);
-            setCollectButton(false);
+
         }
     }
 
@@ -430,7 +430,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 Intent intent = new Intent();
                 intent.putExtra("id",mRProgram.id);
                 intent.putExtra("isCollection",mRProgram.isCollection);
-                setResult(RESULT_OK,intent);
+                setResult(18,intent);
             }
         }else{
             if(!TextUtils.isEmpty(response.errorMessage)){

@@ -27,6 +27,7 @@ public class RProgram implements Serializable,PlayData{
     public String type;//1视频，2图文，3直播
     public List<String> picList;//图片节目的话就有图片集合
     public String isCollection;//true,false   是否收藏
+    public int play_cnt;//播放次数
     @Override
     public String getTitle() {
         return name;

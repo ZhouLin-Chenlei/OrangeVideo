@@ -55,7 +55,6 @@ public class PlayCountHelper {
                 .postString()
                 .content(content)
                 .url(url)
-                .tag(listener.getClass().getSimpleName())
                 .build()
                 .execute(new PlayCountCallback(listener));
 

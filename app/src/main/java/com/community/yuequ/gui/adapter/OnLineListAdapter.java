@@ -76,7 +76,7 @@ public class OnLineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     intent.putExtra("program", programa);
 //                    intent.putExtra("column_id", programa.id);
 //                    intent.putExtra("column_name", programa.name);
-                    mContext.startActivityForResult(intent, OnLineSecondListActivity.CODE_REFRESH);
+                    mContext.startActivityForResult(intent, 17);
                 }
             });
         }

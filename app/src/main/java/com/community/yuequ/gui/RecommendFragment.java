@@ -1,6 +1,7 @@
 package com.community.yuequ.gui;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,13 +19,19 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.gui.adapter.RecommendAdapter;
+import com.community.yuequ.imple.HomeData;
 import com.community.yuequ.modle.Advert;
+import com.community.yuequ.modle.HomeItem;
+import com.community.yuequ.modle.HomeOnline;
+import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.RecommendDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
 import com.community.yuequ.view.NetworkImageHolderView;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
+
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -107,9 +114,9 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
                 mRecommendAdapter.addHeadView(headView);
             }
 
-            if (mRecommendDao.result.program != null) {
-                mRecommendAdapter.setData(mRecommendDao.result.program);
-            }
+
+                mRecommendAdapter.setData(mRecommendDao.result);
+
         }
 
         if (mStatuLayout != null) {
@@ -245,9 +252,9 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
                 mRecommendAdapter.addHeadView(headView);
             }
 
-            if (mRecommendDao.result.program != null) {
-                mRecommendAdapter.setData(mRecommendDao.result.program);
-            }
+
+            mRecommendAdapter.setData(mRecommendDao.result);
+
 
             mStatuLayout.setProgressBarVisibility(false)
                     .setText(null)
@@ -328,5 +335,48 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==17){
+            if(resultCode== 18){
+                int id = data.getIntExtra("id",0);
+                String isCollection = data.getStringExtra("isCollection");
+
+                if(mRecommendAdapter!=null ){
+                    List<HomeData> list = mRecommendAdapter.getList();
+                    if(list!=null){
+                        for(int i = 0;i<list.size();i++){
+                            HomeData homeData = list.get(i);
+                            if(homeData instanceof HomeItem){
+                                HomeItem homeItem = (HomeItem) homeData;
+                                if(homeItem.mPrograms!=null){
+                                    for (int j = 0;j < homeItem.mPrograms.size();j++){
+                                        RProgram program = homeItem.mPrograms.get(j);
+                                        if(program.id==id){
+                                            program.isCollection = isCollection;
+                                        }
+                                    }
+                                }
+                            }else if(homeData instanceof HomeOnline){
+                                HomeOnline homeOnline = (HomeOnline) homeData;
+                                if(homeOnline.mProgram!=null){
+                                    if(homeOnline.mProgram.id==id){
+                                        homeOnline.mProgram.isCollection = isCollection;
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+        }
+
     }
 }

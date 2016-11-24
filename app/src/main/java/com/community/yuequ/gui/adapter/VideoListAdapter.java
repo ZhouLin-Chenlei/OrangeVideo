@@ -1,8 +1,10 @@
 package com.community.yuequ.gui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
 import com.community.yuequ.gui.LiveVideoActivity;
 import com.community.yuequ.gui.VideoDetailActivity;
+import com.community.yuequ.gui.VideoListActivity;
 import com.community.yuequ.modle.RProgram;
 
 import java.util.List;
@@ -23,13 +26,13 @@ import java.util.List;
  * modou
  */
 public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
+    private AppCompatActivity mContext;
     private View footView;
     private static final int TYPE_LIST = 0;
     private static final int TYPE_FOOT_VIEW = 1;
     private List<RProgram> mRPrograms;
 
-    public VideoListAdapter(Context context) {
+    public VideoListAdapter(AppCompatActivity context) {
         this.mContext = context;
     }
 
@@ -75,7 +78,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }else {
                         Intent intent = new Intent(mContext, VideoDetailActivity.class);
                         intent.putExtra("program", rProgram);
-                        mContext.startActivity(intent);
+                        mContext.startActivityForResult(intent,17);
                     }
 
                 }
@@ -134,6 +137,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mRPrograms.addAll(list);
             notifyDataSetChanged();
         }
+    }
+
+    public List<RProgram> getList() {
+        return mRPrograms;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

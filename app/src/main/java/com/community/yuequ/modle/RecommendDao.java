@@ -12,6 +12,7 @@ public class RecommendDao {
     public Recommend result;
 
     public static class Recommend{
+        public List<RProgram> recommend;
         public List<Advert> advert;
         public List<RGroup> program;
 

@@ -24,6 +24,7 @@ import com.community.yuequ.modle.HomeOnline;
 import com.community.yuequ.modle.HomeTitle;
 import com.community.yuequ.modle.RGroup;
 import com.community.yuequ.modle.RProgram;
+import com.community.yuequ.modle.RecommendDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,7 +159,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //                        intent.putExtra("name",rProgram.name);
 //                        intent.putExtra("id",rProgram.id);
                             intent.putExtra("program", program);
-                            mFragment.startActivity(intent);
+                            mFragment.startActivityForResult(intent,17);
                         }
                     }
                 });
@@ -188,7 +189,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //                        intent.putExtra("name",rProgram.name);
 //                        intent.putExtra("id",rProgram.id);
                             intent.putExtra("program", program2);
-                            mFragment.startActivity(intent);
+                            mFragment.startActivityForResult(intent,17);
                         }
                     }
                 });
@@ -222,7 +223,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //                        intent.putExtra("name",rProgram.name);
 //                        intent.putExtra("id",rProgram.id);
                             intent.putExtra("program", program);
-                            mFragment.startActivity(intent);
+                            mFragment.startActivityForResult(intent,17);
                         }
                     }
                 });
@@ -252,7 +253,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //                        intent.putExtra("name",rProgram.name);
 //                        intent.putExtra("id",rProgram.id);
                             intent.putExtra("program", program2);
-                            mFragment.startActivity(intent);
+                            mFragment.startActivityForResult(intent,17);
                         }
                     }
                 });
@@ -284,7 +285,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //                        intent.putExtra("name",rProgram.name);
 //                        intent.putExtra("id",rProgram.id);
                             intent.putExtra("program", program3);
-                            mFragment.startActivity(intent);
+                            mFragment.startActivityForResult(intent,17);
                         }
                     }
                 });
@@ -320,12 +321,25 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             onlineViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setClass(mFragment.getContext(), LiveVideoActivity.class);
-                    intent.putExtra("program", program);
+                    if("3".equals(program.type)){
+
+                        Intent intent = new Intent();
+                        intent.setClass(mFragment.getContext(), LiveVideoActivity.class);
+                        intent.putExtra("program", program);
 //                    intent.putExtra("column_id", program.id);
 //                    intent.putExtra("column_name", program.name);
-                    mFragment.startActivity(intent);
+                        mFragment.startActivityForResult(intent,17);
+
+                    }else{
+                        Intent intent = new Intent(mFragment.getActivity(), VideoDetailActivity.class);
+//                        intent.putExtra("name",rProgram.name);
+//                        intent.putExtra("id",rProgram.id);
+                        intent.putExtra("program", program);
+                        mFragment.startActivityForResult(intent,17);
+
+                    }
+
+
                 }
             });
         }
@@ -399,67 +413,91 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 */
 
-    public void setData(List<RGroup> programs) {
+    public void setData(RecommendDao.Recommend recommend) {
         List<HomeData> tempData = new ArrayList<>();
         boolean isFirst = true;
-        for (RGroup group : programs) {
 
-            HomeTitle title = new HomeTitle(group.column_id, group.column_name, group.type, TYPE_TITLE_VIEW);
-            tempData.add(title);
-            if ("1".equals(group.type) && group.plist!=null) {
-                if (isFirst) {
+        if(recommend.recommend!=null){
+            for (int i = 0;  i < recommend.recommend.size(); i++) {
+                RProgram program = recommend.recommend.get(i);
+//                if("3".equals(program.type)){
+//                    HomeOnline item = new HomeOnline(TYPE_LIST_ONLINE);
+//                    item.mProgram = program;
+//                    tempData.add(item);
+//                }else{
+//
+//                }
+                HomeOnline item = new HomeOnline(TYPE_LIST_ONLINE);
+                item.mProgram = program;
+                tempData.add(item);
+            }
+        }
 
-                    int i = 0;
-                    int index = 0;
-                    while (index < group.plist.size() && i < 2) {
-                        int row = 0;
-                        i++;
-                        HomeItem item = new HomeItem(TYPE_LIST_VIDEO_2R);
+        if(recommend.program!=null) {
 
-                        for (; index < group.plist.size(); index++) {
+            for (RGroup group : recommend.program) {
 
-                            if (row > 1) {
-                                break;
+                HomeTitle title = new HomeTitle(group.column_id, group.column_name, group.type, TYPE_TITLE_VIEW);
+                tempData.add(title);
+                if ("1".equals(group.type) && group.plist != null) {
+                    if (isFirst) {
+
+                        int i = 0;
+                        int index = 0;
+                        while (index < group.plist.size() && i < 2) {
+                            int row = 0;
+                            i++;
+                            HomeItem item = new HomeItem(TYPE_LIST_VIDEO_2R);
+
+                            for (; index < group.plist.size(); index++) {
+
+                                if (row > 1) {
+                                    break;
+                                }
+                                item.mPrograms.add(group.plist.get(index));
+                                row++;
                             }
-                            item.mPrograms.add(group.plist.get(index));
-                            row++;
+
+                            tempData.add(item);
                         }
 
-                        tempData.add(item);
-                    }
+                    } else {
+                        int i = 0;
+                        int index = 0;
+                        while (index < group.plist.size() && i < 2) {
+                            int row = 0;
+                            i++;
+                            HomeItem item = new HomeItem(TYPE_LIST_VIDEO_3R);
 
+                            for (; index < group.plist.size(); index++) {
+
+                                if (row > 2) {
+                                    break;
+                                }
+                                item.mPrograms.add(group.plist.get(index));
+                                row++;
+                            }
+
+                            tempData.add(item);
+                        }
+                    }
+                    isFirst = false;
                 } else {
-                    int i = 0;
-                    int index = 0;
-                    while (index < group.plist.size() && i < 2) {
-                        int row = 0;
-                        i++;
-                        HomeItem item = new HomeItem(TYPE_LIST_VIDEO_3R);
-
-                        for (; index < group.plist.size(); index++) {
-
-                            if (row > 2) {
-                                break;
-                            }
-                            item.mPrograms.add(group.plist.get(index));
-                            row++;
-                        }
-
+                    for (int i = 0; group.plist != null && i < group.plist.size(); i++) {
+                        HomeOnline item = new HomeOnline(TYPE_LIST_ONLINE);
+                        item.mProgram = group.plist.get(i);
                         tempData.add(item);
                     }
-                }
-                isFirst = false;
-            }else{
-                for (int i = 0; group.plist!=null && i < group.plist.size(); i++) {
-                    HomeOnline item = new HomeOnline(TYPE_LIST_ONLINE);
-                    item.mProgram = group.plist.get(i);
-                    tempData.add(item);
                 }
             }
         }
         mDatas.clear();
         mDatas.addAll(tempData);
         notifyDataSetChanged();
+    }
+
+    public List<HomeData> getList() {
+        return mDatas;
     }
 
     public class TitleViewHolder extends RecyclerView.ViewHolder {

@@ -337,7 +337,7 @@ public class LiveVideoActivity extends AppCompatActivity implements View.OnClick
                 Intent intent = new Intent();
                 intent.putExtra("id",mRProgram.id);
                 intent.putExtra("isCollection",mRProgram.isCollection);
-                setResult(RESULT_OK,intent);
+                setResult(18,intent);
             }
         }else{
             if(!TextUtils.isEmpty(response.errorMessage)){

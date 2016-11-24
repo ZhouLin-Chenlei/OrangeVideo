@@ -34,7 +34,7 @@ import okhttp3.Request;
 
 public class OnLineSecondListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,View.OnClickListener {
     public static final String TAG = OnLineSecondListActivity.class.getSimpleName();
-    public static final int CODE_REFRESH = 17;
+//    public static final int CODE_REFRESH = 17;
     private Toolbar mToolbar;
     private TextView mTitleView;
     private  PageStatuLayout mStatuLayout;
@@ -262,8 +262,8 @@ public class OnLineSecondListActivity extends AppCompatActivity implements Swipe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==CODE_REFRESH){
-            if(resultCode==RESULT_OK){
+        if(requestCode==17){
+            if(resultCode==18){
                 int id = data.getIntExtra("id",0);
                 String isCollection = data.getStringExtra("isCollection");
 
