@@ -8,23 +8,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.bumptech.glide.Glide;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
+import com.community.yuequ.gui.AvdWebActivity;
 import com.community.yuequ.gui.LiveVideoActivity;
 import com.community.yuequ.gui.OnLineSecondListActivity;
 import com.community.yuequ.gui.RecommendFragment;
 import com.community.yuequ.gui.VideoDetailActivity;
 import com.community.yuequ.gui.VideoSecondGroupActivity;
 import com.community.yuequ.imple.HomeData;
+import com.community.yuequ.modle.Advert;
+import com.community.yuequ.modle.HomeAdv;
 import com.community.yuequ.modle.HomeItem;
 import com.community.yuequ.modle.HomeOnline;
 import com.community.yuequ.modle.HomeTitle;
 import com.community.yuequ.modle.RGroup;
 import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.RecommendDao;
+import com.community.yuequ.view.NetworkImageHolderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +45,12 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 //    private final List<RGroup> mPrograms = new ArrayList<>();
     private final List<HomeData> mDatas = new ArrayList<>();
-    private static final int TYPE_HEAD_VIEW = 0;
-    private static final int TYPE_TITLE_VIEW = 1;
-    private static final int TYPE_LIST_VIDEO_2R = 2;
-    private static final int TYPE_LIST_VIDEO_3R = 3;
-    private static final int TYPE_LIST_VIDEO_GRID = 4;
-    private static final int TYPE_LIST_ONLINE = 5;
+    public static final int TYPE_HEAD_VIEW = 0;
+    public static final int TYPE_TITLE_VIEW = 1;
+    public static final int TYPE_LIST_VIDEO_2R = 2;
+    public static final int TYPE_LIST_VIDEO_3R = 3;
+    public static final int TYPE_LIST_VIDEO_GRID = 4;
+    public static final int TYPE_LIST_ONLINE = 5;
 
 //    private static final int TYPE_LIST_P2 = 4;
 //    private static final int TYPE_LIST_P3 = 5;
@@ -62,7 +70,9 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         switch (viewType) {
 
             case TYPE_HEAD_VIEW:
-                viewHolder = new HeadViewHolder(headView);
+                View hView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommed_banner_layout, parent,false);
+
+                viewHolder = new HeadViewHolder(hView);
                 break;
             case TYPE_TITLE_VIEW:
                 View titleV = LayoutInflater.from(parent.getContext()).inflate(R.layout.rl_list_title, parent, false);
@@ -91,7 +101,69 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeadViewHolder) {
+            HeadViewHolder headViewHolder = (HeadViewHolder) holder;
+            final HomeAdv online = (HomeAdv) getItem(position);
+            headViewHolder.mConvenientBanner.setPages(
+                    new CBViewHolderCreator<NetworkImageHolderView>() {
+                        @Override
+                        public NetworkImageHolderView createHolder() {
+                            return new NetworkImageHolderView();
+                        }
+                    }, online.mAdvertList)
+                    //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
+                    .setPageIndicator(new int[]{R.drawable.circular_indicator_white, R.drawable.circular_indicator_red})
+                    //设置指示器的方向
+//                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT)
+//                .setOnPageChangeListener(this)//监听翻页事件
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
 
+                            Advert advert = online.mAdvertList.get(position);
+
+                            if("1".equals(advert.link_type)){//内链改成点播和直播
+//                                Intent intent = new Intent(mFragment.getActivity(),AvdWebActivity.class);
+//                                intent.putExtra("title",advert.title);
+//                                intent.putExtra("link_url",advert.link_url);
+//                                mFragment.startActivity(intent);
+                                  if("1".equals(advert.program_type)){//点播
+                                      RProgram program = new RProgram();
+                                      program.name = advert.title;
+                                      program.img_path = advert.img_path;
+                                      program.id = advert.program_id;
+                                      program.type = advert.program_type;
+
+                                      Intent intent = new Intent(mFragment.getActivity(), VideoDetailActivity.class);
+                                      intent.putExtra("program", program);
+                                      mFragment.startActivityForResult(intent,17);
+                                  }else if("3".equals(advert.program_type)){//直播
+
+                                      RProgram program = new RProgram();
+                                      program.name = advert.title;
+                                      program.img_path = advert.img_path;
+                                      program.id = advert.program_id;
+                                      program.type = advert.program_type;
+
+                                      Intent intent = new Intent();
+                                      intent.setClass(mFragment.getContext(), LiveVideoActivity.class);
+                                      intent.putExtra("program", program);
+                                      mFragment.startActivityForResult(intent,17);
+                                  }else{
+                                      Toast.makeText(mFragment.getContext(), "未知数据！", Toast.LENGTH_SHORT).show();
+                                  }
+
+                            }else{
+                                try {
+                                    String openurl = advert.link_url;
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(openurl));
+                                    mFragment.startActivity(intent);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }
+                    });
 
         }else if(holder instanceof  TitleViewHolder){
             TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
@@ -433,6 +505,12 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         }
 
+        if(recommend.advert!=null){
+            HomeAdv homeAdv = new HomeAdv(TYPE_HEAD_VIEW);
+            homeAdv.mAdvertList.addAll(recommend.advert);
+            tempData.add(homeAdv);
+        }
+
         if(recommend.program!=null) {
 
             for (RGroup group : recommend.program) {
@@ -591,11 +669,12 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     static class HeadViewHolder extends RecyclerView.ViewHolder {
 
-        View headView;
-
-        public HeadViewHolder(View view) {
-            super(view);
-            headView = view;
+//        public View headView;
+        public ConvenientBanner mConvenientBanner;
+        public HeadViewHolder(View itemView) {
+            super(itemView);
+//            headView = view;
+            mConvenientBanner = (ConvenientBanner) itemView.findViewById(R.id.convenientBanner);
         }
     }
 }

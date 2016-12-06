@@ -46,8 +46,8 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private View headView;
-    private ConvenientBanner mConvenientBanner;
+//    private View headView;
+//    private ConvenientBanner mConvenientBanner;
     protected RecommendDao mRecommendDao;
 
 
@@ -79,8 +79,8 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
         mSwipeRefreshLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        headView = inflater.inflate(R.layout.recommed_banner_layout, null);
-        mConvenientBanner = (ConvenientBanner) headView.findViewById(R.id.convenientBanner);
+//        headView = inflater.inflate(R.layout.recommed_banner_layout, null);
+//        mConvenientBanner = (ConvenientBanner) headView.findViewById(R.id.convenientBanner);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -96,23 +96,23 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
 
     private void display() {
         if(mRecommendDao!=null && mRecommendDao.result!=null) {
-            if (mRecommendDao.result.advert != null) {
-                //本地图片例子
-                mConvenientBanner.setPages(
-                        new CBViewHolderCreator<NetworkImageHolderView>() {
-                            @Override
-                            public NetworkImageHolderView createHolder() {
-                                return new NetworkImageHolderView();
-                            }
-                        }, mRecommendDao.result.advert)
-                        //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
-                        .setPageIndicator(new int[]{R.drawable.circular_indicator_white, R.drawable.circular_indicator_red})
-                        //设置指示器的方向
-//                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT)
-//                .setOnPageChangeListener(this)//监听翻页事件
-                        .setOnItemClickListener(this);
-                mRecommendAdapter.addHeadView(headView);
-            }
+//            if (mRecommendDao.result.advert != null) {
+//                //本地图片例子
+//                mConvenientBanner.setPages(
+//                        new CBViewHolderCreator<NetworkImageHolderView>() {
+//                            @Override
+//                            public NetworkImageHolderView createHolder() {
+//                                return new NetworkImageHolderView();
+//                            }
+//                        }, mRecommendDao.result.advert)
+//                        //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
+//                        .setPageIndicator(new int[]{R.drawable.circular_indicator_white, R.drawable.circular_indicator_red})
+//                        //设置指示器的方向
+////                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT)
+////                .setOnPageChangeListener(this)//监听翻页事件
+//                        .setOnItemClickListener(this);
+//                mRecommendAdapter.addHeadView(headView);
+//            }
 
 
                 mRecommendAdapter.setData(mRecommendDao.result);
@@ -234,23 +234,23 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(mRecommendDao!=null && mRecommendDao.result!=null) {
-            if (mRecommendDao.result.advert != null) {
-                //本地图片例子
-                mConvenientBanner.setPages(
-                        new CBViewHolderCreator<NetworkImageHolderView>() {
-                            @Override
-                            public NetworkImageHolderView createHolder() {
-                                return new NetworkImageHolderView();
-                            }
-                        }, mRecommendDao.result.advert)
-                        //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
-                        .setPageIndicator(new int[]{R.drawable.circular_indicator_white, R.drawable.circular_indicator_red})
-                        //设置指示器的方向
-//                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT)
-//                .setOnPageChangeListener(this)//监听翻页事件
-                        .setOnItemClickListener(this);
-                mRecommendAdapter.addHeadView(headView);
-            }
+//            if (mRecommendDao.result.advert != null) {
+//                //本地图片例子
+//                mConvenientBanner.setPages(
+//                        new CBViewHolderCreator<NetworkImageHolderView>() {
+//                            @Override
+//                            public NetworkImageHolderView createHolder() {
+//                                return new NetworkImageHolderView();
+//                            }
+//                        }, mRecommendDao.result.advert)
+//                        //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
+//                        .setPageIndicator(new int[]{R.drawable.circular_indicator_white, R.drawable.circular_indicator_red})
+//                        //设置指示器的方向
+////                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT)
+////                .setOnPageChangeListener(this)//监听翻页事件
+//                        .setOnItemClickListener(this);
+//                mRecommendAdapter.addHeadView(headView);
+//            }
 
 
             mRecommendAdapter.setData(mRecommendDao.result);
@@ -293,27 +293,27 @@ public class RecommendFragment extends BaseTabFragment implements SwipeRefreshLa
 
     @Override
     public void onItemClick(int position) {
-        if(mRecommendDao!=null && mRecommendDao.result!=null) {
-            if (mRecommendDao.result.advert != null) {
-
-                Advert advert = mRecommendDao.result.advert.get(position);
-
-                if("1".equals(advert.link_type)){
-                    Intent intent = new Intent(getContext(),AvdWebActivity.class);
-                    intent.putExtra("title",advert.title);
-                    intent.putExtra("link_url",advert.link_url);
-                    startActivity(intent);
-                }else{
-                    try {
-                        String openurl = advert.link_url;
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(openurl));
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+//        if(mRecommendDao!=null && mRecommendDao.result!=null) {
+//            if (mRecommendDao.result.advert != null) {
+//
+//                Advert advert = mRecommendDao.result.advert.get(position);
+//
+//                if("1".equals(advert.link_type)){
+//                    Intent intent = new Intent(getContext(),AvdWebActivity.class);
+//                    intent.putExtra("title",advert.title);
+//                    intent.putExtra("link_url",advert.link_url);
+//                    startActivity(intent);
+//                }else{
+//                    try {
+//                        String openurl = advert.link_url;
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(openurl));
+//                        startActivity(intent);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
 
     }
 
