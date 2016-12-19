@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.community.yuequ.R;
 import com.community.yuequ.contorl.ImageManager;
-import com.community.yuequ.gui.PicListActivity;
 import com.community.yuequ.gui.VideoListActivity;
 import com.community.yuequ.modle.OrVideoGroup;
 
@@ -50,11 +49,7 @@ public class VideoOrPicGroupAdapter extends RecyclerView.Adapter<VideoOrPicGroup
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                if("1".equals(type)){
-                    intent.setClass(mContext,VideoListActivity.class);
-                }else{
-                    intent.setClass(mContext,PicListActivity.class);
-                }
+                intent.setClass(mContext,VideoListActivity.class);
                 intent.putExtra("column_id",programa.id);
                 intent.putExtra("type",type);//1:视频;2:图文
                 intent.putExtra("column_name",programa.name);
