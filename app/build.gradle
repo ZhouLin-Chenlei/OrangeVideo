@@ -12,13 +12,16 @@ android {
         versionName "1.0"
     }
 
-    signingConfigs {
-        release {
-            storeFile file('zhoulin.jks')
-            storePassword '123456'
-            keyAlias 'zhoulin'
-            keyPassword '123456'
-
+    signingConfigs{
+        release{
+            try {
+                storeFile file('zhoulin.jks')
+                storePassword KEYSTORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }catch (ex){
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+            }
         }
     }
 
@@ -29,14 +32,14 @@ android {
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
 

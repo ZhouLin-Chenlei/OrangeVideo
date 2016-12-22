@@ -2,24 +2,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <com.community.yuequ.view.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="vertical"
-            android:scrollbars="vertical"
-            android:padding="5dp"/>
+           />
 
     </com.community.yuequ.view.SwipeRefreshLayout>
 

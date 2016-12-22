@@ -3,12 +3,16 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+
+                >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rl_pic">
+        android:id="@+id/rl_pic"
+        android:paddingStart="5dp"
+        android:paddingLeft="5dp">
         <ImageView
             android:layout_width="96dp"
             android:layout_height="96dp"

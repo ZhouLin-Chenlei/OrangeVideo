@@ -82,16 +82,6 @@
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-            android:name=".gui.PicListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".gui.PicDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
             android:name=".gui.AvdWebActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -105,18 +95,13 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
-        <activity
-            android:name=".gui.PayListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
         <receiver android:name=".receiver.DownLoadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".pay.SLogmr">
+       <!-- <receiver android:name=".pay.SLogmr">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
@@ -125,7 +110,7 @@
         <service
             android:name=".pay.Slog"
             android:enabled="true">
-        </service>
+        </service>-->
 
         <activity
             android:name=".gui.GuideActivity"

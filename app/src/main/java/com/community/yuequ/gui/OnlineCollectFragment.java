@@ -86,11 +86,12 @@ public class OnlineCollectFragment extends Fragment implements SwipeRefreshLayou
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeLayout);
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setEnabled(false);
+//        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setHasFixedSize(true);
+
         mRecyclerView.addOnScrollListener(mScrollListener);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mCollectAdapter = new MyCenterCollectAdapter(this);
@@ -153,7 +154,7 @@ public class OnlineCollectFragment extends Fragment implements SwipeRefreshLayou
             lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             int topRowVerticalPosition =
                     (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
-            mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+//            mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
         }
     };
 

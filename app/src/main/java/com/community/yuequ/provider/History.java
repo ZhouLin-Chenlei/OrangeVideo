@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/11/18.
+ * 历史记录数据库操作工具类
  */
 
 public class History {

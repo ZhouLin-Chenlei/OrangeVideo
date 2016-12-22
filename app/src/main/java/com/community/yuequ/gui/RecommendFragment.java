@@ -1,32 +1,25 @@
 package com.community.yuequ.gui;
 
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bigkoo.convenientbanner.ConvenientBanner;
-import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.community.yuequ.Contants;
 import com.community.yuequ.R;
 import com.community.yuequ.gui.adapter.RecommendAdapter;
 import com.community.yuequ.imple.HomeData;
-import com.community.yuequ.modle.Advert;
 import com.community.yuequ.modle.HomeItem;
 import com.community.yuequ.modle.HomeOnline;
 import com.community.yuequ.modle.RProgram;
 import com.community.yuequ.modle.RecommendDao;
 import com.community.yuequ.modle.callback.JsonCallBack;
-import com.community.yuequ.view.NetworkImageHolderView;
 import com.community.yuequ.view.PageStatuLayout;
 import com.community.yuequ.view.SwipeRefreshLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
